@@ -16,11 +16,11 @@ The first field stores the quantity of the bounty in satoshis (the base unit of 
 For instance, if a bounty is 100,000,000 satoshis (1 BTC), but their address only contains 10,000, you can safely say that the request is invalid, as they do not have the funds to pay you. Likewise if you cannot connect to their IP address.
 The data array can contain various flags. For instance, if the program is designed to run on multiple threads, it could contain the ideal core count. Or if the server is run by a well known entity, it could contain something like “SETI thanks you”.
 
-[](http://i.imgur.com/pNUXvZs.png)
+![](http://i.imgur.com/pNUXvZs.png)
 
 Each node decides to propagate a bounty to the network by using the following workflow:
 
-[](http://i.imgur.com/7ceMiiv.png)
+![](http://i.imgur.com/7ceMiiv.png)
 
 ##Security
 Because a client is allowing other people to run unknown code on their computer, there needs to be a way to keep things secure. This is possible by the use of a sandbox, making Java an ideal language for tests. While this is less efficient than other languages, it builds a security solution into the network and client itself.
@@ -35,7 +35,7 @@ After all of this, the query is finally sent to the client. Simultaneously, a pa
 
 Upon closing the connection, the reward is distributed between the two parties in the way agreed upon in the last transaction broadcast. If a result is given, the full bounty will be delivered. The transactions are always broadcast with a lock-time of 24 hours.
 
-[](http://i.imgur.com/ohQYnrD.png)
+![](http://i.imgur.com/ohQYnrD.png)
 
 ##Servers
 The server side of this has two additional components: a propagator and a parser. The propagator handles requests from various clients. It is comprised of a wallet, a socket, and (at least) two files. The wallet is used to pay clients, and essentially signs transactions all day. It largely runs in a separate thread. The socket decides which file to send to clients, and then sends them. When the socket receives a file, it passes it on to the parser.
