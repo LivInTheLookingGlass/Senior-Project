@@ -35,7 +35,7 @@ After all of this, the query is finally sent to the client. Simultaneously, a pa
 
 Upon closing the connection, the reward is distributed between the two parties in the way agreed upon in the last transaction broadcast. If a result is given, the full bounty will be delivered. The transactions are always broadcast with a lock-time of 24 hours.
 
-![](http://i.imgur.com/ohQYnrD.png)
+![](http://i.imgur.com/1smic2Q.png)
 
 ##Servers
 The server side of this has two additional components: a propagator and a parser. The propagator handles requests from various clients. It is comprised of a wallet, a socket, and (at least) two files. The wallet is used to pay clients, and essentially signs transactions all day. It largely runs in a separate thread. The socket decides which file to send to clients, and then sends them. When the socket receives a file, it passes it on to the parser.
