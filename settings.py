@@ -9,4 +9,7 @@ def setup(overrides):
               'propagate_factor':2,
               'accept_latency':2000]
     pickle.dump(config,"settings.conf")
-  config.update(overides)
+  for key in overrides:
+    if overrides[key] is None:
+      overrides.pop(key)
+  config.update(overrides)
