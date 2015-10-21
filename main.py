@@ -19,3 +19,8 @@ def main():
                       dest='propagate-factor',
                       default=None,
                       help='Minimum funds:reward ratio you'll propagate bounties at')
+                      
+    (options, args) = parser.parse_args()
+    
+if __name__ == "__main__":
+    main()
