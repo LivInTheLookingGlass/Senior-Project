@@ -22,5 +22,13 @@ def main():
                       
     (options, args) = parser.parse_args()
     
+    overrides = {}
+    
+    for key in options:
+        if settings.defaults.get(key) is not None:
+            overrides = overrides.update({key:settings.default.get(key)})
+            
+    settings.setup(overrides)
+    
 if __name__ == "__main__":
     main()
