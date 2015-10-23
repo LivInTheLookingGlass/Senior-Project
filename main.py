@@ -1,4 +1,7 @@
-import optparse, settings
+import optparse
+from bounty import *
+from peers import *
+from settings import *
 
 def main():
     parser = optparse.OptionParser()
