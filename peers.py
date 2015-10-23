@@ -1,19 +1,19 @@
 import os, pickle
 
 seedlist = []
-list = []
+peerlist = []
 
 def getFromFile():
   if os.path.exists("peerlist.pickle"):
-    list = pickle.load("peerlist.pickle")
+    peerlist = pickle.load("peerlist.pickle")
 
 def saveToFile():
   if os.path.exists("peerlist.pickle"):
-    pickle.dump(list,"peerlist.pickle")
+    pickle.dump(peerlist,"peerlist.pickle")
 
 def getFromSeeds():
   for seed in seedlist:
-    list = list + requestPeerlist(seed)
+    peerlist.extend(requestPeerlist(seed))
 
 def requestPeerlist(address):
   print "currently unsupported"
@@ -28,5 +28,5 @@ def initializePeerConnections():
   getFromSeeds()
   if len(list) < 12:
     for peer in list:
-      list = list + requestPeerlist(peer)
+      peerlist.extend(requestPeerlist(peer))
   saveToFile()
