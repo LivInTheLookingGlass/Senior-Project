@@ -20,7 +20,7 @@ The data array can contain various flags. For instance, if the program is design
 
 Each node decides to propagate a bounty to the network by using the following workflow:
 
-![](http://i.imgur.com/7ceMiiv.png)
+![](http://i.imgur.com/bkmwNsB.png)
 
 ##Security
 Because a client is allowing other people to run unknown code on their computer, there needs to be a way to keep things secure. This is possible by the use of a sandbox, making Java an ideal language for tests. While this is less efficient than other languages, it builds a security solution into the network and client itself.
