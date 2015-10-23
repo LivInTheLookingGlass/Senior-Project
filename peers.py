@@ -1,4 +1,4 @@
-import os, pickle
+import os, pickle, socket
 
 seedlist = []
 peerlist = []
@@ -16,17 +16,30 @@ def getFromSeeds():
     peerlist.extend(requestPeerlist(seed))
 
 def requestPeerlist(address):
-  print "currently unsupported"
-  return []
+  con = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  con.connect(address.split(":"))
+  con.send("Requesting Peers...")
+  connected = True
+  s = ""
+  while connected:
+    a = con.recv(1024)
+    if a is not "Close Signal":
+      s += a
+    else:
+      con.close()
+  return pickle.loads(s)
   
 def sendPeerlist(address):
   print "currently unsupported"
+  s = pickle.dumps(peerlist)
   #send list
 
 def initializePeerConnections():
   getFromFile()
+  print "peers fetched from file"
   getFromSeeds()
-  if len(list) < 12:
-    for peer in list:
+  print "peers fetched from seedlist"
+  if len(peerlist) < 12:
+    for peer in peerlist:
       peerlist.extend(requestPeerlist(peer))
   saveToFile()
