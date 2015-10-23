@@ -16,7 +16,7 @@ The first field stores the quantity of the bounty in satoshis (the base unit of 
 For instance, if a bounty is 100,000,000 satoshis (1 BTC), but their address only contains 10,000, you can safely say that the request is invalid, as they do not have the funds to pay you. Likewise if you cannot connect to their IP address.
 The data array can contain various flags. For instance, if the program is designed to run on multiple threads, it could contain the ideal core count. Or if the server is run by a well known entity, it could contain something like “SETI thanks you”.
 
-![](http://i.imgur.com/pNUXvZs.png)
+![](http://i.imgur.com/xCsjOto.png)
 
 Each node decides to propagate a bounty to the network by using the following workflow:
 
