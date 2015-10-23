@@ -29,6 +29,7 @@ def requestPeerlist(address):
         s += a
       else:
         con.close()
+        connected = False
     return pickle.loads(s)
   except:
     return []
