@@ -2,6 +2,7 @@ import os, pickle, socket
 
 seedlist = []
 peerlist = []
+server = socket.socket()
 
 def getFromFile():
   if os.path.exists("peerlist.pickle"):
@@ -17,17 +18,20 @@ def getFromSeeds():
 
 def requestPeerlist(address):
   con = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-  con.connect(address.split(":"))
-  con.send("Requesting Peers...")
-  connected = True
-  s = ""
-  while connected:
-    a = con.recv(1024)
-    if a is not "Close Signal":
-      s += a
-    else:
-      con.close()
-  return pickle.loads(s)
+  try:
+    con.connect(address.split(":"))
+    con.send("Requesting Peers...")
+    connected = True
+    s = ""
+    while connected:
+      a = con.recv(1024)
+      if a is not "Close Signal":
+        s += a
+      else:
+        con.close()
+    return pickle.loads(s)
+  except:
+    return []
   
 def sendPeerlist(address):
   print "currently unsupported"
@@ -35,6 +39,7 @@ def sendPeerlist(address):
   #send list
 
 def initializePeerConnections():
+  server.bind((socket.gethostname(),44565))
   getFromFile()
   print "peers fetched from file"
   getFromSeeds()
@@ -43,3 +48,7 @@ def initializePeerConnections():
     for peer in peerlist:
       peerlist.extend(requestPeerlist(peer))
   saveToFile()
+  server.listen(1)
+
+def listen():
+  
