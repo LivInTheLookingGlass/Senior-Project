@@ -1,6 +1,6 @@
-from bounty import *
-from peers import *
-import settings
+from common.bounty import *
+from common.peers import *
+from common import settings
 
 def main():
     settings.setup()
