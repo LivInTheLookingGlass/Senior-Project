@@ -1,3 +1,5 @@
+To see a better-formatted version of this, [click here](https://docs.google.com/document/d/1fpamr5mf4G7N5NVfBLGp-teppB66yTRBb8eUn1bQXwQ/edit?usp=sharing).
+
 # Senior Project
 
 ##Abstract:
