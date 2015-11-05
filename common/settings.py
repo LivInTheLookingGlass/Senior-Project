@@ -27,12 +27,14 @@ def setup():
   print "options parsed"
   overrides = options.__dict__
   
-  if os.path.exists("settings.conf"):
+  if os.path.exists("data" + os.sep + "settings.conf"):
     config.update(pickle.load(open("settings.conf","r")))
     print overrides
     print config
   else:
-    pickle.dump(config,open("settings.conf","w"))
+    if not os.path.exists("data" + os.sep + "settings.conf"):
+      os.mkdir("data")
+    pickle.dump(config,open("data" + os.sep + "settings.conf","w"))
   kill = []
   for key in overrides:
     if overrides.get(key) is None:
