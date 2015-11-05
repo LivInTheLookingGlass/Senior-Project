@@ -3,7 +3,9 @@ import os, pickle
 bountyList = []
 
 class Bounty:
-  ip, btc, reward
+  ip = ["",0]
+  btc = ""
+  reward = 0
   data = []
   
   def __init__(ipAddress, btcAddress, rewardAmount):
