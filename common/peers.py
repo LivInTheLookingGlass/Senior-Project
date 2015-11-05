@@ -52,7 +52,7 @@ def sendPeerlist(address):
   #send list
 
 def initializePeerConnections():
-  server.bind(("localhost",44564))
+  server.bind(("0.0.0.0",44564))
   getFromFile()
   print "peers fetched from file"
   getFromSeeds()
@@ -93,11 +93,10 @@ def listen():
     print "listening on", (get_lan_ip(),port)
     a, addr = server.accept()
     print "connection accepted"
-    b = a.recv(19)
+    b = a.recv(len(peer_request))
     print b
     if b == peer_request:
       a.send(pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)]))
-    time.sleep(1)
     a.send(close_signal)
     time.sleep(1)
     a.close()
