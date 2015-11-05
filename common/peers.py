@@ -10,11 +10,13 @@ close_signal = "Close Signal"
 peer_request = "Requesting Peers..."
 
 def getFromFile():
-  if os.path.exists("peerlist.pickle"):
-    peerlist = pickle.load(open("peerlist.pickle","r"))
+  if os.path.exists("data" + os.sep + "peerlist.pickle"):
+    peerlist = pickle.load(open("data" + os.sep + "peerlist.pickle","r"))
 
 def saveToFile():
-  pickle.dump(peerlist,open("peerlist.pickle","w"))
+  if not os.path.exists("data" + os.sep + "peerlist.pickle"):
+    os.mkdir("data")
+  pickle.dump(peerlist,open("data" + os.sep + "peerlist.pickle","w"))
 
 def getFromSeeds():
   for seed in seedlist:
@@ -66,13 +68,8 @@ def initializePeerConnections():
     peerlist.extend(newlist)
   print "peer network extended"
   trimPeers()
-  print remove
-  for peer in remove:
-    try:
-      del peerlist[peerlist.index(peer)]
-    except:
-      continue
-  del remove[:]
+  print "peer list:  ", peerlist
+  print "remove list:", remove
   print "peer network trimmed to set"
   saveToFile()
   print "peer network saved to file"
@@ -80,6 +77,12 @@ def initializePeerConnections():
 
 def trimPeers():
   temp = list(set(peerlist))
+  for peer in remove:
+    try:
+      del temp[temp.index(peer)]
+    except:
+      continue
+  del remove[:]
   del peerlist[:]
   peerlist.extend(temp)
 
