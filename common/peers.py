@@ -54,7 +54,6 @@ def sendPeerlist(address):
   #send list
 
 def initializePeerConnections():
-  server.bind(("0.0.0.0",44564))
   getFromFile()
   print "peers fetched from file"
   getFromSeeds()
@@ -66,11 +65,8 @@ def initializePeerConnections():
     for peer in peerlist:
       newlist.extend(requestPeerlist(peer))
     peerlist.extend(newlist)
-  print "peer network extended"
   trimPeers()
-  print "peer list:  ", peerlist
-  print "remove list:", remove
-  print "peer network trimmed to set"
+  print "peer network extended"
   saveToFile()
   print "peer network saved to file"
   server.listen(5)
@@ -87,7 +83,6 @@ def trimPeers():
   peerlist.extend(temp)
 
 def listen():
-  print "currently unsupported"
   port = 44565
   server = socket.socket()
   server.bind(("0.0.0.0",port))
