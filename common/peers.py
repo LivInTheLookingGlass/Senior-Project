@@ -69,7 +69,6 @@ def initializePeerConnections():
   print "peer network extended"
   saveToFile()
   print "peer network saved to file"
-  server.listen(5)
 
 def trimPeers():
   temp = list(set(peerlist))
