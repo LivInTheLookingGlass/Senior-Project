@@ -6,6 +6,10 @@ def main():
     settings.setup()
     print "settings are:"
     print settings.config
+    if settings.config.get('server') is not True:
+        initializePeerConnections()
+    else:
+        listen()
     
 if __name__ == "__main__":
     main()
