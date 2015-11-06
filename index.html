@@ -1,59 +1,49 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Senior Project by gappleto97</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-dark.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
     <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
+    <title>Senior Project by gappleto97</title>
   </head>
+
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/gappleto97/Senior-Project">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/gappleto97/Senior-Project/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/gappleto97/Senior-Project/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
+    <header>
+      <div class="inner">
+        <h1>Senior Project</h1>
+        <h2></h2>
+        <a href="https://github.com/gappleto97/Senior-Project" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
 
-    <div class="wrapper">
-
-      <section>
-        <div id="title">
-          <h1>Senior Project</h1>
-          <p></p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/gappleto97">gappleto97</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-        </div>
-
-        <p>To see a better-formatted version of this <a href="https://docs.google.com/document/d/1fpamr5mf4G7N5NVfBLGp-teppB66yTRBb8eUn1bQXwQ/edit?usp=sharing">click here</a>.</p>
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <p>To see the original version of this <a href="https://docs.google.com/document/d/1fpamr5mf4G7N5NVfBLGp-teppB66yTRBb8eUn1bQXwQ/edit?usp=sharing">click here</a>.</p>
 
 <h1>
 <a id="senior-project" class="anchor" href="#senior-project" aria-hidden="true"><span class="octicon octicon-link"></span></a>Senior Project</h1>
 
 <h2>
-<a id="abstract" class="anchor" href="#abstract" aria-hidden="true"><span class="octicon octicon-link"></span></a>Abstract:</h2>
+<a id="abstract" class="anchor" href="#abstract" aria-hidden="true"><span class="octicon octicon-link"></span></a>Abstract</h2>
 
 <p>A purely peer to peer distributed computing network which rewards the participants for solving proposed problems. Bounties and IP addresses are exchanged across a websocket network. If the bounty is above a client’s threshold, they will request a java-based test from this IP address. Because a system does not want to reward for faulty results, a test app is sent to the client. If the result is returned correctly, the bountied problem will then be sent.</p>
 
 <h2>
 <a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h2>
 
-<p>With the rise of distributed computing projects, from Folding at Home, SETI, etc., there is a distinct lack of standardisation in their distribution methods. Because of this, anyone who wants to tap into this incredible trove of information must design their own platform and market this to the world. Because of this, it’s not surprising that it’s been relatively slow to diversify.</p>
+<p>With the rise of distributed computing projects, from <a href="https://folding.stanford.edu/">Folding at Home</a>, <a href="http://setiathome.ssl.berkeley.edu/">SETI</a>, etc., there is a distinct lack of standardization in their distribution methods. Because of this, anyone who wants to tap into this trove of information must design their own platform and market this to the world. It’s not surprising that it’s been slow to diversify.</p>
 
-<p>Another problem is that clients have no incentive to run these programs, save for charitable inclinations. Until recently, it would have been next to impossible to provide an incentive. However, with the onset of cryptocurrencies, there is now an easy solution. If people are provided a bounty for problems, they can gain a passive income for their idle resources. This becomes their incentive.</p>
+<p>Another problem is that clients have no incentive to run these programs, save for charitable inclinations. Until recently, it would have been next to impossible to provide an incentive. However, with the onset of cryptocurrencies, there is now an easy solution. If people are provided a bounty for problems, they can gain a passive income for their idle resources. This becomes their incentive.<sup><a href="#myfootnote1">1</a></sup></p>
 
 <h2>
 <a id="bounties" class="anchor" href="#bounties" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bounties</h2>
@@ -62,8 +52,9 @@
 
 <p>The first field stores the quantity of the bounty in satoshis (the base unit of Bitcoin). The second stores the IP address of the server. The third stores the Bitcoin address of the server. These three pieces of information can be used to filter out invalid requests.</p>
 
-<p>For instance, if a bounty is 100,000,000 satoshis (1 BTC), but their address only contains 10,000, you can safely say that the request is invalid, as they do not have the funds to pay you. Likewise if you cannot connect to their IP address.
-The data array can contain various flags. For instance, if the program is designed to run on multiple threads, it could contain the ideal core count. Or if the server is run by a well known entity, it could contain something like “SETI thanks you”.</p>
+<p>For instance, if a bounty is 100,000,000 satoshis (1 BTC),<sup><a href="#myfootnote2">2</a></sup> but their address only contains 10,000, you can safely say that the request is invalid, as they do not have the funds to pay you. Likewise if you cannot connect to their IP address.</p>
+
+<p>The data array can contain various flags. For instance, if the program is designed to run on multiple threads, it could contain the ideal core count. Or if the server is run by a well known entity, it could contain something like “SETI thanks you”.</p>
 
 <p><img src="http://i.imgur.com/xCsjOto.png" alt=""></p>
 
@@ -76,32 +67,60 @@ The data array can contain various flags. For instance, if the program is design
 
 <p>Because a client is allowing other people to run unknown code on their computer, there needs to be a way to keep things secure. This is possible by the use of a sandbox, making Java an ideal language for tests. While this is less efficient than other languages, it builds a security solution into the network and client itself.</p>
 
+<p>There will also be cases where one will not want to run it in a sandbox. Support for this type of operation is critical for companies like Intel, AMD, NVidia, and Samsung, which may want to test edge cases of their products in the wild. If everything is sandboxed, there’s no way for them to easily guarantee that they are getting to the correct devices. These use cases will be investigated, as they could make up most of the demand for this network.</p>
+
 <h2>
 <a id="tests" class="anchor" href="#tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tests</h2>
 
 <p>Tests are a vital part of the network. Like there are ways for clients to exclude invalid requests, there must also be a way for servers to exclude inappropriate clients. They can do this with small bits of test code. The client will then send them the result of this code, and if it is correct, will receive the real problem.</p>
 
-<p>This opens an avenue of attack for the network, however, so there must be constraints on these tests. These will be defined at a later time.</p>
+<p>This opens an avenue of attack for the network, however, so there must be constraints on these tests. These will be defined at a later time.<sup><a href="#myfootnote3">3</a></sup></p>
 
 <h2>
 <a id="queries" class="anchor" href="#queries" aria-hidden="true"><span class="octicon octicon-link"></span></a>Queries</h2>
 
-<p>After all of this, the query is finally sent to the client. Simultaneously, a payment channel is opened. This channel will be updated once per minute as long as there is an active connection between the server and client, and will grow at a linear rate until a result is achieved, but will never reach the full bounty until a result is submitted. This is to protect from fraud on both the server and user end. The server is protected in that the client has an incentive to stay online, and the user is protected in that the connection will expire if a predetermined time goes by without a result.</p>
+<p>After all of this, the query is finally sent to the client. Simultaneously, a <a href="https://bitcoin.org/en/developer-guide#micropayment-channel">payment channel</a><sup><a href="#myfootnote4">4</a></sup> is opened. This channel will be updated once per minute as long as there is an active connection between the server and client, and will grow at a linear rate until a result is achieved, but will never reach the full bounty until a result is submitted. This is to protect from fraud on both the server and user end. The server is protected in that the client has an incentive to stay online, and the user is protected in that the connection will expire if a predetermined time goes by without a result.</p>
 
-<p>Upon closing the connection, the reward is distributed between the two parties in the way agreed upon in the last transaction broadcast. If a result is given, the full bounty will be delivered. The transactions are always broadcast with a lock-time of 24 hours.</p>
-
-<p><img src="http://i.imgur.com/I25QiL0.png" alt=""></p>
+<p>Upon closing the connection, the reward is distributed between the two parties in the way agreed upon in the last transaction broadcast. If a result is given, the full bounty will be delivered. The transactions are always broadcast with a lock-time of 24 hours.
+<img src="http://i.imgur.com/I25QiL0.png" alt=""></p>
 
 <h2>
 <a id="servers" class="anchor" href="#servers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Servers</h2>
 
-<p>The server side of this has two additional components: a propagator and a parser. The propagator handles requests from various clients. It is comprised of a wallet, a socket, and (at least) two files. The wallet is used to pay clients, and essentially signs transactions all day. It largely runs in a separate thread. The socket decides which file to send to clients, and then sends them. When the socket receives a file, it passes it on to the parser.</p>
+<p>The server side of this has two additional components: a propagator and a parser. The propagator handles requests from various clients. It is comprised of a wallet,<sup><a href="#myfootnote5">5</a></sup> a socket,<sup><a href="#myfootnote6">6</a></sup> and (at least) two files. The wallet is used to pay clients in the manner described above. By necessity it spawns large numbers of threads—one per client connected. The socket decides which file to send to clients, and then sends them. When the socket receives a file, it passes it on to the parser.</p>
 
-<p>The parser has two purposes: analyze test results, and move problem results to the proper area. Because of this, test results take the priority. This piece must be custom written by the server maintainers, because it needs to verify that the test was completed correctly. Because each test is tailored to the problem at hand, there is no general purpose solution for it. When it is not doing this, the parser writes solution files to a specified folder, where it can be analyzed without slowing down server functions.</p>
-      </section>
+<p>The parser has two purposes: analyze test results, and move problem results to the proper area. Because of this, test results take the priority. This piece must be written by the server maintainers; there is no general solution for it. When it is not doing this, the parser moves solution files to a different folder, where it can be analyzed without slowing down the rest of the server.</p>
 
+<p><a name="myfootnote1">1</a>: Users will have the option of running this for free. The bounty is to encourage participation, and is not strictly necessary.</p>
+
+<p><a name="myfootnote2">2</a>: The program would store in values in satoshis to avoid floating point inaccuracies.</p>
+
+<p><a name="myfootnote3">3</a>: Fork bombing and other such annoyances are a major concern with the test network. Because of this, any solution that necessitates trust must be rejected. Code analysis for any obvious concerns will be necessary, but may not be enough.</p>
+
+<p><a name="myfootnote4">4</a>: This opens up a security risk to the user because their private key is exposed to my program. This is the single biggest reason that this must be an open source project. Encryption will be explored.</p>
+
+<p><a name="myfootnote5">5</a>: Part of the common library.</p>
+
+<p><a name="myfootnote6">6</a>: Overrides of the standard peer management system.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/gappleto97/Senior-Project/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/gappleto97/Senior-Project/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/gappleto97/Senior-Project"></a> is maintained by <a href="https://github.com/gappleto97">gappleto97</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
+
+  
   </body>
 </html>
