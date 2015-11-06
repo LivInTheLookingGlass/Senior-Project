@@ -47,6 +47,8 @@ The server side of this has two additional components: a propagator and a parser
 
 The parser has two purposes: analyze test results, and move problem results to the proper area. Because of this, test results take the priority. This piece must be written by the server maintainers; there is no general solution for it. When it is not doing this, the parser moves solution files to a different folder, where it can be analyzed without slowing down the rest of the server.
 
+----------------------------
+
 <a name="myfootnote1">1</a>: Users will have the option of running this for free. The bounty is to encourage participation, and is not strictly necessary.
 
 <a name="myfootnote2">2</a>: The program would store in values in satoshis to avoid floating point inaccuracies.
