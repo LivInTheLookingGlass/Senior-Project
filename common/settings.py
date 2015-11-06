@@ -21,7 +21,13 @@ def setup():
                     '--propagation-factor',
                     dest='propagate_factor',
                     default=None,
-                    help='Minimum funds:reward ratio you\'ll propagate bounties at')        
+                    help='Minimum funds:reward ratio you\'ll propagate bounties at')
+  parser.add_option('-S',
+                    '--server',
+                    dest='server',
+                    default=None,
+                    action="store_true",
+                    help='Sets whether you operate as a server or client (Default: client)')        
   (options, args) = parser.parse_args()
 
   print "options parsed"
