@@ -3,20 +3,20 @@ import os, pickle, select, socket, time
 seedlist = ["127.0.0.1:44565", "localhost:44565", "10.132.80.128:44565"]
 peerlist = ["10.132.80.138:44565"]
 remove   = []
-server = socket.socket()
 
 #constants
 close_signal = "Close Signal"
 peer_request = "Requesting Peers..."
+peers_file   = "data" + os.sep + "peerlist.pickle"
 
 def getFromFile():
-  if os.path.exists("data" + os.sep + "peerlist.pickle"):
-    peerlist = pickle.load(open("data" + os.sep + "peerlist.pickle","r"))
+  if os.path.exists(peers_file):
+    peerlist = pickle.load(open(peers_file,"r"))
 
 def saveToFile():
-  if not os.path.exists("data" + os.sep + "peerlist.pickle"):
-    os.mkdir("data")
-  pickle.dump(peerlist,open("data" + os.sep + "peerlist.pickle","w"))
+  if not os.path.exists(peers_file):
+    os.mkdir(peers_file.split(os.sep)[0])
+  pickle.dump(peerlist,open(peers_file,"w"))
 
 def getFromSeeds():
   for seed in seedlist:
