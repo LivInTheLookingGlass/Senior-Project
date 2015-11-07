@@ -27,14 +27,19 @@ def setup():
                     dest='server',
                     default=None,
                     action="store_true",
-                    help='Sets whether you operate as a server or client (Default: client)')        
+                    help='Sets whether you operate as a server or client (Default: client)')     
+  parser.add_option('-p,
+                    '--port',
+                    dest='port',
+                    default=None,
+                    help=('Port on which to listen (default: ' + str(config['port']) + ')'))
   (options, args) = parser.parse_args()
 
   print "options parsed"
   overrides = options.__dict__
   
   if os.path.exists("data" + os.sep + "settings.conf"):
-    config.update(pickle.load(open("settings.conf","r")))
+    config.update(pickle.load(open("data" + os.sep + "settings.conf","r")))
     print overrides
     print config
   else:
