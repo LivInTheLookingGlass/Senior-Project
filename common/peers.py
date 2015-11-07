@@ -1,4 +1,4 @@
-import os, pickle, select, socket, time
+import multiprocessing, os, pickle, select, socket, time
 
 seedlist = ["127.0.0.1:44565", "localhost:44565", "10.132.80.128:44565"]
 peerlist = ["10.132.80.138:44565"]
@@ -8,6 +8,8 @@ remove   = []
 close_signal = "Close Signal"
 peer_request = "Requesting Peers..."
 peers_file   = "data" + os.sep + "peerlist.pickle"
+
+Alive = True
 
 def getFromFile():
   if os.path.exists(peers_file):
@@ -81,22 +83,35 @@ def trimPeers():
   del peerlist[:]
   peerlist.extend(temp)
 
-def listen():
-  port = 44565
+def listen(port, ID):
   server = socket.socket()
   server.bind(("0.0.0.0",port))
-  server.listen(5)
+  server.listen(10)
+  prid = "[" + str(ID) + "]"
   while True:
-    print "listening on", (get_lan_ip(),port)
-    a, addr = server.accept()
-    print "connection accepted"
-    b = a.recv(len(peer_request))
-    print b
-    if b == peer_request:
-      a.send(pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)]))
-    a.send(close_signal)
-    time.sleep(1)
-    a.close()
+    print prid, "listening on", (get_lan_ip(),port)
+    try:
+      a, addr = server.accept()
+      print prid, "connection accepted"
+      b = a.recv(len(peer_request))
+      print prid, "Received:", b
+      if b == peer_request:
+        a.send(pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)]))
+      a.send(close_signal)
+      time.sleep(1)
+      a.close()
+    except Exception as e:
+      print prid, "Failed:", type(e)
+      print e
+
+class listener(multiprocessing.Process):
+  def __init__(self, threadID, port):
+    multiprocessing.Process.__init__(self)
+    self.threadID = threadID
+    self.port = port
+  def run(self):
+    print "hi"
+    listen(self.port,self.threadID)
 
 if os.name != "nt":
     import fcntl
