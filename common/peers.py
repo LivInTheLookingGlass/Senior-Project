@@ -1,5 +1,5 @@
 import multiprocessing, os, pickle, select, socket, time
-from safeprint import safeprint
+from common.safeprint import safeprint
 
 if os.name != "nt":
     import fcntl
