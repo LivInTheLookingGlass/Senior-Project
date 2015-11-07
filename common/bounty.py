@@ -1,4 +1,5 @@
 import os, pickle
+from common.safeprint import safeprint
 
 bountyList = []
 
@@ -54,10 +55,10 @@ def requestBounties(peerList):
     bountyList.extend(requestBounty(peer))
     
 def requestBounty(peer):
-  print "currently unsupported"
+  safeprint("currently unsupported")
 
 def sendBounty(peer):
-  print "currently unsupported"
+  safeprint("currently unsupported")
   if len(bountyList) is 0:
     loadBounties()
   #send bounties
