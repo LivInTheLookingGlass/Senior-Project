@@ -1,5 +1,8 @@
 To see the original version of this [click here](https://docs.google.com/document/d/1fpamr5mf4G7N5NVfBLGp-teppB66yTRBb8eUn1bQXwQ/edit?usp=sharing).
 
+#Issues
+If you do not have a GitHub account, please submit your issue with [this link](https://gitreports.com/issue/gappleto97/Senior-Project). Otherwise, use the [standard issue tracker](https://github.com/gappleto97/Senior-Project/issues/new).
+
 # Senior Project
 
 ##Abstract
