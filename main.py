@@ -7,7 +7,7 @@ def main():
     settings.setup()
     print "settings are:"
     print settings.config
-    ear = listener(1,44565)
+    ear = listener(1,settings.config['port'])
     ear.daemon = True
     ear.start()
     initializePeerConnections()
