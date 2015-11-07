@@ -16,7 +16,7 @@ def getFromFile():
     peerlist = pickle.load(open(peers_file,"r"))
 
 def saveToFile():
-  if not os.path.exists(peers_file):
+  if not os.path.exists(peers_file.split(os.sep)[0]):
     os.mkdir(peers_file.split(os.sep)[0])
   pickle.dump(peerlist,open(peers_file,"w"))
 
