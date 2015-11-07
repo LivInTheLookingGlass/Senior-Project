@@ -2,11 +2,12 @@ from common.bounty import *
 from common.peers import *
 from common import settings
 from time import sleep
+from common.safeprint import safeprint
 
 def main():
     settings.setup()
-    print "settings are:"
-    print settings.config
+    safeprint("settings are:")
+    safeprint(settings.config)
     ear = listener(1,settings.config['port'])
     ear.daemon = True
     ear.start()
