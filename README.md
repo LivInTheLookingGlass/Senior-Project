@@ -74,6 +74,7 @@ The parser has two purposes: analyze test results, and move problem results to t
 * Dedicated server mode
 * More complete bounty definition
 * Network discovery
+* Python 3 compatibility
 * Sandboxed Execution
 
 ----------------------------
