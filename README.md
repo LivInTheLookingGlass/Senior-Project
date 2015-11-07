@@ -53,12 +53,12 @@ The parser has two purposes: analyze test results, and move problem results to t
 
 * Basic networking capabilities
   * Send messages
-  * Listen and respond (dedicated only)
+  * Listen and respond (concurrently)
+  * On a custom port, if desired
 * Transparent settings storage
  
 ##Working on it
 
-* Listen and respond to messages (concurrently)
 * More complete settings controls
 * UPnP forwarding
 
