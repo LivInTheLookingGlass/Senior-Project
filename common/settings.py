@@ -1,8 +1,10 @@
 import optparse, os, pickle
+from common.safeprint import safeprint
 
 config = {'charity':False,
           'propagate_factor':2,
-          'accept_latency':2000}
+          'accept_latency':2000,
+	  'port':44565}
 settings_file = "data" + os.sep + "settings.conf"
 
 def setup():
@@ -31,13 +33,13 @@ def setup():
                     help='Sets whether you operate as a server or client (Default: client)')        
   (options, args) = parser.parse_args()
 
-  print "options parsed"
+  safeprint("options parsed")
   overrides = options.__dict__
   
   if os.path.exists(settings_file):
     config.update(pickle.load(open(settings_file,"r")))
-    print overrides
-    print config
+    safeprint(overrides)
+    safeprint(config)
   else:
     if not os.path.exists(settings_file.split(os.sep)[0]):
       os.mkdir(settings_file.split(os.sep)[0])
