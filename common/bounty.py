@@ -4,7 +4,7 @@ from common.safeprint import safeprint
 bountyList = []
 
 class Bounty:
-  ip = ["",0]
+  ip = ""
   btc = ""
   reward = 0
   data = []
