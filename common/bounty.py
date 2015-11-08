@@ -1,4 +1,4 @@
-import os, pickle
+import os, pickle, re
 from common.safeprint import safeprint
 
 bountyList = []
@@ -9,27 +9,59 @@ class Bounty:
   reward = 0
   data = []
   
-  def __init__(ipAddress, btcAddress, rewardAmount):
-    ip = ipAddress
-    btc = btcAddress
-    reward = rewardAmount
-  
-  def __init__(ipAddress, btcAddress, rewardAmount, dataList):
-    ip = ipAddress
-    btc = btcAddress
-    reward = rewardAmount
-    data = dataList
-  
-  def addData(dataList):
-    data = dataList
+  def __init__(self, ipAddress, btcAddress, rewardAmount, dataList=[]):
+    self.ip = ipAddress
+    self.btc = btcAddress
+    self.reward = rewardAmount
+    self.data = dataList
     
-  def isValid():
-    #ping ip
-    #check if all fields have things
-    return False
+  def isValid(self):
+    try:
+      safeprint("Testing IP address")
+      #is IP valid
+      b = int(self.ip.split(":")[1])
+      b = int(self.ip.split(":")[0].split(".")[0])
+      b = int(self.ip.split(":")[0].split(".")[1])
+      b = int(self.ip.split(":")[0].split(".")[2])
+      b = int(self.ip.split(":")[0].split(".")[3])
+      #ping IP
+      #is Bitcoin address valid
+      safeprint("Testing Bitcoin address")
+      address = str(self.btc)
+      if not re.match(re.compile("^[a-zA-Z1-9]{27,35}$"),address):
+	return False
+      #is reward valid
+      safeprint("Testing reward")
+      b = int(self.reward)
+      return True
+    except:
+      return False
   
-  def isPayable():
+  def isPayable(self):
     #check if address has enough
+    return False
+
+def verify(string):
+  test = pickle.loads(string)
+  try:
+    safeprint("Testing IP address")
+    #is IP valid
+    b = int(test.ip.split(":")[1])
+    b = int(test.ip.split(":")[0].split(".")[0])
+    b = int(test.ip.split(":")[0].split(".")[1])
+    b = int(test.ip.split(":")[0].split(".")[2])
+    b = int(test.ip.split(":")[0].split(".")[3])
+    #ping IP
+    #is Bitcoin address valid
+    safeprint("Testing Bitcoin address")
+    address = str(test.btc)
+    if not re.match(re.compile("^[a-zA-Z1-9]{27,35}$"),address):
+      return False
+    #is reward valid
+    safeprint("Testing reward")
+    b = int(test.reward)
+    return True
+  except:
     return False
 
 def saveToFile():
