@@ -28,12 +28,14 @@ class Bounty:
       #is Bitcoin address valid
       safeprint("Testing Bitcoin address")
       address = str(self.btc)
+      #The following is a soft check
+      #A deeper check will need to be done in order to assure this is correct
       if not re.match(re.compile("^[a-zA-Z1-9]{27,35}$"),address):
 	return False
       #is reward valid
       safeprint("Testing reward")
       b = int(self.reward)
-      return True
+      return (b >= 0)
     except:
       return False
   
