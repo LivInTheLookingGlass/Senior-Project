@@ -1,5 +1,6 @@
 import multiprocessing, os, pickle, select, socket, time
 from common.safeprint import safeprint
+from common.Bounty import *
 
 if os.name != "nt":
     import fcntl
@@ -25,11 +26,15 @@ def get_lan_ip():
 seedlist = ["127.0.0.1:44565", "localhost:44565", "10.132.80.128:44565"]
 peerlist = [get_lan_ip() + ":44565"]
 remove   = []
+bounties = []
 
 #constants
-close_signal = "Close Signal"
-peer_request = "Requesting Peers..."
-peers_file   = "data" + os.sep + "peerlist.pickle"
+peers_file      = "data" + os.sep + "peerlist.pickle"
+close_signal    = "Close Signal......."
+peer_request    = "Requesting Peers..."
+incoming_bounty = "Incoming Bounty...."
+valid_signal    = "Bounty was valid..."
+invalid_signal  = "Bounty was invalid."
 
 Alive = True
 
@@ -120,6 +125,22 @@ def listen(port, ID):
       if b == peer_request:
         a.send(pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)]))
         time.sleep(0.1)
+      elif b == incoming_bounty:
+	connected = True
+	s = ""
+	while connected:
+	  c = a.recv(len(close_signal))
+	  safeprint(c)
+	  if not c == close_signal:
+	    s += c
+	  else:
+	    con.close()
+	    connected = False
+	if (verify(s)):
+	  Bounty.bountyList.append(bount)
+	  a.send(valid_signal)
+	else:
+	  a.send(invalid_signal)
       a.send(close_signal)
       time.sleep(1)
       a.close()
@@ -136,4 +157,3 @@ class listener(multiprocessing.Process):
   def run(self):
     safeprint("listener started")
     listen(self.port,self.threadID)
-    
