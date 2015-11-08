@@ -4,6 +4,7 @@ from common.safeprint import safeprint
 config = {'charity':False,
           'propagate_factor':2,
           'accept_latency':2000,
+          'server':False,
 	  'port':44565}
 settings_file = "data" + os.sep + "settings.conf"
 
