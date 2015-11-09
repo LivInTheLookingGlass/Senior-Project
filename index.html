@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="./marked.js"></script>
 
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -192,7 +193,7 @@
                 .append("<issue>")
                 .append("<b>" + issue.number + " - " + issue.title + "</b></br>")
                 .append("Updated at " + issue.updated_at.replace("T"," ").replace("Z"," UTC") + "</br>")
-                .append(issue.body + "</issue></br></br></br>");
+                .append(marked(issue.body) + "</issue></br></br></br>");
             });
           });
         });
