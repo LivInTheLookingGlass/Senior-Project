@@ -9,6 +9,10 @@
 }
 
 .issue a  {
+  color: #666;
+}
+
+.issue a:hover  {
   color: black;
 }
 
