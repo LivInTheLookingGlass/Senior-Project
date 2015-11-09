@@ -38,13 +38,13 @@ def setup():
   overrides = options.__dict__
   
   if os.path.exists(settings_file):
-    config.update(pickle.load(open(settings_file,"r")))
+    config.update(pickle.load(open(settings_file,"rb")))
     safeprint(overrides)
     safeprint(config)
   else:
     if not os.path.exists(settings_file.split(os.sep)[0]):
       os.mkdir(settings_file.split(os.sep)[0])
-    pickle.dump(config,open(settings_file,"w"))
+    pickle.dump(config,open(settings_file,"wb"))
   kill = []
   for key in overrides:
     if overrides.get(key) is None:
