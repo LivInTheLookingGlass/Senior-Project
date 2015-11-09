@@ -183,15 +183,15 @@
         pageTracker._trackPageview();
         } catch(err) {}
       </script>
-      $(document).ready(function () {
       <script type="text/javascript">
-        $.getJSON("https://api.github.com/repos/gappleto97/Senior-Project/issues?state=open", function (allIssues) {
-          $.each(allIssues, function (i, issue) {
-            $("#issuesection")
-              .append("<issue>")
-              .append("<b>" + issue.number + " - " + issue.title + "</b></br>")
-              .append("Updated at " + issue.updated_at.replace("T"," ").replace("Z"," UTC") + "</br>")
-              .append(issue.body + "</issue></br></br></br>");
+        $(document).ready(function () {
+          $.getJSON("https://api.github.com/repos/gappleto97/Senior-Project/issues?state=open", function (allIssues) {
+            $.each(allIssues, function (i, issue) {
+              $("#issuesection")
+                .append("<issue>")
+                .append("<b>" + issue.number + " - " + issue.title + "</b></br>")
+                .append("Updated at " + issue.updated_at.replace("T"," ").replace("Z"," UTC") + "</br>")
+                .append(issue.body + "</issue></br></br></br>");
             });
           });
         });
