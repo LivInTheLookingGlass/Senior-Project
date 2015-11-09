@@ -15,3 +15,10 @@
 .issue a:hover  {
   color: black;
 }
+
+.issue a span {
+  border: 3px groove;
+  border-radius: 5px;
+  padding-right: 3px;
+  padding-bottom: 3px;
+}
