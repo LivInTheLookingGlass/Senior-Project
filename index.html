@@ -192,7 +192,7 @@
             $.each(allIssues, function (i, issue) {
               appendstring = "<div class=\"issue\">"+ "<b>" + issue.number + " - " + issue.title + "</b></br>";
               appendstring = appendstring + "Updated at " + issue.updated_at.replace("T"," ").replace("Z"," UTC") + "</br>";
-              appendstring = appendstring + marked(issue.body) + "</div></br></br></br>";
+              appendstring = appendstring + marked(issue.body) + "</div></br>";
               $("#issuesection").append(appendstring);
             });
           });
