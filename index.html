@@ -137,6 +137,10 @@
 
 <hr>
 
+<div id="issuesection"></div>
+
+<hr>
+
 <p><a name="myfootnote1">1</a>: Users will have the option of running this for free. The bounty is to encourage participation, and is not strictly necessary.</p>
 
 <p><a name="myfootnote2">2</a>: The program would store in values in satoshis to avoid floating point inaccuracies.</p>
@@ -167,16 +171,28 @@
       </div>
     </div>
 
-            <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-69722974-3");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
-
+      <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+      </script>
+      <script type="text/javascript">
+        try {
+          var pageTracker = _gat._getTracker("UA-69722974-3");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      </script>
+      $(document).ready(function () {
+      <script type="text/javascript">
+        $.getJSON("https://api.github.com/repos/gappleto97/Senior-Project/issues?state=open", function (allIssues) {
+          $.each(allIssues, function (i, issue) {
+            $("#issuesection")
+              .append("<issue>")
+              .append("<b>" + issue.number + " - " + issue.title + "</b></br>")
+              .append("Updated at " + issue.updated_at.replace("T"," ").replace("Z"," UTC") + "</br>")
+              .append(issue.body + "</issue></br></br></br>");
+            });
+          });
+        });
+      </script>
   </body>
 </html>
