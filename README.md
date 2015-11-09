@@ -1,4 +1,4 @@
-You'll probably find the [web format](https://gappleto97.github.io/Senior-Project) a bit nicer to read.
+You'll probably find the [web format](https://gappleto97.github.io/Senior-Project) a bit nicer to read. It's also kept more up to date.
 
 #Issues
 If you do not have a GitHub account, please submit your issue with [this link](https://gitreports.com/issue/gappleto97/Senior-Project). Otherwise, use the [standard issue tracker](https://github.com/gappleto97/Senior-Project/issues/new).
