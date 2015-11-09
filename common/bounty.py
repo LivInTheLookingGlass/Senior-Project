@@ -19,11 +19,13 @@ class Bounty:
     try:
       safeprint("Testing IP address")
       #is IP valid
-      b = int(self.ip.split(":")[1])
-      b = int(self.ip.split(":")[0].split(".")[0])
-      b = int(self.ip.split(":")[0].split(".")[1])
-      b = int(self.ip.split(":")[0].split(".")[2])
-      b = int(self.ip.split(":")[0].split(".")[3])
+      b = int(self.ip.split(":")[1]) in range(1024,49152)
+      b = int(self.ip.split(":")[0].split(".")[0]) in range(0,256) and b
+      b = int(self.ip.split(":")[0].split(".")[1]) in range(0,256) and b
+      b = int(self.ip.split(":")[0].split(".")[2]) in range(0,256) and b
+      b = int(self.ip.split(":")[0].split(".")[3]) in range(0,256) and b
+      if not b:
+        return False
       #ping IP
       #is Bitcoin address valid
       safeprint("Testing Bitcoin address")
@@ -48,11 +50,11 @@ def verify(string):
   try:
     safeprint("Testing IP address")
     #is IP valid
-    b = int(self.ip.split(":")[1])
-    b = int(self.ip.split(":")[0].split(".")[0])
-    b = int(self.ip.split(":")[0].split(".")[1])
-    b = int(self.ip.split(":")[0].split(".")[2])
-    b = int(self.ip.split(":")[0].split(".")[3])
+    b = int(self.ip.split(":")[1]) in range(1024,49152)
+    b = int(self.ip.split(":")[0].split(".")[0]) in range(0,256) and b
+    b = int(self.ip.split(":")[0].split(".")[1]) in range(0,256) and b
+    b = int(self.ip.split(":")[0].split(".")[2]) in range(0,256) and b
+    b = int(self.ip.split(":")[0].split(".")[3]) in range(0,256) and b
     #ping IP
     #is Bitcoin address valid
     safeprint("Testing Bitcoin address")
