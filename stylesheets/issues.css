@@ -1,0 +1,9 @@
+.issue  {
+  border: 3px groove;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+p.issue {
+  margin-bottom: 5px;
+}
