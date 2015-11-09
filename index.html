@@ -198,8 +198,8 @@
                   appendstring = appendstring + " -";
               for (var i = 0; i < issue.labels.length; i++)	{
                   label = issue.labels[i];
-                  appendstring = appendstring + " <span style=\"border:3px groove #" + label.color
-                      + ";border-radius:5px;background:#" + label.color + "\">[" + label.name + "]</span>";
+                  appendstring = appendstring + " <span style=\"border-color:#" + label.color
+                      + ";background:#" + label.color + "\">[" + label.name + "]</span>";
               };
               appendstring = appendstring + "</a></b></br>" + "<i>Updated at "
                   + issue.updated_at.replace("T"," ").replace("Z"," UTC") + "</i></br>"
