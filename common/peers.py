@@ -126,21 +126,21 @@ def listen(port, ID):
         a.send(pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)]))
         time.sleep(0.1)
       elif b == incoming_bounty:
-	connected = True
-	s = ""
-	while connected:
-	  c = a.recv(len(close_signal))
-	  safeprint(c)
-	  if not c == close_signal:
-	    s += c
-	  else:
-	    con.close()
-	    connected = False
-	if (verify(s)):
-	  Bounty.bountyList.append(bount)
-	  a.send(valid_signal)
-	else:
-	  a.send(invalid_signal)
+        connected = True
+        s = ""
+        while connected:
+          c = a.recv(len(close_signal))
+          safeprint(c)
+          if not c == close_signal:
+            s += c
+          else:
+            con.close()
+            connected = False
+          if (verify(s)):
+            Bounty.bountyList.append(bount)
+            a.send(valid_signal)
+          else:
+            a.send(invalid_signal)
       a.send(close_signal)
       time.sleep(1)
       a.close()
