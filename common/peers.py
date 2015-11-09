@@ -1,4 +1,4 @@
-import multiprocessing, os, pickle, select, socket, time
+import multiprocessing, os, pickle, select, socket, sys, time
 from common.safeprint import safeprint
 from common.bounty import *
 
@@ -12,16 +12,19 @@ if os.name != "nt":
                                 ifname[:15]))[20:24])
 
 def get_lan_ip():
-    ip = socket.gethostbyname(socket.gethostname())
-    if ip.startswith("127.") and os.name != "nt":
-        interfaces = ["eth0","eth1","eth2","wlan0","wlan1","wifi0","ath0","ath1","ppp0",]
-        for ifname in interfaces:
-            try:
-                ip = get_interface_ip(ifname)
-                break
-            except IOError:
-                pass
-    return ip
+    if sys.version_info[0] != 3:
+        ip = socket.gethostbyname(socket.gethostname())
+        if ip.startswith("127.") and os.name != "nt":
+            interfaces = ["eth0","eth1","eth2","wlan0","wlan1","wifi0","ath0","ath1","ppp0",]
+            for ifname in interfaces:
+                try:
+                    ip = get_interface_ip(ifname)
+                    break
+                except IOError:
+                    pass
+        return ip
+    else:
+        return "127.0.0.1"
 
 seedlist = ["127.0.0.1:44565", "localhost:44565", "10.132.80.128:44565"]
 peerlist = [get_lan_ip() + ":44565"]
@@ -40,12 +43,12 @@ Alive = True
 
 def getFromFile():
   if os.path.exists(peers_file):
-    peerlist = pickle.load(open(peers_file,"r"))
+    peerlist = pickle.load(open(peers_file,"rb"))
 
 def saveToFile():
   if not os.path.exists(peers_file.split(os.sep)[0]):
     os.mkdir(peers_file.split(os.sep)[0])
-  pickle.dump(peerlist,open(peers_file,"w"))
+  pickle.dump(peerlist,open(peers_file,"wb"))
 
 def getFromSeeds():
   for seed in seedlist:
