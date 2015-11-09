@@ -9,7 +9,7 @@ If you do not have a GitHub account, please submit your issue with [this link](h
 A purely peer to peer distributed computing network which rewards the participants for solving proposed problems. Bounties and IP addresses are exchanged across a websocket network. If the bounty is above a client’s threshold, they will request a java-based test from this IP address. Because a system does not want to reward for faulty results, a test app is sent to the client. If the result is returned correctly, the bountied problem will then be sent.
 
 ##Introduction
-With the rise of distributed computing projects, from [Folding at Home](https://folding.stanford.edu/), [SETI](http://setiathome.ssl.berkeley.edu/), etc., there is a distinct lack of standardization in their distribution methods. Because of this, anyone who wants to tap into this trove of information must design their own platform and market this to the world. It’s not surprising that it’s been slow to diversify.
+With the rise of distributed computing projects, from [Folding at Home](https://folding.stanford.edu/), [SETI](https://setiathome.ssl.berkeley.edu/), etc., there is a distinct lack of standardization in their distribution methods. Because of this, anyone who wants to tap into this trove of information must design their own platform and market this to the world. It’s not surprising that it’s been slow to diversify.
 
 Another problem is that clients have no incentive to run these programs, save for charitable inclinations. Until recently, it would have been next to impossible to provide an incentive. However, with the onset of cryptocurrencies, there is now an easy solution. If people are provided a bounty for problems, they can gain a passive income for their idle resources. This becomes their incentive.<sup>[1](#myfootnote1)</sup>
 
@@ -22,11 +22,11 @@ For instance, if a bounty is 100,000,000 satoshis (1 BTC),<sup>[2](#myfootnote2)
 
 The data array can contain various flags. For instance, if the program is designed to run on multiple threads, it could contain the ideal core count. Or if the server is run by a well known entity, it could contain something like “SETI thanks you”.
 
-![](http://i.imgur.com/xCsjOto.png)
+![](https://i.imgur.com/xCsjOto.png)
 
 Each node decides to propagate a bounty to the network by using the following workflow:
 
-![](http://i.imgur.com/bkmwNsB.png)
+![](https://i.imgur.com/bkmwNsB.png)
 
 ##Security
 Because a client is allowing other people to run unknown code on their computer, there needs to be a way to keep things secure. This is possible by the use of a sandbox, making Java an ideal language for tests. While this is less efficient than other languages, it builds a security solution into the network and client itself.
@@ -43,7 +43,7 @@ This opens an avenue of attack for the network, however, so there must be constr
 After all of this, the query is finally sent to the client. Simultaneously, a [payment channel](https://bitcoin.org/en/developer-guide#micropayment-channel)<sup>[4](#myfootnote4)</sup> is opened. This channel will be updated once per minute as long as there is an active connection between the server and client, and will grow at a linear rate until a result is achieved, but will never reach the full bounty until a result is submitted. This is to protect from fraud on both the server and user end. The server is protected in that the client has an incentive to stay online, and the user is protected in that the connection will expire if a predetermined time goes by without a result.
 
 Upon closing the connection, the reward is distributed between the two parties in the way agreed upon in the last transaction broadcast. If a result is given, the full bounty will be delivered. The transactions are always broadcast with a lock-time of 24 hours.
-![](http://i.imgur.com/I25QiL0.png)
+![](https://i.imgur.com/I25QiL0.png)
 
 ##Servers
 The server side of this has two additional components: a propagator and a parser. The propagator handles requests from various clients. It is comprised of a wallet,<sup>[5](#myfootnote5)</sup> a socket,<sup>[6](#myfootnote6)</sup> and (at least) two files. The wallet is used to pay clients in the manner described above. By necessity it spawns large numbers of threads—one per client connected. The socket decides which file to send to clients, and then sends them. When the socket receives a file, it passes it on to the parser.
