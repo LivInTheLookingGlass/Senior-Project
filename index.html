@@ -192,7 +192,7 @@
         $(document).ready(function () {
           $.getJSON("https://api.github.com/repos/gappleto97/Senior-Project/issues?state=open", function (allIssues) {
             $.each(allIssues, function (i, issue) {
-              appendstring = "<div class=\"issue\">"+ "<b>" + issue.number + " - " + issue.title + "</b></br>";
+              appendstring = "<div class=\"issue\">"+ "<b><a href=\"issue.html_url\">" + issue.number + " - " + issue.title + "</a></b></br>";
               appendstring = appendstring + "<i>Updated at " + issue.updated_at.replace("T"," ").replace("Z"," UTC");
               appendstring = appendstring + "</i></br>" + marked(issue.body) + "</div></br>";
               $("#issuesection").append(appendstring);
