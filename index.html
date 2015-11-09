@@ -59,11 +59,11 @@
 
 <p>The data array can contain various flags. For instance, if the program is designed to run on multiple threads, it could contain the ideal core count. Or if the server is run by a well known entity, it could contain something like “SETI thanks you”.</p>
 
-<p><img src="http://i.imgur.com/xCsjOto.png" alt=""></p>
+<p><img src="https://i.imgur.com/xCsjOto.png" alt=""></p>
 
 <p>Each node decides to propagate a bounty to the network by using the following workflow:</p>
 
-<p><img src="http://i.imgur.com/bkmwNsB.png" alt=""></p>
+<p><img src="https://i.imgur.com/bkmwNsB.png" alt=""></p>
 
 <h2>
 <a id="security" class="anchor" href="#security" aria-hidden="true"><span class="octicon octicon-link"></span></a>Security</h2>
@@ -85,7 +85,7 @@
 <p>After all of this, the query is finally sent to the client. Simultaneously, a <a href="https://bitcoin.org/en/developer-guide#micropayment-channel">payment channel</a><sup><a href="#myfootnote4">4</a></sup> is opened. This channel will be updated once per minute as long as there is an active connection between the server and client, and will grow at a linear rate until a result is achieved, but will never reach the full bounty until a result is submitted. This is to protect from fraud on both the server and user end. The server is protected in that the client has an incentive to stay online, and the user is protected in that the connection will expire if a predetermined time goes by without a result.</p>
 
 <p>Upon closing the connection, the reward is distributed between the two parties in the way agreed upon in the last transaction broadcast. If a result is given, the full bounty will be delivered. The transactions are always broadcast with a lock-time of 24 hours.
-<img src="http://i.imgur.com/I25QiL0.png" alt=""></p>
+<img src="https://i.imgur.com/I25QiL0.png" alt=""></p>
 
 <h2>
 <a id="servers" class="anchor" href="#servers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Servers</h2>
