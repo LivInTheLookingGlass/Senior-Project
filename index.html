@@ -28,7 +28,7 @@
               + issue.updated_at.replace("T"," ").replace("Z"," UTC") + "</i></br>"
               + marked(issue.body) + "</div></br>";
           $("#issuesection").append(appendstring);
-        }).then(getScript("./prism.min.js"));
+        }).then($.getScript("./prism.min.js"));
       });
     </script>
     <!--[if lt IE 9]>
