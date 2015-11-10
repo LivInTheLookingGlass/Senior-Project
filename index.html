@@ -31,9 +31,9 @@
                 + marked(issue.body) + "</div></br>";
             console.log(marked(issue.body));
             $("#issuesection").append(appendstring);
+            Prism.highlightAll();
           });
         });
-        Prism.highlightAll();
       });
     </script>
     <!--[if lt IE 9]>
