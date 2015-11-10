@@ -779,7 +779,10 @@ Renderer.prototype.code = function(code, lang, escaped) {
   return '<pre class="'
     + this.options.langPrefix
     + escape(lang, true)
-    + '"><code>'
+    + '"><code class="'
+    + this.options.langPrefix
+    + escape(lang, true)
+    + '">'
     + (escaped ? code : escape(code, true))
     + '\n</code></pre>\n';
 };
