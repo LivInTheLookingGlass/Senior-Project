@@ -211,17 +211,5 @@
         pageTracker._trackPageview();
         } catch(err) {}
       </script>
-      <script type="text/javascript">
-        $(window).load(function ()  {
-          var i = setInterval(function ()
-          {
-            if ($('#issuesloaded').length)
-            {
-              clearInterval(i); 
-              $.getScript("./prism.min.js");
-            }
-          }, 100);
-        });
-      </script>
   </body>
 </html>
