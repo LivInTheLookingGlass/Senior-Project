@@ -12,7 +12,6 @@
     <link rel="stylesheet" type="text/css" href="prism.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="./marked.js"></script>
-    <script src="./prism.min.js"></script>
 
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -207,9 +206,9 @@
               };
               appendstring = appendstring + "</a></b></br>" + "<i>Updated at "
                   + issue.updated_at.replace("T"," ").replace("Z"," UTC") + "</i></br>"
-                  + marked(issue.body) + "</div></br>";
+                  + marked(issue.body) + "</div></br>"
+                  + "<script src=\"./prism.min.js\"></script>";
               $("#issuesection").append(appendstring);
-              
             });
           });
         });
