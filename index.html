@@ -209,11 +209,7 @@
                   + issue.updated_at.replace("T"," ").replace("Z"," UTC") + "</i></br>"
                   + marked(issue.body) + "</div></br>";
               $("#issuesection").append(appendstring);
-              $.ajax({
-                url: "prism.min.js",
-                dataType: "script",
-                success: console.log("Script was loaded")
-              });
+              
             });
           });
         });
