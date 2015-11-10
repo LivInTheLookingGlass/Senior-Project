@@ -218,8 +218,7 @@
             if ($('#issuesloaded').length)
             {
               clearInterval(i); 
-              $(document).ready($.getScript("./prism.min.js", function(){
-               }));
+              $.getScript("./prism.min.js");
             }
           }, 100);
         });
