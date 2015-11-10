@@ -14,8 +14,9 @@
     <script src="./marked.js"></script>
     <script type="text/javascript">
       $.getJSON("https://api.github.com/repos/gappleto97/Senior-Project/issues?state=open", function (allIssues) {
-        $.each(allIssues, function (i, issue) {
-          appendstring = "<div class=\"issue\">"+ "<b><a href=\"" + issue.html_url + "\">" + issue.number
+        appendstring = "<div id=\"issuesloaded\">";
+        $.each(allIssues, function (i, issue, appendstring) {
+          appendstring = appendstring + "<div class=\"issue\">"+ "<b><a href=\"" + issue.html_url + "\">" + issue.number
               + " - " + issue.title;
           if (issue.labels.length > 0)
               appendstring = appendstring + " -";
@@ -27,8 +28,9 @@
           appendstring = appendstring + "</a></b></br>" + "<i>Updated at "
               + issue.updated_at.replace("T"," ").replace("Z"," UTC") + "</i></br>"
               + marked(issue.body) + "</div></br>";
-          $("#issuesection").append(appendstring);
-        });
+        }, appendstring);
+        appendstring = appendstring + "</div>";
+        $("#issuesection").append(appendstring);
       });
       $(document).ready($.getScript("./prism.min.js", function(){
        }));
