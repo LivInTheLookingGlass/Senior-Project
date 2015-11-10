@@ -776,7 +776,7 @@ Renderer.prototype.code = function(code, lang, escaped) {
       + '\n</code></pre>';
   }
 
-  return '<pre class="'
+  return '<pre class="line-numbers  '
     + this.options.langPrefix
     + escape(lang, true)
     + '"><code class="'
