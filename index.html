@@ -32,8 +32,6 @@
         appendstring = appendstring + "</div>";
         $("#issuesection").append(appendstring);
       });
-      $(document).ready($.getScript("./prism.min.js", function(){
-       }));
     </script>
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -212,6 +210,19 @@
           var pageTracker = _gat._getTracker("UA-69722974-3");
         pageTracker._trackPageview();
         } catch(err) {}
+      </script>
+      <script type="text/javascript">
+        $(window).load(function ()  {
+          var i = setInterval(function ()
+          {
+            if ($('#issuesloaded').length)
+            {
+              clearInterval(i); 
+              $(document).ready($.getScript("./prism.min.js", function(){
+               }));
+            }
+          }, 100);
+        });
       </script>
   </body>
 </html>
