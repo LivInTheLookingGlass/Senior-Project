@@ -23,3 +23,8 @@
   padding-bottom: 3px;
   color: black;
 }
+
+pre code  {
+  background: inherit;
+}
+}
