@@ -27,6 +27,7 @@
           appendstring = appendstring + "</a></b></br>" + "<i>Updated at "
               + issue.updated_at.replace("T"," ").replace("Z"," UTC") + "</i></br>"
               + marked(issue.body) + "</div></br>";
+          console.log(marked(issue.body));
           $("#issuesection").append(appendstring);
         });
         $.getScript("./javascripts/prism.min.js");
