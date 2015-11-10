@@ -29,6 +29,7 @@
               + marked(issue.body) + "</div></br>";
           $("#issuesection").append(appendstring);
         });
+        $.getScript("./prism.min.js");
       });
     </script>
     <!--[if lt IE 9]>
@@ -208,6 +209,5 @@
       pageTracker._trackPageview();
       } catch(err) {}
     </script>
-    <script src="./prism.min.js" defer></script>
   </body>
 </html>
