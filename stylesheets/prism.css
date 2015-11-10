@@ -1,4 +1,4 @@
-/* http://prismjs.com/download.html?themes=prism&languages=python&plugins=line-numbers+show-language+highlight-keywords+remove-initial-line-feed+autoloader */
+/* http://prismjs.com/download.html?themes=prism&languages=python&plugins=line-numbers+wpd+show-language+highlight-keywords+remove-initial-line-feed+autoloader */
 /**
  * prism.js default theme for JavaScript, CSS and HTML
  * Based on dabblet (http://dabblet.com)
@@ -177,6 +177,17 @@ pre.line-numbers > code {
 			padding-right: 0.8em;
 			text-align: right;
 		}
+code[class*="language-"] a[href],
+pre[class*="language-"] a[href] {
+	cursor: help;
+	text-decoration: none;
+}
+
+code[class*="language-"] a[href]:hover,
+pre[class*="language-"] a[href]:hover {
+	cursor: help;
+	text-decoration: underline;
+}
 div.prism-show-language {
 	position: relative;
 }
@@ -206,4 +217,3 @@ div.prism-show-language > div.prism-show-language-label[data-language] {
 	-o-transform: none;
 	transform: none;
 }
-
