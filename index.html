@@ -29,7 +29,8 @@
               + marked(issue.body) + "</div></br>";
           $("#issuesection").append(appendstring);
         });
-        $("#issuesection").append("<div id=\"issuesloaded\"></div>");
+        $.getScript("./prism.min.js");
+        Prism();
       });
     </script>
     <!--[if lt IE 9]>
@@ -217,7 +218,6 @@
             if ($('#issuesloaded').length)
             {
               clearInterval(i); 
-              $.getScript("./prism.min.js");
             }
           }, 100);
         });
