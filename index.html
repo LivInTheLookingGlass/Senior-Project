@@ -12,7 +12,25 @@
     <link rel="stylesheet" type="text/css" href="prism.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="./marked.js"></script>
-
+    <script type="text/javascript">
+      $.getJSON("https://api.github.com/repos/gappleto97/Senior-Project/issues?state=open", function (allIssues) {
+        $.each(allIssues, function (i, issue) {
+          appendstring = "<div class=\"issue\">"+ "<b><a href=\"" + issue.html_url + "\">" + issue.number
+              + " - " + issue.title;
+          if (issue.labels.length > 0)
+              appendstring = appendstring + " -";
+          for (var i = 0; i < issue.labels.length; i++)	{
+              label = issue.labels[i];
+              appendstring = appendstring + " <span style=\"border-color:#" + label.color
+                  + ";background:#" + label.color + "\">" + label.name + "</span>";
+          };
+          appendstring = appendstring + "</a></b></br>" + "<i>Updated at "
+              + issue.updated_at.replace("T"," ").replace("Z"," UTC") + "</i></br>"
+              + marked(issue.body) + "</div></br>";
+          $("#issuesection").append(appendstring);
+        });
+      });
+    </script>
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -192,28 +210,9 @@
         } catch(err) {}
       </script>
       <script type="text/javascript">
-        $(document).ready(function () {
-          $.getJSON("https://api.github.com/repos/gappleto97/Senior-Project/issues?state=open", function (allIssues) {
-            $.each(allIssues, function (i, issue) {
-              appendstring = "<div class=\"issue\">"+ "<b><a href=\"" + issue.html_url + "\">" + issue.number
-                  + " - " + issue.title;
-              if (issue.labels.length > 0)
-                  appendstring = appendstring + " -";
-              for (var i = 0; i < issue.labels.length; i++)	{
-                  label = issue.labels[i];
-                  appendstring = appendstring + " <span style=\"border-color:#" + label.color
-                      + ";background:#" + label.color + "\">" + label.name + "</span>";
-              };
-              appendstring = appendstring + "</a></b></br>" + "<i>Updated at "
-                  + issue.updated_at.replace("T"," ").replace("Z"," UTC") + "</i></br>"
-                  + marked(issue.body) + "</div></br>";
-              $("#issuesection").append(appendstring);
-            });
-          });
-        });
-        $.getScript("./prism.min.js", function(){
+        $(document).ready($.getScript("./prism.min.js", function(){
          alert("Script loaded and executed.");
-       });
+       }));
       </script>
   </body>
 </html>
