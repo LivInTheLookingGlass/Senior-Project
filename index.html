@@ -9,9 +9,9 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
     <link rel="stylesheet" type="text/css" href="stylesheets/issues.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="prism.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/prism.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="./marked.js"></script>
+    <script src="javascripts/marked.js"></script>
     <script type="text/javascript">
       $.getJSON("https://api.github.com/repos/gappleto97/Senior-Project/issues?state=open", function (allIssues) {
         $.each(allIssues, function (i, issue) {
@@ -29,7 +29,7 @@
               + marked(issue.body) + "</div></br>";
           $("#issuesection").append(appendstring);
         });
-        $.getScript("./prism.min.js");
+        $.getScript("stylesheets/prism.min.js");
       });
     </script>
     <!--[if lt IE 9]>
