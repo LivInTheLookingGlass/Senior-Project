@@ -164,20 +164,6 @@
 
 <hr>
 
-<?php
-$url = "https://api.github.com/repos/gappleto97/Senior-Project/issues?state=open";
-$content = file_get_contents($url);
-$json = json_decode($content, true);
-
-foreach($json as $issue)	{
-	$append = "<div class=\"issue\"><b><a href=\"" . $issue['html_url'] . "\">" . $issue['number'] . " - " . $issue['title'];
-	echo $append;
-}
-
-echo '</br></br>';
-echo $content;
-?>
-
 <div id="issuesection"></div>
 
 <h1>Footnotes</h1>
