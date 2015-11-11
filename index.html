@@ -79,7 +79,7 @@
 
 <p>The first field stores the quantity of the bounty in satoshis (the base unit of Bitcoin). The second stores the IP address of the server. The third stores the Bitcoin address of the server. These three pieces of information can be used to filter out invalid requests.</p>
 
-<p>For instance, if a bounty is 100,000,000 satoshis (1 BTC),<sup><a href="#myfootnote2">2</a></sup> but their address only contains 10,000, you can safely say that the request is invalid, as they do not have the funds to pay you. Likewise if you cannot connect to their IP address.</p>
+<p>For instance, if a bounty is 100,000,000 satoshis (1 BTC),<script type="text/javascript">addFootnote("The program would store in values in satoshis to avoid floating point inaccuracies.");</script><sup><a href="#myfootnote2">2</a></sup> but their address only contains 10,000, you can safely say that the request is invalid, as they do not have the funds to pay you. Likewise if you cannot connect to their IP address.</p>
 
 <p>The data array can contain various flags. For instance, if the program is designed to run on multiple threads, it could contain the ideal core count. Or if the server is run by a well known entity, it could contain something like “SETI thanks you”.</p>
 
@@ -101,12 +101,12 @@
 
 <p>Tests are a vital part of the network. Like there are ways for clients to exclude invalid requests, there must also be a way for servers to exclude inappropriate clients. They can do this with small bits of test code. The client will then send them the result of this code, and if it is correct, will receive the real problem.</p>
 
-<p>This opens an avenue of attack for the network, however, so there must be constraints on these tests. These will be defined at a later time.<sup><a href="#myfootnote3">3</a></sup></p>
+<p>This opens an avenue of attack for the network, however, so there must be constraints on these tests. These will be defined at a later time.<script type="text/javascript">addFootnote("Fork bombing and other such annoyances are a major concern with the test network. Because of this, any solution that necessitates trust must be rejected. Code analysis for any obvious concerns will be necessary, but may not be enough.");</script></p>
 
 <h2>
 <a id="queries" class="anchor" href="#queries" aria-hidden="true"><span class="octicon octicon-link"></span></a>Queries</h2>
 
-<p>After all of this, the query is finally sent to the client. Simultaneously, a <a href="https://bitcoin.org/en/developer-guide#micropayment-channel">payment channel</a><sup><a href="#myfootnote4">4</a></sup> is opened. This channel will be updated once per minute as long as there is an active connection between the server and client, and will grow at a linear rate until a result is achieved, but will never reach the full bounty until a result is submitted. This is to protect from fraud on both the server and user end. The server is protected in that the client has an incentive to stay online, and the user is protected in that the connection will expire if a predetermined time goes by without a result.</p>
+<p>After all of this, the query is finally sent to the client. Simultaneously, a <a href="https://bitcoin.org/en/developer-guide#micropayment-channel">payment channel</a><script type="text/javascript">addFootnote("This opens up a security risk to the user because their private key is exposed to my program. This is the single biggest reason that this must be an open source project. Encryption will be explored.");</script> is opened. This channel will be updated once per minute as long as there is an active connection between the server and client, and will grow at a linear rate until a result is achieved, but will never reach the full bounty until a result is submitted. This is to protect from fraud on both the server and user end. The server is protected in that the client has an incentive to stay online, and the user is protected in that the connection will expire if a predetermined time goes by without a result.</p>
 
 <p>Upon closing the connection, the reward is distributed between the two parties in the way agreed upon in the last transaction broadcast. If a result is given, the full bounty will be delivered. The transactions are always broadcast with a lock-time of 24 hours.
 <img src="https://i.imgur.com/I25QiL0.png" alt=""></p>
@@ -114,7 +114,7 @@
 <h2>
 <a id="servers" class="anchor" href="#servers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Servers</h2>
 
-<p>The server side of this has two additional components: a propagator and a parser. The propagator handles requests from various clients. It is comprised of a wallet,<sup><a href="#myfootnote5">5</a></sup> a socket,<sup><a href="#myfootnote6">6</a></sup> and (at least) two files. The wallet is used to pay clients in the manner described above. By necessity it spawns large numbers of threads—one per client connected. The socket decides which file to send to clients, and then sends them. When the socket receives a file, it passes it on to the parser.</p>
+<p>The server side of this has two additional components: a propagator and a parser. The propagator handles requests from various clients. It is comprised of a wallet,<script type="text/javascript">addFootnote("Part of the common library.");</script> a socket,<script type="text/javascript">addFootnote("Overrides of the standard peer management system.");</script> and (at least) two files. The wallet is used to pay clients in the manner described above. By necessity it spawns large numbers of threads—one per client connected. The socket decides which file to send to clients, and then sends them. When the socket receives a file, it passes it on to the parser.</p>
 
 <p>The parser has two purposes: analyze test results, and move problem results to the proper area. Because of this, test results take the priority. This piece must be written by the server maintainers; there is no general solution for it. When it is not doing this, the parser moves solution files to a different folder, where it can be analyzed without slowing down the rest of the server.</p>
 
@@ -175,7 +175,7 @@
 <hr>
 
 <div id="footnotes"></div>
-
+<!----
 <p><a name="myfootnote1">1</a>: Users will have the option of running this for free. The bounty is to encourage participation, and is not strictly necessary.</p>
 
 <p><a name="myfootnote2">2</a>: The program would store in values in satoshis to avoid floating point inaccuracies.</p>
@@ -186,7 +186,7 @@
 
 <p><a name="myfootnote5">5</a>: Part of the common library.</p>
 
-<p><a name="myfootnote6">6</a>: Overrides of the standard peer management system.</p>
+<p><a name="myfootnote6">6</a>: Overrides of the standard peer management system.</p>--->
         </section>
 
         <aside id="sidebar">
