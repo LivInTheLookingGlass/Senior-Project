@@ -11,4 +11,5 @@ function addFootnote(message)  {
 }
 $(document).ready(function()  {
   $("#footnotes").append(footnotequeue);
+  footnotequeue = "";
 });
