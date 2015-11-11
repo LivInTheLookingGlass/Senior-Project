@@ -12,7 +12,7 @@ if os.name != "nt":
                                 ifname[:15]))[20:24])
 
 def get_lan_ip():
-    if sys.version_info[0] <= 3:
+    if sys.version_info[0] < 3:
         ip = socket.gethostbyname(socket.gethostname())
         if ip.startswith("127.") and os.name != "nt":
             interfaces = ["eth0","eth1","eth2","wlan0","wlan1","wifi0","ath0","ath1","ppp0",]
@@ -50,7 +50,7 @@ def getFromFile():
 def saveToFile():
   if not os.path.exists(peers_file.split(os.sep)[0]):
     os.mkdir(peers_file.split(os.sep)[0])
-  pickle.dump(peerlist,open(peers_file,"wb"))
+  pickle.dump(peerlist,open(peers_file,"wb"),2)
 
 def getFromSeeds():
   for seed in seedlist:
@@ -128,14 +128,14 @@ def listen(port, ID):
       b = a.recv(len(peer_request))
       safeprint("Received: " + str(b))
       if b == peer_request:
-        a.send(pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)]))
+        a.send(bytes(pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)])))
         time.sleep(0.1)
       elif b == incoming_bounty:
         connected = True
         s = ""
         while connected:
           c = a.recv(len(close_signal))
-          safeprint(c)
+          safeprint(bytes(c))
           if not c == close_signal:
             s += c
           else:
