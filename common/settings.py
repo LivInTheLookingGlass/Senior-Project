@@ -1,11 +1,12 @@
 import optparse, os, pickle
 from common.safeprint import safeprint
 
-config = {'charity':False,
+config = {'accept_latency':2000,
+          'charity':False,
+          'port':44565,
+          'outbound':False,
           'propagate_factor':2,
-          'accept_latency':2000,
-          'server':False,
-	  'port':44565}
+          'server':False}
 settings_file = "data" + os.sep + "settings.conf"
 
 def saveSettings():
