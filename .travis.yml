@@ -11,12 +11,16 @@ python:
   - "3.5"
   - "3.5-dev" # 3.5 development branch
   - "nightly" # currently points to 3.6-dev
+eng:
+  - Cov='true'
+  - Cov='false'
 # command to install dependencies
 install: "pip install -r requirements.txt"
 # command to run tests
 script: 
-  - coverage run main.py
+  - if [ $Cov = 'true'  ];coverage run main.py
+  - if [ $Cov = 'false' ];python main.py
 before_install:
-  - pip install codecov
+  - if [ $Cov = 'true'  ];pip install codecov
 after_success:
-  - codecov --token=0482d032-e24c-461b-a116-f0e3dbc88734
+  - if [ $Cov = 'true'  ];codecov --token=0482d032-e24c-461b-a116-f0e3dbc88734
