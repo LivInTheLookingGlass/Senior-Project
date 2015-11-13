@@ -6,7 +6,7 @@ If you do not have a GitHub account, please submit your issue with [this link](h
 # Senior Project
 
 ##Abstract
-A purely peer to peer distributed computing network which rewards the participants for solving proposed problems. Bounties and IP addresses are exchanged across a websocket network. If the bounty is above a client’s threshold, they will request a java-based test from this IP address. Because a system does not want to reward for faulty results, a test app is sent to the client. If the result is returned correctly, the bountied problem will then be sent.
+propose a peer to peer distributed computing network where given problems are solved by participants. Results are tested with a java-based test program, and valid results lead to payment of a bounty to the participant responsible for the solution. Nodes communicate via a websocket network.
 
 ##Introduction
 With the rise of distributed computing projects, from [Folding at Home](https://folding.stanford.edu/), [SETI](https://setiathome.ssl.berkeley.edu/), etc., there is a distinct lack of standardization in their distribution methods. Because of this, anyone who wants to tap into this trove of information must design their own platform and market this to the world. It’s not surprising that it’s been slow to diversify.
