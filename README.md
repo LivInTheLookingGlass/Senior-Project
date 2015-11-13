@@ -1,3 +1,5 @@
+![](https://api.travis-ci.org/gappleto97/Senior-Project.svg?branch=master)
+
 You'll probably find the [web format](https://gappleto97.github.io/Senior-Project) a bit nicer to read. It's also kept more up to date.
 
 #Issues
