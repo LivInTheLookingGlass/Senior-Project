@@ -18,9 +18,9 @@ eng:
 install: "pip install -r requirements.txt"
 # command to run tests
 script: 
-  - if [ $Cov = 'true'  ];coverage run main.py
-  - if [ $Cov = 'false' ];python main.py
+  - if [ $Cov == 'true'  ]; then coverage run main.py; fi
+  - if [ $Cov == 'false' ]; then python main.py; fi
 before_install:
-  - if [ $Cov = 'true'  ];pip install codecov
+  - if [ $Cov == 'true'  ]; then pip install codecov; fi
 after_success:
-  - if [ $Cov = 'true'  ];codecov --token=0482d032-e24c-461b-a116-f0e3dbc88734
+  - if [ $Cov == 'true'  ]; then codecov --token=0482d032-e24c-461b-a116-f0e3dbc88734; fi
