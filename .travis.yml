@@ -18,4 +18,4 @@ script: "python main.py"
 before_install:
   - pip install codecov
 after_success:
-  - codecov -t :0482d032-e24c-461b-a116-f0e3dbc88734
+  - codecov
