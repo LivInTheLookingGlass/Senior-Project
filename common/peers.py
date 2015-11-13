@@ -37,6 +37,7 @@ bounties = []
 peers_file      = "data" + os.sep + "peerlist.pickle"
 close_signal    = "Close Signal......."
 peer_request    = "Requesting Peers..."
+bounty_request  = "Requesting Bounties"
 incoming_bounty = "Incoming Bounty...."
 valid_signal    = "Bounty was valid..."
 invalid_signal  = "Bounty was invalid."
@@ -129,7 +130,10 @@ def listen(port, ID):
       safeprint("Received: " + str(b))
       if b == peer_request:
         a.send(bytes(pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)])))
-        time.sleep(0.1)
+        time.sleep(0.01)
+      elif b == bounty_request:
+        a.send(bytes(pickle.dumps(bountyList)))
+        time.sleep(0.01)
       elif b == incoming_bounty:
         connected = True
         s = ""
