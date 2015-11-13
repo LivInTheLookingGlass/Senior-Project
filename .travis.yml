@@ -11,7 +11,7 @@ python:
   - "3.5"
   - "3.5-dev" # 3.5 development branch
   - "nightly" # currently points to 3.6-dev
-eng:
+env:
   - Cov='true'
   - Cov='false'
 # command to install dependencies
