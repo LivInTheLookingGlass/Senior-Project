@@ -16,6 +16,6 @@ install: "pip install -r requirements.txt"
 # command to run tests
 script: 
   - python main.py
-  - codecov
+  - codecov --token=0482d032-e24c-461b-a116-f0e3dbc88734
 before_install:
   - pip install codecov
