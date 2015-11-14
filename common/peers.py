@@ -96,6 +96,18 @@ def requestPeerlist(address):
         s += a.decode()
     s = s.encode('utf-8')
     safeprint(pickle.loads(s))
+    #test section
+    con.connect((address.split(":")[0],int(address.split(":")[1])))
+    con.send(incoming_bounty)
+    time.sleep(0.01)
+    b = Bounty(get_lan_ip() + ":44565","1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1150)
+    b = pickle.dumps(b,1)
+    if type(b) == type("a"):
+        b = b.encode('utf-8')
+    con.send(b)
+    time.sleep(0.01)
+    con.send(close_signal)
+    #end test section
     return pickle.loads(s)
   except Exception as e:
     safeprint("Failed:" + str(type(e)))
