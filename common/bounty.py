@@ -120,7 +120,7 @@ def addBounty(bounty):
     bounty = pickle.loads(bounty)
   else:
     c = pickle.dumps(bounty,1)
-    if type(c) == type("aaa"):
+    if type(c) == type("aaa") and sys.version_info[0] >= 3:
       safeprint("Fed as string, encoding utf-8")
       c = c.encode('utf-8')
     safeprint("External verify")
