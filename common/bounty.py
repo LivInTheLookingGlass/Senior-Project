@@ -108,7 +108,7 @@ def sendBounty(peer):
   
 def addBounty(bounty):
   a = False
-  if type(bounty) == type("aaa") an sys.version_info[0] >= 3:
+  if type(bounty) == type("aaa") and sys.version_info[0] >= 3:
     safeprint("Fed as string, encoding utf-8")
     bounty = bounty.encode('utf-8')
   elif sys.version_info[0] < 3:
