@@ -6,9 +6,13 @@ from common.safeprint import safeprint
 
 def main():
     settings.setup()
+    try:
+        import miniupnpc
+    except:
+        settings.config['outbound'] = True
     safeprint("settings are:")
     safeprint(settings.config)
-    ear = listener(1,settings.config['port'])
+    ear = listener(1,settings.config['outbound'])
     ear.daemon = True
     ear.start()
     initializePeerConnections()
