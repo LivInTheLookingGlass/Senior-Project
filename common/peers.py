@@ -72,11 +72,19 @@ def requestPeerlist(address):
     while connected:
       a = con.recv(64)
       safeprint(a.decode())
-      if not a == close_signal:
-        s += a.decode()
-      else:
+      if a == close_signal:
         con.close()
         connected = False
+      elif a == peer_request:
+        c = pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)],1)
+        if type(c) != type("a".encode("utf-8")):
+          safeprint("Test here")
+          c = c.encode("utf-8")
+        a.send(c)
+        time.sleep(0.01)
+        a.send(close_signal)
+      else:
+        s += a.decode()
     s = s.encode('utf-8')
     safeprint(pickle.loads(s))
     return pickle.loads(s)
@@ -175,6 +183,21 @@ def listen(port, outbound):
           c = c.encode("utf-8")
         a.send(c)
         time.sleep(0.01)
+        a.send(peer_request)
+        connected = True
+        s = ""
+        while connected:
+          a = con.recv(64)
+          safeprint(a.decode())
+          if a == close_signal:
+            connected = False
+          elif a == peer_request:
+            continue
+          else:
+            s += a.decode()
+        s = s.encode('utf-8')
+        peerlist.extend(pickle.loads(s))
+        trimPeers()
       elif b == bounty_request:
         c = pickle.dumps(bountyList,1)
         if type(c) != type("a".encode("utf-8")):
@@ -198,7 +221,7 @@ def listen(port, outbound):
           else:
             a.send(invalid_signal)
       a.send(close_signal)
-      time.sleep(1)
+      time.sleep(0.01)
       a.close()
       safeprint("connection closed")
     except Exception as e:
