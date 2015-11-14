@@ -28,7 +28,7 @@ def get_lan_ip():
         s.connect(('8.8.8.8', 0))
         return s.getsockname()[0]
 
-seedlist = ["127.0.0.1:44565", "localhost:44565", "10.132.80.128:44565"]
+seedlist = ["127.0.0.1:44565", "localhost:44565", "10.132.80.128:44565", "24.10.111.111:44565"]
 peerlist = [get_lan_ip() + ":44565"]
 remove   = []
 bounties = []
@@ -124,6 +124,8 @@ def listen(port, outbound):
   server = socket.socket()
   server.bind(("0.0.0.0",port))
   server.listen(10)
+  ext_ip = ""
+  ext_port = -1
   if outbound is True:
     safeprint("UPnP mode is disabled")
   else:
@@ -141,13 +143,20 @@ def listen(port, outbound):
     safeprint(str(u.discover()) + 'device(s) detected')
     try:
       u.selectigd()
+      ext_ip = u.externalipaddress()
+      safeprint("external ip is: " + str(ext_ip))
     except Exception as e:
       safeprint("Failed: " + str(type(e)))
       safeprint(e)
       outbound = True
   if outbound is False:
     try:
-      safeprint(u.addportmapping(port, 'TCP', get_lan_ip(), port, 'port mapping test', ''))
+      for i in range(0,20):
+        safeprint("Port forward try: " + str(i))
+        if u.addportmapping(port+i, 'TCP', get_lan_ip(), port, 'Bounty Net', ''):
+          ext_port = port + i
+          break
+      safeprint("External port is " + str(ext_port))
     except Exception as e:
       safeprint("Failed: " + str(type(e)))
       safeprint(e)
