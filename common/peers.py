@@ -28,8 +28,8 @@ def get_lan_ip():
         s.connect(('8.8.8.8', 0))
         return s.getsockname()[0]
 
-seedlist = ["127.0.0.1:44565", "localhost:44565", "10.132.80.128:44565", "24.10.111.111:44565"]
-peerlist = [get_lan_ip() + ":44565"]
+seedlist = ["127.0.0.1:44565", "localhost:44565", "10.132.80.128:44565"]
+peerlist = [get_lan_ip() + ":44565", "24.10.111.111:44565"]
 remove   = []
 bounties = []
 
