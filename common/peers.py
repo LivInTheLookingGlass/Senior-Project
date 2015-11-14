@@ -35,12 +35,12 @@ bounties = []
 
 #constants
 peers_file      = "data" + os.sep + "peerlist.pickle"
-close_signal    = "Close Signal......."
-peer_request    = "Requesting Peers..."
-bounty_request  = "Requesting Bounties"
-incoming_bounty = "Incoming Bounty...."
-valid_signal    = "Bounty was valid..."
-invalid_signal  = "Bounty was invalid."
+close_signal    = "Close Signal.......".encode("utf-8")
+peer_request    = "Requesting Peers...".encode("utf-8")
+bounty_request  = "Requesting Bounties".encode("utf-8")
+incoming_bounty = "Incoming Bounty....".encode("utf-8")
+valid_signal    = "Bounty was valid...".encode("utf-8")
+invalid_signal  = "Bounty was invalid.".encode("utf-8")
 
 Alive = True
 
@@ -71,9 +71,9 @@ def requestPeerlist(address):
     s = ""
     while connected:
       a = con.recv(64)
-      safeprint(a)
+      safeprint(a.decode())
       if not a == close_signal:
-        s += a
+        s += a.decode()
       else:
         con.close()
         connected = False
@@ -127,21 +127,21 @@ def listen(port, ID):
       a, addr = server.accept()
       safeprint("connection accepted")
       b = a.recv(len(peer_request))
-      safeprint("Received: " + str(b))
+      safeprint("Received: " + b.decode())
       if b == peer_request:
-        a.send(bytes(pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)])))
+        a.send(pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)]).encode("utf-8"))
         time.sleep(0.01)
       elif b == bounty_request:
-        a.send(bytes(pickle.dumps(bountyList)))
+        a.send(pickle.dumps(bountyList).encode("utf-8"))
         time.sleep(0.01)
       elif b == incoming_bounty:
         connected = True
         s = ""
         while connected:
           c = a.recv(len(close_signal))
-          safeprint(bytes(c))
+          safeprint(c.decode())
           if not c == close_signal:
-            s += c
+            s += c.decode()
           else:
             con.close()
             connected = False
