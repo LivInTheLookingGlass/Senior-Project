@@ -1,7 +1,9 @@
 import os, pickle, re
 from common.safeprint import safeprint
+from multiprocessing import Lock
 
 bountyList = []
+bountyLock = Lock()
 
 class Bounty:
   ip = ""
@@ -103,6 +105,23 @@ def sendBounty(peer):
     loadBounties()
   #send bounties
   dumpBounties()
+  
+def addBounty(bounty):
+  a = False
+  if type(bounty) == type("aaa"):
+    bounty = boundy.encode('utf-8')
+  if type(bounty) == type("a".encode('utf-8'):
+    a = verify(bounty)
+    bounty = pickle.loads(bounty)
+  else:
+    c = pickle.dumps(bounty,1)
+    if type(c) == type("aaa"):
+      c = c.encode('utf-8')
+    a = verify(c)
+  b = bounty.isValid()
+  if a and b:
+    with bountyLock:
+      bountyList.append(bounty)
 
 def getBounty(charity, factor):
   for bounty in bountyList:
