@@ -122,6 +122,7 @@ def addBounty(bounty):
   if a and b:
     with bountyLock:
       bountyList.append(bounty)
+  return (a and b)
 
 def getBounty(charity, factor):
   for bounty in bountyList:
