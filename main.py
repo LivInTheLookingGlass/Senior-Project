@@ -12,7 +12,7 @@ def main():
         settings.config['outbound'] = True
     safeprint("settings are:")
     safeprint(settings.config)
-    ear = listener(1,settings.config['outbound'])
+    ear = listener(settings.config['port'],settings.config['outbound'])
     ear.daemon = True
     ear.start()
     initializePeerConnections()
