@@ -51,7 +51,7 @@ def getFromFile():
 def saveToFile():
   if not os.path.exists(peers_file.split(os.sep)[0]):
     os.mkdir(peers_file.split(os.sep)[0])
-  pickle.dump(peerlist,open(peers_file,"wb"),2)
+  pickle.dump(peerlist,open(peers_file,"wb"),1)
 
 def getFromSeeds():
   for seed in seedlist:
@@ -129,14 +129,14 @@ def listen(port, ID):
       b = a.recv(len(peer_request))
       safeprint("Received: " + b.decode())
       if b == peer_request:
-        c = pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)])
+        c = pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)],1)
         if type(c) != type("a".encode("utf-8")):
           safeprint("Test here")
           c = c.encode("utf-8")
         a.send(c)
         time.sleep(0.01)
       elif b == bounty_request:
-        c = pickle.dumps(bountyList)
+        c = pickle.dumps(bountyList,1)
         if type(c) != type("a".encode("utf-8")):
           c = c.encode("utf-8")
         a.send(c)
