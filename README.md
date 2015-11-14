@@ -1,6 +1,6 @@
-[![](https://img.shields.io/github/issues/gappleto97/Senior-Project.svg?style=flat)](https://github.com/gappleto97/Senior-Project/issues) [![](https://img.shields.io/travis/gappleto97/Senior-Project.svg?style=flat)](https://travis-ci.org/gappleto97/Senior-Project) [![](https://img.shields.io/codecov/c/github/gappleto97/Senior-Project.svg?style=flat)](https://codecov.io/github/gappleto97/Senior-Project)\*
+[![](https://img.shields.io/github/issues/gappleto97/Senior-Project.svg?style=flat)](https://github.com/gappleto97/Senior-Project/issues) [![](https://img.shields.io/travis/gappleto97/Senior-Project.svg?style=flat)](https://travis-ci.org/gappleto97/Senior-Project) [![](https://img.shields.io/codecov/c/github/gappleto97/Senior-Project.svg?style=flat)](https://codecov.io/github/gappleto97/Senior-Project)
 
-\*Note: because code coverage does not work for seperate threads, the listener will continue to show up as untested. This is a fault of `codecov`.
+Note: because code coverage does not work for seperate threads, the listener will continue to show up as untested. This is a fault of `codecov`.
 
 You'll probably find the [web format](https://gappleto97.github.io/Senior-Project) a bit nicer to read. It's also kept more up to date.
 
