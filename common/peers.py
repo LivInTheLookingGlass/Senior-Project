@@ -77,6 +77,7 @@ def requestPeerlist(address):
       else:
         con.close()
         connected = False
+    safeprint(pickle.loads(s))
     return pickle.loads(s)
   except Exception as e:
     safeprint("Failed:" + str(type(e)))
