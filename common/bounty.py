@@ -51,15 +51,12 @@ def verify(string):
     safeprint("Testing IP address")
     #is IP valid
     b = int(test.ip.split(":")[1]) in range(1024,49152)
-    safeprint(int(test.ip.split(":")[1]))
-    safeprint(int(test.ip.split(":")[1]) in range(1024,49152))
-    safeprint(b)
-    safeprint(int(test.ip.split(":")[0].split(".")[0]) in range(0,256) and b)
-    safeprint(b and int(test.ip.split(":")[0].split(".")[0]) in range(0,256))
     b = int(test.ip.split(":")[0].split(".")[0]) in range(0,256) and b
     b = int(test.ip.split(":")[0].split(".")[1]) in range(0,256) and b
     b = int(test.ip.split(":")[0].split(".")[2]) in range(0,256) and b
     b = int(test.ip.split(":")[0].split(".")[3]) in range(0,256) and b
+    if not b:
+      return False
     #ping IP
     #is Bitcoin address valid
     safeprint("Testing Bitcoin address")
