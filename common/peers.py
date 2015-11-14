@@ -224,11 +224,11 @@ def listen(port, outbound): #pragma: no cover
           else:
             con.close()
             connected = False
-          if (verify(s)):
-            Bounty.bountyList.append(bount)
+          if (verify(s.encode('utf-8'))):
             a.send(valid_signal)
           else:
             a.send(invalid_signal)
+          addBounty(s)
       a.send(close_signal)
       time.sleep(0.01)
       a.close()
