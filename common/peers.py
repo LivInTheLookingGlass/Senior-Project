@@ -77,8 +77,7 @@ def requestPeerlist(address):
       else:
         con.close()
         connected = False
-    if sys.version_info[0] < 3:
-      s = s.encode('utf-8')
+    s = s.encode('utf-8')
     safeprint(pickle.loads(s))
     return pickle.loads(s)
   except Exception as e:
