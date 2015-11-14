@@ -26,10 +26,7 @@ script:
   - if [ $Cov == 'false' ]; then python main.py; fi
 before_install:
   - echo $TRAVIS_OS_NAME;
-  - if [ $TRAVIS_OS_NAME == "osx" ]; then
-  - wget https://raw.githubusercontent.com/pyca/cryptography/master/.travis/install.sh;
-  - sh install.sh;
-  - fi
+  - if [ $TRAVIS_OS_NAME == "osx" ]; then wget https://raw.githubusercontent.com/pyca/cryptography/master/.travis/install.sh; sh install.sh; fi
   - if [ $Cov == 'true'  ]; then pip install codecov; fi
 after_success:
   - if [ $Cov == 'true'  ]; then codecov --token=0482d032-e24c-461b-a116-f0e3dbc88734; fi
