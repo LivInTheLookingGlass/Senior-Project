@@ -186,7 +186,7 @@ def listen(port, outbound):
       if b == peer_request:
         if not outbound:
           c = pickle.dumps(peerlist + [ext_ip+":"+str(ext_port)],1)
-        c = pickle.dumps(peerlist],1)
+        c = pickle.dumps(peerlist,1)
         if type(c) != type("a".encode("utf-8")):
           safeprint("Test here")
           c = c.encode("utf-8")
