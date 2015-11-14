@@ -139,6 +139,19 @@ def listen(port, outbound):
     # discovery process, it usualy takes several seconds (2 seconds or more)
     safeprint('Discovering... delay=%ums' % u.discoverdelay)
     safeprint(str(u.discover()) + 'device(s) detected')
+    try:
+      u.selectigd()
+    except Exception, e:
+      safeprint("Failed: " + str(type(e)))
+      safeprint(e)
+      outbound = True
+  if outbound is False:
+    try:
+      safeprint(u.addportmapping(port, 'TCP', get_lan_ip(), port, 'port mapping test', ''))
+    except Exception, e:
+      safeprint("Failed: " + str(type(e)))
+      safeprint(e)
+      outbound = True
   while True:
     safeprint("listening on " + str(get_lan_ip()) + ":" + str(port))
     try:
