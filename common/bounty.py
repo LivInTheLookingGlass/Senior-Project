@@ -1,4 +1,4 @@
-import os, pickle, re
+import os, pickle, re, sys
 from common.safeprint import safeprint
 from multiprocessing import Lock
 
@@ -108,9 +108,12 @@ def sendBounty(peer):
   
 def addBounty(bounty):
   a = False
-  if type(bounty) == type("aaa"):
+  if type(bounty) == type("aaa") an sys.version_info[0] >= 3:
     safeprint("Fed as string, encoding utf-8")
     bounty = bounty.encode('utf-8')
+  elif sys.version_info[0] < 3:
+    safeprint("External verify")
+    a = verify(bounty)
   if type(bounty) == type("a".encode('utf-8')):
     safeprint("External verify")
     a = verify(bounty)
