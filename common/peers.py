@@ -2,6 +2,9 @@ import multiprocessing, os, pickle, select, socket, sys, time
 from common.safeprint import safeprint
 from common.bounty import *
 
+global port
+port = 44565
+
 if os.name != "nt":
     import fcntl
     import struct
@@ -76,7 +79,7 @@ def requestPeerlist(address):
         con.close()
         connected = False
       elif a == peer_request:
-        c = pickle.dumps(peerlist,1)
+        c = pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)],1)
         if type(c) != type("a".encode("utf-8")):
           safeprint("Test here")
           c = c.encode("utf-8")
@@ -99,7 +102,8 @@ def sendPeerlist(address):
   s = pickle.dumps(peerlist)
   #send list
 
-def initializePeerConnections():
+def initializePeerConnections(newPort):
+  port = newPort
   getFromFile()
   safeprint("peers fetched from file")
   getFromSeeds()
