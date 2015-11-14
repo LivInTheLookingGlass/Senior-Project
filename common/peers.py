@@ -129,10 +129,16 @@ def listen(port, ID):
       b = a.recv(len(peer_request))
       safeprint("Received: " + b.decode())
       if b == peer_request:
-        a.send(pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)]).encode("utf-8"))
+        c = pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)])
+        if type(c) != type("a".encode("utf-8")):
+            c = c.encode("utf-8")
+        a.send(c)
         time.sleep(0.01)
       elif b == bounty_request:
-        a.send(pickle.dumps(bountyList).encode("utf-8"))
+        c = pickle.dumps(bountyList)
+        if type(c) != type("a".encode("utf-8")):
+          c = c.encode("utf-8")
+        a.send(c)
         time.sleep(0.01)
       elif b == incoming_bounty:
         connected = True
