@@ -128,6 +128,17 @@ def listen(port, outbound):
     safeprint("UPnP mode is disabled")
   else:
     safeprint("UPnP mode is enabled")
+    import miniupnpc
+    u = miniupnpc.UPnP(None, None, 200, port)
+    safeprint('inital(default) values :')
+    safeprint(' discoverdelay' + str(u.discoverdelay))
+    safeprint(' lanaddr' + str(u.lanaddr))
+    safeprint(' multicastif' + str(u.multicastif))
+    safeprint(' minissdpdsocket' + str(u.minissdpdsocket))
+    #u.minissdpdsocket = '../minissdpd/minissdpd.sock'
+    # discovery process, it usualy takes several seconds (2 seconds or more)
+    safeprint('Discovering... delay=%ums' % u.discoverdelay)
+    safeprint(str(u.discover()) + 'device(s) detected')
   while True:
     safeprint("listening on " + str(get_lan_ip()) + ":" + str(port))
     try:
