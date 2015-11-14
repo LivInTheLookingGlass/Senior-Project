@@ -15,7 +15,7 @@ def main():
     ear = listener(settings.config['port'],settings.config['outbound'])
     ear.daemon = True
     ear.start()
-    sleep(1)
+    sleep(2)
     initializePeerConnections()
     
 if __name__ == "__main__":
