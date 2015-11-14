@@ -106,6 +106,7 @@ def requestPeerlist(address):
     b = pickle.dumps(b,1)
     if type(b) == type("a"):
         b = b.encode('utf-8')
+    safeprint(b)
     con.send(b)
     time.sleep(0.01)
     con.send(close_signal)
