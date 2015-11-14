@@ -239,7 +239,7 @@ def listen(port, outbound): #pragma: no cover
           if not c == close_signal:
             s += c.decode()
           else:
-            con.close()
+            a.close()
             connected = False
         safeprint("Adding bounty: " + s.decode())
         if (verify(s.encode('utf-8'))):
