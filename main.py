@@ -23,7 +23,7 @@ def main():
     a = pickle.dumps(test,1)
     if type(a) != type("a".encode('utf-8')):
         a = a.encode('utf-8')
-    safeprint(verify())
+    safeprint(verify(a))
     
 if __name__ == "__main__":
     main()
