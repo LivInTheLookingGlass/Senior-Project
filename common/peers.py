@@ -124,7 +124,7 @@ def listen(port, outbound):
   server = socket.socket()
   server.bind(("0.0.0.0",port))
   server.listen(10)
-  if outbound is False:
+  if outbound is True:
     safeprint("UPnP mode is disabled")
   else:
     safeprint("UPnP mode is enabled")
