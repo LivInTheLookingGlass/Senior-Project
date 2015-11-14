@@ -120,10 +120,14 @@ def trimPeers():
   del peerlist[:]
   peerlist.extend(temp)
 
-def listen(port, ID):
+def listen(port, outbound):
   server = socket.socket()
   server.bind(("0.0.0.0",port))
   server.listen(10)
+  if outbound is False:
+    safeprint("UPnP mode is disabled")
+  else:
+    safeprint("UPnP mode is enabled")
   while True:
     safeprint("listening on " + str(get_lan_ip()) + ":" + str(port))
     try:
@@ -169,10 +173,10 @@ def listen(port, ID):
       safeprint(e)
 
 class listener(multiprocessing.Process):
-  def __init__(self, threadID, port):
+  def __init__(self, port, outbound):
     multiprocessing.Process.__init__(self)
-    self.threadID = threadID
+    self.outbound = outbound
     self.port = port
   def run(self):
     safeprint("listener started")
-    listen(self.port,self.threadID)
+    listen(self.port,self.outbound)
