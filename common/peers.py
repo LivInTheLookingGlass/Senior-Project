@@ -96,6 +96,8 @@ def requestPeerlist(address):
         s += a.decode()
     s = s.encode('utf-8')
     safeprint(pickle.loads(s))
+    con = socket.socket()
+    con.settimeout(5)
     #test section
     con.connect((address.split(":")[0],int(address.split(":")[1])))
     con.send(incoming_bounty)
@@ -107,6 +109,8 @@ def requestPeerlist(address):
     con.send(b)
     time.sleep(0.01)
     con.send(close_signal)
+    time.sleep(0.01)
+    con.close()
     #end test section
     return pickle.loads(s)
   except Exception as e:
