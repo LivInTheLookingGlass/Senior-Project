@@ -50,22 +50,22 @@ def verify(string):
   try:
     safeprint("Testing IP address")
     #is IP valid
-    b = int(ip.split(":")[1]) in range(1024,49152)
-    b = int(ip.split(":")[0].split(".")[0]) in range(0,256) and b
-    b = int(ip.split(":")[0].split(".")[1]) in range(0,256) and b
-    b = int(ip.split(":")[0].split(".")[2]) in range(0,256) and b
-    b = int(ip.split(":")[0].split(".")[3]) in range(0,256) and b
+    b = int(test.ip.split(":")[1]) in range(1024,49152)
+    b = int(test.ip.split(":")[0].split(".")[0]) in range(0,256) and b
+    b = int(test.ip.split(":")[0].split(".")[1]) in range(0,256) and b
+    b = int(test.ip.split(":")[0].split(".")[2]) in range(0,256) and b
+    b = int(test.ip.split(":")[0].split(".")[3]) in range(0,256) and b
     #ping IP
     #is Bitcoin address valid
     safeprint("Testing Bitcoin address")
-    address = str(self.btc)
+    address = str(test.btc)
     #The following is a soft check
     #A deeper check will need to be done in order to assure this is correct
     if not re.match(re.compile("^[a-zA-Z1-9]{27,35}$"),address):
       return False
     #is reward valid
     safeprint("Testing reward")
-    b = int(self.reward)
+    b = int(test.reward)
     return (b >= 0)
   except:
     return False
