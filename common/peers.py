@@ -141,14 +141,14 @@ def listen(port, outbound):
     safeprint(str(u.discover()) + 'device(s) detected')
     try:
       u.selectigd()
-    except Exception, e:
+    except Exception as e:
       safeprint("Failed: " + str(type(e)))
       safeprint(e)
       outbound = True
   if outbound is False:
     try:
       safeprint(u.addportmapping(port, 'TCP', get_lan_ip(), port, 'port mapping test', ''))
-    except Exception, e:
+    except Exception as e:
       safeprint("Failed: " + str(type(e)))
       safeprint(e)
       outbound = True
