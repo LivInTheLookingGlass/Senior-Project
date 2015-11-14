@@ -109,7 +109,7 @@ def sendBounty(peer):
 def addBounty(bounty):
   a = False
   if type(bounty) == type("aaa"):
-    bounty = boundy.encode('utf-8')
+    bounty = bounty.encode('utf-8')
   if type(bounty) == type("a".encode('utf-8')):
     a = verify(bounty)
     bounty = pickle.loads(bounty)
