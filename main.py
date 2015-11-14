@@ -3,6 +3,7 @@ from common.peers import *
 from common import settings
 from time import sleep
 from common.safeprint import safeprint
+import pickle
 
 def main():
     settings.setup()
@@ -17,6 +18,12 @@ def main():
     ear.start()
     sleep(5)
     initializePeerConnections(settings.config['port'])
+    test = Bounty('8.8.8.8',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1090)
+    safeprint(test.isValid())
+    a = pickle.dumps(test,1)
+    if type(a) != type("a".encode('utf-8')):
+        a = a.encode('utf-8')
+    safeprint(verify())
     
 if __name__ == "__main__":
     main()
