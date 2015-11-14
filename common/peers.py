@@ -76,7 +76,7 @@ def requestPeerlist(address):
         con.close()
         connected = False
       elif a == peer_request:
-        c = pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)],1)
+        c = pickle.dumps(peerlist,1)
         if type(c) != type("a".encode("utf-8")):
           safeprint("Test here")
           c = c.encode("utf-8")
@@ -188,7 +188,7 @@ def listen(port, outbound):
         s = ""
         while connected:
           d = a.recv(64)
-          safeprint(a.decode())
+          safeprint(d.decode())
           if d == close_signal:
             connected = False
           elif d == peer_request:
