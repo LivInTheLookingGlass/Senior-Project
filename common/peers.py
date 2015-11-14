@@ -80,9 +80,9 @@ def requestPeerlist(address):
         if type(c) != type("a".encode("utf-8")):
           safeprint("Test here")
           c = c.encode("utf-8")
-        a.send(c)
+        con.send(c)
         time.sleep(0.01)
-        a.send(close_signal)
+        con.send(close_signal)
       else:
         s += a.decode()
     s = s.encode('utf-8')
@@ -187,14 +187,14 @@ def listen(port, outbound):
         connected = True
         s = ""
         while connected:
-          a = con.recv(64)
+          d = a.recv(64)
           safeprint(a.decode())
-          if a == close_signal:
+          if d == close_signal:
             connected = False
-          elif a == peer_request:
+          elif d == peer_request:
             continue
           else:
-            s += a.decode()
+            s += d.decode()
         s = s.encode('utf-8')
         peerlist.extend(pickle.loads(s))
         trimPeers()
