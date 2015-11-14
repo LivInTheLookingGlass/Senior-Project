@@ -109,22 +109,10 @@ def sendBounty(peer):
 def addBounty(bounty):
   a = False
   if type(bounty) == type("aaa") and sys.version_info[0] >= 3:
-    safeprint("Fed as string, encoding utf-8")
     bounty = bounty.encode('utf-8')
-  elif sys.version_info[0] < 3:
-    safeprint("External verify")
-    a = verify(bounty)
-  if type(bounty) == type("a".encode('utf-8')):
-    safeprint("External verify")
-    a = verify(bounty)
-    bounty = pickle.loads(bounty)
-  else:
-    c = pickle.dumps(bounty,1)
-    if type(c) == type("aaa") and sys.version_info[0] >= 3:
-      safeprint("Fed as string, encoding utf-8")
-      c = c.encode('utf-8')
-    safeprint("External verify")
-    a = verify(c)
+  safeprint("External verify")
+  a = verify(bounty)
+  b = pickle.loads(bounty)
   safeprint("Internal verify")
   b = bounty.isValid()
   if a and b:
