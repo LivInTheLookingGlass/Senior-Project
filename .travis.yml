@@ -25,7 +25,8 @@ script:
   - if [ $Cov == 'true'  ]; then coverage run main.py; fi
   - if [ $Cov == 'false' ]; then python main.py; fi
 before_install:
-  - if [ $TRAVIS_OS_NAME == osx ]; then
+  - echo $TRAVIS_OS_NAME;
+  - if [ $TRAVIS_OS_NAME == "osx" ]; then
   - wget https://raw.githubusercontent.com/pyca/cryptography/master/.travis/install.sh;
   - sh install.sh;
   - fi
