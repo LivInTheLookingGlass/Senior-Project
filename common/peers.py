@@ -241,6 +241,7 @@ def listen(port, outbound): #pragma: no cover
           else:
             con.close()
             connected = False
+          safeprint("Adding bounty: " + s.decode())
           if (verify(s.encode('utf-8'))):
             a.send(valid_signal)
           else:
