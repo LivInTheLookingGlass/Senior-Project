@@ -2,7 +2,11 @@ import multiprocessing, os, pickle, select, socket, sys, time
 from common.safeprint import safeprint
 from common.bounty import *
 
+global ext_port
+global ext_ip
 global port
+ext_port = -1
+ext_ip = ""
 port = 44565
 
 if os.name != "nt":
@@ -79,7 +83,9 @@ def requestPeerlist(address):
         con.close()
         connected = False
       elif a == peer_request:
-        c = pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)],1)
+        if not ext_ip == "":
+          c = pickle.dumps(peerlist + [ext_ip+":"+str(ext_port)],1)
+        c = pickle.dumps(peerlist,1)
         if type(c) != type("a".encode("utf-8")):
           safeprint("Test here")
           c = c.encode("utf-8")
@@ -96,11 +102,6 @@ def requestPeerlist(address):
     safeprint(e)
     remove.extend([address])
     return []
-
-def sendPeerlist(address):
-  safeprint("currently unsupported")
-  s = pickle.dumps(peerlist)
-  #send list
 
 def initializePeerConnections(newPort):
   port = newPort
@@ -175,13 +176,17 @@ def listen(port, outbound):
       outbound = True
   while True:
     safeprint("listening on " + str(get_lan_ip()) + ":" + str(port))
+    if not outbound:
+      safeprint("forwarded from " + ext_ip + ":" + str(ext_port))
     try:
       a, addr = server.accept()
       safeprint("connection accepted")
       b = a.recv(len(peer_request))
       safeprint("Received: " + b.decode())
       if b == peer_request:
-        c = pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)],1)
+        if not outbound:
+          c = pickle.dumps(peerlist + [ext_ip+":"+str(ext_port)],1)
+        c = pickle.dumps(peerlist],1)
         if type(c) != type("a".encode("utf-8")):
           safeprint("Test here")
           c = c.encode("utf-8")
