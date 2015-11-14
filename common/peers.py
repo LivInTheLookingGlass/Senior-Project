@@ -131,7 +131,8 @@ def listen(port, ID):
       if b == peer_request:
         c = pickle.dumps(peerlist + [get_lan_ip()+":"+str(port)])
         if type(c) != type("a".encode("utf-8")):
-            c = c.encode("utf-8")
+          safeprint("Test here")
+          c = c.encode("utf-8")
         a.send(c)
         time.sleep(0.01)
       elif b == bounty_request:
