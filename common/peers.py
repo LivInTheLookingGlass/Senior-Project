@@ -73,11 +73,11 @@ def requestPeerlist(address):
       a = con.recv(64)
       safeprint(a.decode())
       if not a == close_signal:
-        s += a.decode()
+        s += a#.decode()
       else:
         con.close()
         connected = False
-    s = s.encode('utf-8')
+    #s = s.encode('utf-8')
     safeprint(pickle.loads(s))
     return pickle.loads(s)
   except Exception as e:
