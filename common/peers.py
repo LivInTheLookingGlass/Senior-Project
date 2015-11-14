@@ -237,7 +237,7 @@ def listen(port, outbound): #pragma: no cover
       safeprint("Failed: " + str(type(e)))
       safeprint(e)
 
-class listener(multiprocessing.Process):
+class listener(multiprocessing.Process):  #pragma: no cover
   def __init__(self, port, outbound):
     multiprocessing.Process.__init__(self)
     self.outbound = outbound
