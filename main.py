@@ -5,6 +5,16 @@ from time import sleep
 from common.safeprint import safeprint
 import pickle
 
+def testBounty(ip, btc, rwd, desc):
+    safeprint(desc)
+    test = Bounty(ip,btc,rwd)
+    safeprint(test)
+    safeprint(test.isValid())
+    a = pickle.dumps(test,1)
+    if type(a) != type("a".encode('utf-8')):
+        a = a.encode('utf-8')
+    safeprint(verify(a))
+
 def main():
     settings.setup()
     try:
@@ -19,46 +29,13 @@ def main():
     sleep(5)
     initializePeerConnections(settings.config['port'])
     #######TEST SECTION#######
-    safeprint("Correctly formed bounty")
-    test = Bounty('8.8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1090)
-    safeprint(test)
-    safeprint(test.isValid())
-    a = pickle.dumps(test,1)
-    if type(a) != type("a".encode('utf-8')):
-        a = a.encode('utf-8')
-    safeprint(verify(a))
-    safeprint("Malformed bounty 1 (ip failure)")
-    test = Bounty('8.8.8.8',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1090)
-    safeprint(test)
-    safeprint(test.isValid())
-    a = pickle.dumps(test,1)
-    if type(a) != type("a".encode('utf-8')):
-        a = a.encode('utf-8')
-    safeprint(verify(a))
-    safeprint("Malformed bounty 2 (ip failure)")
-    test = Bounty('8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1090)
-    safeprint(test)
-    safeprint(test.isValid())
-    a = pickle.dumps(test,1)
-    if type(a) != type("a".encode('utf-8')):
-        a = a.encode('utf-8')
-    safeprint(verify(a))
-    safeprint("Malformed bounty 3 (btc failure)")
-    test = Bounty('8.8.8.8:8888',"1JTGcHS3GMhBGGww4ZEDmP7u9",1090)
-    safeprint(test)
-    safeprint(test.isValid())
-    a = pickle.dumps(test,1)
-    if type(a) != type("a".encode('utf-8')):
-        a = a.encode('utf-8')
-    safeprint(verify(a))
-    safeprint("Malformed bounty 4 (reward failure)")
-    test = Bounty('8.8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",-1090)
-    safeprint(test)
-    safeprint(test.isValid())
-    a = pickle.dumps(test,1)
-    if type(a) != type("a".encode('utf-8')):
-        a = a.encode('utf-8')
-    safeprint(verify(a))
+    testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1090,"Correctly formed bounty")
+    testBounty('8.8.8.8',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1090,"Malformed bounty 1 (ip failure)")
+    testBounty('8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1090,"Malformed bounty 2 (ip failure)")
+    testBounty('8.8.8.8:88888888888888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1090,"Malformed bounty 3 (ip failure)")
+    testBounty('8.8.12348.8',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1090,"Malformed bounty 4 (ip failure)")
+    testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGGww4ZEDmP7u9",1090,"Malformed bounty 5 (btc failure)")
+    testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",-1090,"Malformed bounty 6 (reward failure)")
     
 if __name__ == "__main__":
     main()
