@@ -114,7 +114,7 @@ def addBounty(bounty):
   a = verify(bounty)
   b = pickle.loads(bounty)
   safeprint("Internal verify")
-  b = bounty.isValid()
+  b = b.isValid()
   if a and b:
     with bountyLock:
       bountyList.append(bounty)
