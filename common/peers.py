@@ -107,6 +107,7 @@ def initializePeerConnections():
   safeprint("peer network extended")
   saveToFile()
   safeprint("peer network saved to file")
+  safeprint(peerlist)
 
 def trimPeers():
   temp = list(set(peerlist))
