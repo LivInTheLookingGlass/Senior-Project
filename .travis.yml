@@ -18,7 +18,8 @@ env:
   - Cov='false' UPnP='false'
 matrix:
   allow_failures:
-    - env: Cov='true'
+    - env: Cov='true' UPnP='true'
+    - env: Cov='true' UPnP='false'
     - os: osx
 # command to install dependencies
 install: 
