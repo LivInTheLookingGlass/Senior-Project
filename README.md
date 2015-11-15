@@ -1,6 +1,6 @@
 [![](https://img.shields.io/github/issues/gappleto97/Senior-Project.svg?style=flat&label=Open%20Issues)](https://github.com/gappleto97/Senior-Project/issues) [![](https://img.shields.io/travis/gappleto97/Senior-Project.svg?style=flat&label=Linux%20Build)](https://travis-ci.org/gappleto97/Senior-Project) [![](https://img.shields.io/coveralls/gappleto97/Senior-Project/master.svg?style=flat&label=Linux%20Coverage)](https://coveralls.io/github/gappleto97/Senior-Project) [![](https://img.shields.io/appveyor/ci/gappleto97/Senior-Project/master.svg?style=flat&label=Windows%20Build)](https://ci.appveyor.com/project/gappleto97/senior-project) [![](https://img.shields.io/codecov/c/github/gappleto97/Senior-Project.svg?style=flat&label=Windows%20Coverage)](https://codecov.io/github/gappleto97/Senior-Project)
 
-Note: because code coverage does not work for seperate threads, the listener will continue to show up as untested. This is a fault of `codecov`.
+Note: because code coverage does not work for seperate threads, the listener will continue to show up as untested. This is a fault of `coverage`.
 
 You'll probably find the [web format](https://gappleto97.github.io/Senior-Project) a bit nicer to read. It's also kept more up to date.
 
