@@ -36,7 +36,7 @@ class Bounty(object):
       address = str(self.btc)
       #The following is a soft check
       #A deeper check will need to be done in order to assure this is correct
-      if not check_bc_valid(address):
+      if not (check_bc_valid(address) and re.match(re.compile("^[a-zA-Z1-9]{27,35}$"),address)):
         return False
       #is reward valid
       safeprint("Testing reward")
@@ -78,7 +78,7 @@ def verify(string):
     address = str(test.btc)
     #The following is a soft check
     #A deeper check will need to be done in order to assure this is correct
-    if not check_bc_valid(address):
+    if not (check_bc_valid(address) and re.match(re.compile("^[a-zA-Z1-9]{27,35}$"),address)):
       return False
     #is reward valid
     safeprint("Testing reward")
