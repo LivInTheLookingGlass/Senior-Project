@@ -14,7 +14,7 @@ python:
 env:
   - Cov='true' UPnP='true'
   - Cov='true' UPnP='false'
-  - Cov='false' UPnP='false'
+  - Cov='false' UPnP='true'
   - Cov='false' UPnP='false'
 matrix:
   allow_failures:
