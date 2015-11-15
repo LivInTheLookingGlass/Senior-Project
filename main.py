@@ -50,6 +50,10 @@ def main():
     testBounty('8.8.12348.8',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1090,"Malformed bounty 4 (ip failure)")
     testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGGww4ZEDmP7u9",1090,"Malformed bounty 5 (btc failure)")
     testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",-1090,"Malformed bounty 6 (reward failure)")
+    safeprint(getBountyList())
+    saveToFile()
+    loadFromFile()
+    safeprint(getBountyList())
     
 if __name__ == "__main__":
     main()

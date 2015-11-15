@@ -1,9 +1,11 @@
 import os, pickle, re, sys
 from common.safeprint import safeprint
 from multiprocessing import Lock
+from hashlib import sha256
 
 bountyList = []
 bountyLock = Lock()
+bounty_path = "data" + os.sep + "bounties.pickle"
 
 class Bounty(object):
   ip = ""
@@ -34,7 +36,7 @@ class Bounty(object):
       address = str(self.btc)
       #The following is a soft check
       #A deeper check will need to be done in order to assure this is correct
-      if not re.match(re.compile("^[a-zA-Z1-9]{27,35}$"),address):
+      if not (check_bc_valid(address) and re.match(re.compile("^[a-zA-Z1-9]{26,35}$"),address)):
         return False
       #is reward valid
       safeprint("Testing reward")
@@ -46,6 +48,17 @@ class Bounty(object):
   def isPayable(self):
     #check if address has enough
     return False
+
+def check_bc_valid(bc):
+  n = 0
+  for char in bc:
+      n = n * 58 + '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'.index(char)
+  if sys.version_info[0] < 3:
+      bcbytes = (('%%0%dx' % (25 << 1) % n).decode('hex')[-25:])
+      return bcbytes[-4:] == sha256(sha256(bcbytes[:-4]).digest()).digest()[:4]
+  else:
+      bcbytes = n.to_bytes(25, 'big')
+      return bcbytes[-4:] == sha256(sha256(bcbytes[:-4]).digest()).digest()[:4]
 
 def verify(string):
   test = pickle.loads(string)
@@ -65,7 +78,7 @@ def verify(string):
     address = str(test.btc)
     #The following is a soft check
     #A deeper check will need to be done in order to assure this is correct
-    if not re.match(re.compile("^[a-zA-Z1-9]{27,35}$"),address):
+    if not (check_bc_valid(address) and re.match(re.compile("^[a-zA-Z1-9]{26,35}$"),address)):
       return False
     #is reward valid
     safeprint("Testing reward")
@@ -73,16 +86,23 @@ def verify(string):
     return (b >= 0)
   except:
     return False
+    
+def getBountyList():
+  a = []
+  with bountyLock:
+    a = bountyList
+  return a
 
 def saveToFile():
-  if os.path.exists("bounties.pickle"):
-    pickle.dump(boutyList,"bounties.pickle")
-    return True
-  return False
+  if not os.path.exists(bounty_path.split(os.sep)[0]):
+    os.mkdir(bounty_path.split(os.sep)[0])
+  pickle.dump(boutyList,open(bounty_path, "wb"),1)
+  return True
 
 def loadFromFile():
-  if os.path.exists("settings.conf"):
-    bountyList = pickle.load("bounties.pickle")
+  if os.path.exists(bounty_path):
+    with bountyLock:
+      bountyList = pickle.load(bounty_path)
     return True
   return False
   
