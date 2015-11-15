@@ -113,7 +113,7 @@ def addBounty(bounty):
     safeprint("Fed as string; encoding utf-8")
     bounty = bounty.encode('utf-8')
   elif sys.version_info[0] == 2 and sys.version_info[1] == 6 and (type(bounty) == type("aaa") or type(bounty) == type(unicode("aaa"))):
-    safeprint((type(bounty), type("aaa"), type(unicode("aaa")), type(bounty) == type("aaa") or type(bounty) == type(unicode("aaa")))
+    safeprint([type(bounty), type("aaa"), type(unicode("aaa")), type(bounty) == type("aaa") or type(bounty) == type(unicode("aaa"))])
     safeprint("Fed as string in 2.6; encoding ascii and ignoring errors")
     bounty = bounty.encode('ascii','ignore')
   safeprint("External verify")
