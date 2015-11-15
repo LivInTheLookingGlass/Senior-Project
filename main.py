@@ -1,4 +1,4 @@
-from common.bounty import *
+from common import bounty
 from common.peers import *
 from common import settings
 from common.safeprint import safeprint
@@ -8,9 +8,9 @@ import pickle
 
 def testBounty(ip, btc, rwd, desc):
     safeprint(desc)
-    test = Bounty(ip,btc,rwd)
+    test = bounty.Bounty(ip,btc,rwd)
     a = pickle.dumps(test,1)
-    safeprint(addBounty(a))
+    safeprint(bounty.addBounty(a))
  
 def main():
     settings.setup()
@@ -50,10 +50,10 @@ def main():
     testBounty('8.8.12348.8',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1090,"Malformed bounty 4 (ip failure)")
     testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGGww4ZEDmP7u9",1090,"Malformed bounty 5 (btc failure)")
     testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",-1090,"Malformed bounty 6 (reward failure)")
-    safeprint(getBountyList())
-    saveToFile()
-    loadFromFile()
-    safeprint(getBountyList())
+    safeprint(bounty.getBountyList())
+    bounty.saveToFile()
+    bounty.loadFromFile()
+    safeprint(bounty.getBountyList())
     
 if __name__ == "__main__":
     main()
