@@ -3,6 +3,9 @@ from common.safeprint import safeprint
 from multiprocessing import Lock
 from hashlib import sha256
 
+global bountyList
+global bountyLock
+global bounty_path
 bountyList = []
 bountyLock = Lock()
 bounty_path = "data" + os.sep + "bounties.pickle"
