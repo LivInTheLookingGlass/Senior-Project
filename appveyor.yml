@@ -102,7 +102,7 @@ environment:
 #      RUN: "%PYTHON%\\python"
  
 init:
-  - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH% %APPVEYOR_BUILD_FOLDER%""
+  - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH% %APPVEYOR_BUILD_FOLDER%"
  
 install:
 #  - "powershell appveyor\\install.ps1"
