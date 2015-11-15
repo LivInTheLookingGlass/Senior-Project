@@ -102,7 +102,7 @@ environment:
 #      RUN: "%PYTHON%\\python"
  
 init:
-  - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%"
+  - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH% %APPVEYOR_BUILD_FOLDER%""
  
 install:
 #  - "powershell appveyor\\install.ps1"
@@ -112,7 +112,8 @@ install:
 test: off
  
 build_script:
-  - "%RUN% %HOME%\\main.py"
+  - "cd %HOME%"
+  - "%RUN% main.py"
   
 on_success:
   - "%PYTHON%\\Scripts\\coverage xml"
