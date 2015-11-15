@@ -63,11 +63,13 @@ The parser has two purposes: analyze test results, and move problem results to t
   * Listen and respond (concurrently)
   * On a custom port, if desired
 * Transparent settings storage
+* UPnP forwarding (Linux, OSX)
  
 ##Working on it
 
+* Dedicated server mode
 * More complete settings controls
-* UPnP forwarding
+* UPnP forwarding (Windows)
 
 ##Future
 
@@ -75,10 +77,8 @@ The parser has two purposes: analyze test results, and move problem results to t
   * Payment channel
   * Secure wallet generation
   * Secure wallet storage
-* Dedicated server mode
 * More complete bounty definition
 * Network discovery
-* Python 3 compatibility
 * Sandboxed Execution
 
 ----------------------------
