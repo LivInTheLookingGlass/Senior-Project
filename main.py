@@ -26,11 +26,12 @@ def main():
     ear.daemon = True
     ear.start()
     feedback = []
+    sleep(5)
     try:
-        feedback = q.get(False,5)
+        feedback = q.get(False)
     except:
         safeprint("No feedback received from listener")
-    if feedback is not []:
+    if feedback != []:
         settings.outbound = feedback[0]
         if settings.outbound is not True:
             peers.ext_ip = feedback[1]
