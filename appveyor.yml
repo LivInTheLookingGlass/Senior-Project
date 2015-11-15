@@ -117,7 +117,7 @@ build_script:
   
 on_success:
   - "%PYTHON%\\Scripts\\coverage xml"
-  - "COVERALLS_REPO_TOKEN=tGSdG5Qcd2dcQa2oQN9GlJkL50wFZPv1j"
+  - "set COVERALLS_REPO_TOKEN=tGSdG5Qcd2dcQa2oQN9GlJkL50wFZPv1j"
   - "%PYTHON%\\Scripts\\coveralls"
  
 #after_test:
