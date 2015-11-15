@@ -28,11 +28,11 @@ install:
   - pip install -r requirements.txt
 # command to run tests
 script: 
-  - if [ $Cov == 'true'  ]; then coverage run --concurrency=multiprocessing main.py; fi
+  - if [ $Cov == 'true'  ]; then coverage run main.py; fi
   - if [ $Cov == 'false' ]; then python main.py; fi
 before_install:
   - echo $TRAVIS_OS_NAME;
   - if [ $TRAVIS_OS_NAME == "osx" ]; then wget https://raw.githubusercontent.com/pyca/cryptography/master/.travis/install.sh; sh install.sh; fi
   - if [ $Cov == 'true'  ]; then pyver=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))'); echo $pyver; if [[ $pyver =~ 3\.2\.* ]]; then pip install coverage==3.7.1 ; fi; pip install coveralls; fi
 after_success:
-  - if [ $Cov == 'true'  ]; then coverage combine; coveralls; fi 
+  - if [ $Cov == 'true'  ]; then coveralls; fi 
