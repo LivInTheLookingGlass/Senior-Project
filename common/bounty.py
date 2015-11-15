@@ -85,26 +85,6 @@ def loadFromFile():
     bountyList = pickle.load("bounties.pickle")
     return True
   return False
-
-def loadBounties():
-  loadFromFile()
-  if len(bountyList) is 0:
-    requestBounties()
-  return len(bountyList) is not 0
-
-def requestBounties(peerList):
-  for peer in peerList:
-    bountyList.extend(requestBounty(peer))
-    
-def requestBounty(peer):
-  safeprint("currently unsupported")
-
-def sendBounty(peer):
-  safeprint("currently unsupported")
-  if len(bountyList) is 0:
-    loadBounties()
-  #send bounties
-  dumpBounties()
   
 def addBounty(bounty):
   a = False
