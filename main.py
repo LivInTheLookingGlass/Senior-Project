@@ -52,6 +52,7 @@ def main():
     testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",-1090,"Malformed bounty 6 (reward failure)")
     safeprint(bounty.getBountyList())
     bounty.saveToFile(bounty.bountyList)
+    bounty.loadFromFile()
     bounty.bountyList = bounty.loadFromFile()
     safeprint(bounty.getBountyList())
     
