@@ -1,8 +1,9 @@
 from common.bounty import *
 from common.peers import *
 from common import settings
-from time import sleep
 from common.safeprint import safeprint
+from multiprocessing import Queue
+from time import sleep
 import pickle
 
 def testBounty(ip, btc, rwd, desc):
@@ -20,10 +21,20 @@ def main():
         settings.config['outbound'] = True
     safeprint("settings are:")
     safeprint(settings.config)
-    ear = listener(settings.config['port'],settings.config['outbound'])
+    q = Queue()
+    ear = listener(settings.config['port'],settings.config['outbound'],q)
     ear.daemon = True
     ear.start()
-    sleep(5)
+    feedback = []
+    try:
+        feedback = q.get(False,5)
+    except:
+        safeprint("No feedback received from listener")
+    if feedback is not []:
+        settings.outbound = feedback[0]
+        if settings.outbound is not True:
+            peers.ext_ip = feedback[1]
+            peers.ext_port = feedback[2]
     initializePeerConnections(settings.config['port'])
     #######TEST SECTION#######
     testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1090,"Correctly formed bounty")
