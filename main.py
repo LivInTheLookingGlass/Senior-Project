@@ -8,7 +8,8 @@ import pickle
 def testBounty(ip, btc, rwd, desc):
     safeprint(desc)
     test = Bounty(ip,btc,rwd)
-    safeprint(addBounty(test))
+    a = pickle.dumps(test,1)
+    safeprint(addBounty(a))
 
 def main():
     settings.setup()
