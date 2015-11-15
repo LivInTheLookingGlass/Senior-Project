@@ -157,7 +157,7 @@ def trimPeers():
   del peerlist[:]
   peerlist.extend(temp)
 
-def listen(port, outbound,q): #pragma: no cover
+def listen(port, outbound,q):
   server = socket.socket()
   server.bind(("0.0.0.0",port))
   server.listen(10)
