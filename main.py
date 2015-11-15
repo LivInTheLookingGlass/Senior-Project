@@ -37,9 +37,12 @@ def main():
     if feedback != []:
         settings.outbound = feedback[0]
         if settings.outbound is not True:
-            peers.ext_ip = feedback[1]
-            peers.ext_port = feedback[2]
-    initializePeerConnections(settings.config['port'])
+            ext_ip = feedback[1]
+            ext_port = feedback[2]
+        else:
+            ext_ip = ""
+            ext_port = -1
+    initializePeerConnections(settings.config['port'], ext_ip, ext_port)
     #######TEST SECTION#######
     testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1090,"Correctly formed bounty")
     testBounty('8.8.8.8',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1090,"Malformed bounty 1 (ip failure)")

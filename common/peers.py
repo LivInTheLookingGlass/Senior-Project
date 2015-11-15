@@ -123,8 +123,10 @@ def requestPeerlist(address):
     remove.extend([address])
     return []
 
-def initializePeerConnections(newPort):
+def initializePeerConnections(newPort,newip,newport):
   port = newPort
+  ext_ip = newip
+  ext_port = newport
   safeprint([ext_ip, ext_port])
   getFromFile()
   safeprint("peers fetched from file")
