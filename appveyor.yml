@@ -108,12 +108,12 @@ install:
   - "set HOME=%APPVEYOR_BUILD_FOLDER%"
   - "%PYTHON%\\Scripts\\pip install coverage==3.7.1 codecov"
  
-build: off
+test: off
  
-test_script:
+build_script:
   - "%RUN% %HOME%\\main.py"
   
-after_success:
+on_success:
   - "%PYTHON%\\python -m codecov --token=0482d032-e24c-461b-a116-f0e3dbc88734"
  
 #after_test:
