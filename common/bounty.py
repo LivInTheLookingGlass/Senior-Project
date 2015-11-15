@@ -5,7 +5,7 @@ from multiprocessing import Lock
 bountyList = []
 bountyLock = Lock()
 
-class Bounty:
+class Bounty(object):
   ip = ""
   btc = ""
   reward = 0
