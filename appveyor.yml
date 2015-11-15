@@ -1,4 +1,5 @@
 environment:
+  fast_finish: true
   matrix:
     - PYTHON: "C:\\Python26"
       PYTHON_VERSION: "2.6.x"
