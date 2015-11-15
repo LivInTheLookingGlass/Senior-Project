@@ -8,12 +8,7 @@ import pickle
 def testBounty(ip, btc, rwd, desc):
     safeprint(desc)
     test = Bounty(ip,btc,rwd)
-    safeprint(test)
-    safeprint(test.isValid())
-    a = pickle.dumps(test,1)
-    if type(a) != type("a".encode('utf-8')):
-        a = a.encode('utf-8')
-    safeprint(verify(a))
+    safeprint(addBounty(test))
 
 def main():
     settings.setup()
