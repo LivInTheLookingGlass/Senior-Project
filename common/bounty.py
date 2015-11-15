@@ -109,6 +109,7 @@ def sendBounty(peer):
 def addBounty(bounty):
   a = False
   if type(bounty) == type("aaa") and (sys.version_info[0] >= 3 or (sys.version_info[0] == 2 and sys.version_info[1] == 6)):
+    safeprint("Fed as string, encoding utf-8")
     bounty = bounty.encode('utf-8')
   safeprint("External verify")
   a = verify(bounty)
