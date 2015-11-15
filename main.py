@@ -51,8 +51,8 @@ def main():
     testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGGww4ZEDmP7u9",1090,"Malformed bounty 5 (btc failure)")
     testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",-1090,"Malformed bounty 6 (reward failure)")
     safeprint(bounty.getBountyList())
-    bounty.saveToFile()
-    bounty.loadFromFile()
+    bounty.saveToFile(bounty.bountyList)
+    bounty.bountyList = bounty.loadFromFile()
     safeprint(bounty.getBountyList())
     
 if __name__ == "__main__":
