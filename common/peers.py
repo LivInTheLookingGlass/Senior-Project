@@ -155,7 +155,7 @@ def trimPeers():
   del peerlist[:]
   peerlist.extend(temp)
 
-def listen(port, outbound): #pragma: no cover
+def listen(port, outbound,q): #pragma: no cover
   server = socket.socket()
   server.bind(("0.0.0.0",port))
   server.listen(10)
@@ -268,4 +268,4 @@ class listener(multiprocessing.Process):  #pragma: no cover
     self.q = q
   def run(self):
     safeprint("listener started")
-    listen(self.port,self.outbound)
+    listen(self.port,self.outbound,self.q)
