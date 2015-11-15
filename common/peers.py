@@ -9,16 +9,16 @@ ext_port = -1
 ext_ip = ""
 port = 44565
 
-if os.name != "nt":
+if os.name != "nt": #pragma: no cover
     import fcntl
     import struct
 
-    def get_interface_ip(ifname):
+    def get_interface_ip(ifname): #pragma: no cover
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         return socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s',
                                 ifname[:15]))[20:24])
 
-def get_lan_ip():
+def get_lan_ip(): #pragma: no cover
     if sys.version_info[0] < 3:
         ip = socket.gethostbyname(socket.gethostname())
         if ip.startswith("127.") and os.name != "nt":
@@ -33,7 +33,9 @@ def get_lan_ip():
     else:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(('8.8.8.8', 0))
-        return s.getsockname()[0]
+        a = s.getsockname()[0]
+        s.close()
+        return a
 
 seedlist = ["127.0.0.1:44565", "localhost:44565", "10.132.80.128:44565"]
 peerlist = [get_lan_ip() + ":44565", "24.10.111.111:44565"]
