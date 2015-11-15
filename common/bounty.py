@@ -4,6 +4,7 @@ from multiprocessing import Lock
 
 bountyList = []
 bountyLock = Lock()
+bounty_path = "data" + os.sep + "bounties.pickle"
 
 class Bounty(object):
   ip = ""
@@ -75,14 +76,15 @@ def verify(string):
     return False
 
 def saveToFile():
-  if os.path.exists("bounties.pickle"):
-    pickle.dump(boutyList,"bounties.pickle")
-    return True
-  return False
+  if not os.path.exists(bounty_path.split(os.sep)[0]):
+    os.mkdir(bounty_path.split(os.sep)[0])
+  pickle.dump(boutyList,open(bounty_path, "wb"),1)
+  return True
 
 def loadFromFile():
-  if os.path.exists("settings.conf"):
-    bountyList = pickle.load("bounties.pickle")
+  if os.path.exists(bounty_path):
+    with bountyLock:
+      bountyList = pickle.load(bounty_path)
     return True
   return False
   
