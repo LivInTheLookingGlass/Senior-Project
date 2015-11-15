@@ -105,7 +105,7 @@ def saveToFile(bountyList):
 def loadFromFile():
   if os.path.exists(bounty_path):
     with bountyLock:
-      bountyList = pickle.load(bounty_path)
+      bountyList = pickle.load(open(bounty_path,"rb"))
     return True
   return False
   
