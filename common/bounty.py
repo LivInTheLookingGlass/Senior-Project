@@ -110,10 +110,10 @@ def addBounty(bounty):
   a = False
   safeprint((sys.version_info[0],sys.version_info[1],sys.version_info[2]))
   if type(bounty) == type("aaa") and sys.version_info[0] >= 3:
-    safeprint("Fed as string, encoding utf-8")
+    safeprint("Fed as string; encoding utf-8")
     bounty = bounty.encode('utf-8')
-  elif sys.version_info[0] == 2 and sys.version_info[1] == 6:
-    safeprint("Version is 2.6, running additional compatibility")
+  elif type(bounty) == type("aaa") and sys.version_info[0] == 2 and sys.version_info[1] == 6:
+    safeprint("Fed as string in 2.6; encoding ascii and ignoring errors")
     bounty = bounty.encode('ascii','ignore')
   safeprint("External verify")
   a = verify(bounty)
