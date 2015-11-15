@@ -12,10 +12,10 @@ python:
   - "3.5-dev" # 3.5 development branch
   - "nightly" # currently points to 3.6-dev
 env:
-  - Cov='true'
-  - Cov='false'
-  - UPnP='true'
-  - UPnP='false'
+  - Cov='true' UPnP='true'
+  - Cov='true' UPnP='false'
+  - Cov='false' UPnP='false'
+  - Cov='false' UPnP='false'
 matrix:
   allow_failures:
     - env: Cov='true'
