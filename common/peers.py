@@ -1,3 +1,4 @@
+from multiprocessing import Queue
 import multiprocessing, os, pickle, select, socket, sys, time
 from common.safeprint import safeprint
 from common.bounty import *
@@ -195,8 +196,8 @@ def listen(port, outbound): #pragma: no cover
       safeprint("Failed: " + str(type(e)))
       safeprint(e)
       outbound = True
-  
-  safeprint([ext_ip, ext_port])
+  safeprint([outbound,ext_ip, ext_port])
+  q.put([outbound,ext_ip,ext_port])
   while True:
     safeprint("listening on " + str(get_lan_ip()) + ":" + str(port))
     if not outbound:
@@ -260,10 +261,11 @@ def listen(port, outbound): #pragma: no cover
       safeprint(e)
 
 class listener(multiprocessing.Process):  #pragma: no cover
-  def __init__(self, port, outbound):
+  def __init__(self, port, outbound,q):
     multiprocessing.Process.__init__(self)
     self.outbound = outbound
     self.port = port
+    self.q = q
   def run(self):
     safeprint("listener started")
     listen(self.port,self.outbound)
