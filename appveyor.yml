@@ -31,11 +31,10 @@ install:
   - "powershell appveyor\\install.ps1"
   - "set HOME=%APPVEYOR_BUILD_FOLDER%"
  
-build: 
-  - "%PYTHON%/python %HOME%/main.py"
+build: off
  
 test:
-  - "%PYTHON%/python %HOME%/main.py"
+  - "%PYTHON%\\python %HOME%\\main.py"
  
 #after_test:
 #  - "%WITH_COMPILER% %PYTHON%/python setup.py %DISTRIBUTIONS%"
