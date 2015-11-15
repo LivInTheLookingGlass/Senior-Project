@@ -114,6 +114,7 @@ build_script:
   - "%RUN% %HOME%\\main.py"
   
 on_success:
+  - "%PYTHON%\\Scripts\\coverage xml"
   - "%PYTHON%\\Scripts\\codecov --token=0482d032-e24c-461b-a116-f0e3dbc88734"
  
 #after_test:
