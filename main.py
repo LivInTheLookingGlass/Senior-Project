@@ -3,7 +3,7 @@ from common.peers import *
 from common import settings
 from common.safeprint import safeprint
 from multiprocessing import Queue
-from time import sleep, now
+from time import sleep, time
 import pickle
 
 def testBounty(ip, btc, rwd, desc):
@@ -26,9 +26,9 @@ def main():
     ear.daemon = True
     ear.start()
     feedback = []
-    stamp = now()
+    stamp = time()
     while q.empty():
-        if now() - 5 > stamp:
+        if time() - 5 > stamp:
             break
     try:
         feedback = q.get(False)
