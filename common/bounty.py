@@ -74,6 +74,12 @@ def verify(string):
     return (b >= 0)
   except:
     return False
+    
+def getBountyList():
+  a = []
+  with bountyLock:
+    a = bountyList
+  return a
 
 def saveToFile():
   if not os.path.exists(bounty_path.split(os.sep)[0]):
