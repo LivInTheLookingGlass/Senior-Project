@@ -34,14 +34,13 @@ def main():
         feedback = q.get(False)
     except:
         safeprint("No feedback received from listener")
+    ext_ip = ""
+    ext_port = -1
     if feedback != []:
         settings.outbound = feedback[0]
         if settings.outbound is not True:
             ext_ip = feedback[1]
             ext_port = feedback[2]
-        else:
-            ext_ip = ""
-            ext_port = -1
     initializePeerConnections(settings.config['port'], ext_ip, ext_port)
     #######TEST SECTION#######
     testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1090,"Correctly formed bounty")
