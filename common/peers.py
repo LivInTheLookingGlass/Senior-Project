@@ -124,6 +124,7 @@ def requestPeerlist(address):
 
 def initializePeerConnections(newPort):
   port = newPort
+  safeprint([ext_ip, ext_port])
   getFromFile()
   safeprint("peers fetched from file")
   getFromSeeds()
@@ -140,6 +141,7 @@ def initializePeerConnections(newPort):
   saveToFile()
   safeprint("peer network saved to file")
   safeprint(peerlist)
+  safeprint([ext_ip, ext_port])
 
 def trimPeers():
   temp = list(set(peerlist))
@@ -193,6 +195,8 @@ def listen(port, outbound): #pragma: no cover
       safeprint("Failed: " + str(type(e)))
       safeprint(e)
       outbound = True
+  
+  safeprint([ext_ip, ext_port])
   while True:
     safeprint("listening on " + str(get_lan_ip()) + ":" + str(port))
     if not outbound:
