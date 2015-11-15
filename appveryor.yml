@@ -33,7 +33,7 @@ install:
  
 build: off
  
-test_script:
+test:
   - "%PYTHON%/python %HOME%/main.py"
  
 #after_test:
