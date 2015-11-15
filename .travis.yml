@@ -28,7 +28,7 @@ install:
   - pip install -r requirements.txt
 # command to run tests
 script: 
-  - if [ $Cov == 'true'  ]; then coverage run main.py; fi
+  - if [ $Cov == 'true'  ]; then coverage run main.py --concurrency=multiprocessing; fi
   - if [ $Cov == 'false' ]; then python main.py; fi
 before_install:
   - echo $TRAVIS_OS_NAME;
