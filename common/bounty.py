@@ -5,10 +5,10 @@ from hashlib import sha256
 
 global bountyList
 global bountyLock
-global bounty_path
+global bountyPath
 bountyList = []
 bountyLock = Lock()
-bounty_path = "data" + os.sep + "bounties.pickle"
+bountyPath = "data" + os.sep + "bounties.pickle"
 
 class Bounty(object):
   ip = ""
@@ -39,7 +39,7 @@ class Bounty(object):
       address = str(self.btc)
       #The following is a soft check
       #A deeper check will need to be done in order to assure this is correct
-      if not check_bc_valid(address):
+      if not checkAddressValid(address):
         return False
       #is reward valid
       safeprint("Testing reward")
@@ -52,7 +52,7 @@ class Bounty(object):
     #check if address has enough
     return False
 
-def check_bc_valid(bc):
+def checkAddressValid(bc):
   if not re.match(re.compile("^[a-zA-Z1-9]{26,35}$"),bc):
     return False
   n = 0
@@ -83,7 +83,7 @@ def verify(string):
     address = str(test.btc)
     #The following is a soft check
     #A deeper check will need to be done in order to assure this is correct
-    if not check_bc_valid(address):
+    if not checkAddressValid(address):
       return False
     #is reward valid
     safeprint("Testing reward")
@@ -99,15 +99,15 @@ def getBountyList():
   return a
 
 def saveToFile(bountyList):
-  if not os.path.exists(bounty_path.split(os.sep)[0]):
-    os.mkdir(bounty_path.split(os.sep)[0])
-  pickle.dump(bountyList,open(bounty_path, "wb"),1)
+  if not os.path.exists(bountyPath.split(os.sep)[0]):
+    os.mkdir(bountyPath.split(os.sep)[0])
+  pickle.dump(bountyList,open(bountyPath, "wb"),1)
   return True
 
 def loadFromFile():
-  if os.path.exists(bounty_path):
+  if os.path.exists(bountyPath):
     with bountyLock:
-      bountyList = pickle.load(open(bounty_path,"rb"))
+      bountyList = pickle.load(open(bountyPath,"rb"))
     return True
   return False
   
@@ -128,9 +128,9 @@ def addBounty(bounty):
         safeprint("I guess we'll have to wing it")
   safeprint("External verify")
   a = verify(bounty)
-  b = pickle.loads(bounty)
+  bounty = pickle.loads(bounty)
   safeprint("Internal verify")
-  b = b.isValid()
+  b = bounty.isValid()
   if a and b:
     with bountyLock:
       bountyList.append(bounty)
