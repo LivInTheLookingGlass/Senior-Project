@@ -61,7 +61,7 @@ environment:
       RUN: "%PYTHON%\\Scripts\\coverage run"
       UPnP: " "
       
-      - PYTHON: "C:\\Python26"
+    - PYTHON: "C:\\Python26"
       PYTHON_VERSION: "2.6.x"
       PYTHON_ARCH: "32"  
       RUN: "%PYTHON%\\Scripts\\coverage run"
