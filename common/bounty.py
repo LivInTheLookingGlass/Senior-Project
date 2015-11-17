@@ -132,6 +132,7 @@ def addBounty(bounty):
   b = bounty.isValid()
   if a and b:
     with bountyLock:
+      safeprint(bountList)
       bountyList.append(bounty)
   return (a and b)
 
