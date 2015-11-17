@@ -120,7 +120,7 @@ def addBounty(bounty):
       bounty = bounty.encode('ascii','ignore')
     except:
       bounty = str(bounty)
-  elif type(bounty) == type("aaa"): # and sys.version_info[0] >= 3:
+  elif type(bounty) == type("aaa") and sys.version_info[0] >= 3:
     safeprint("Fed as string; encoding utf-8")
     bounty = bounty.encode('utf-8')
   safeprint("External verify")
