@@ -16,6 +16,9 @@ class Bounty(object):
   reward = 0
   data = []
   
+  def __repr__(self):
+    return ("<Bounty: ip=" + str(self.ip) + ", btc=" + str(self.btc) + ", reward=" + str(reward) + ", data=" + str(self.data) + ">")
+  
   def __init__(self, ipAddress, btcAddress, rewardAmount, dataList=[]):
     self.ip = ipAddress
     self.btc = btcAddress
