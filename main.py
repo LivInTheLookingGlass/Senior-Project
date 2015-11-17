@@ -54,9 +54,9 @@ def main():
     testBounty('8.8.8.8:8888',"1MWSdYMKEpfWVxC6BGYARxsksaQuyEWzG5",1090,"Correctly formed bounty 3")
     testBounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",1090,"Correctly formed bounty 4")
     safeprint(bounty.getBountyList())
-    bounty.saveToFile(bounty.bountyList)
-    bounty.loadFromFile()
-    bounty.bountyList = bounty.loadFromFile()
+#    bounty.saveToFile(bounty.bountyList)
+#    bounty.loadFromFile()
+#    bounty.bountyList = bounty.loadFromFile()
     safeprint(bounty.getBountyList())
     safeprint(bounty.getBounty(settings.config.get('charity'),settings.config.get('propagate_factor')))
     
