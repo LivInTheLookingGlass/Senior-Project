@@ -146,7 +146,8 @@ def getBounty(charity, factor):
       if bounty.isValid():
         b = a.index(bounty)
         return a.pop(b)
-  else:    
+  else:
+    best = None
     for bounty in a:
       if best is None:
         best = bounty
