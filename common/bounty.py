@@ -98,9 +98,7 @@ def verify(string):
 def getBountyList():
   a = []
   with bountyLock:
-    safeprint(bountyList)
     a = bountyList
-  safeprint(a)
   return a
 
 def saveToFile(bountyList):
@@ -135,7 +133,6 @@ def addBounty(bounty):
   b = bounty.isValid()
   if a and b:
     with bountyLock:
-      safeprint(bountyList)
       bountyList.append(bounty)
   return (a and b)
 
