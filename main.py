@@ -57,6 +57,7 @@ def main():
     bounty.saveToFile(bounty.bountyList)
     bounty.loadFromFile()
     safeprint(bounty.getBountyList())
+    safeprint("3 bounties should follow")
     safeprint(bounty.getBounty(settings.config.get('charity'),settings.config.get('propagate_factor')))
     safeprint(bounty.getBounty(False,2))
     safeprint(bounty.getBounty(True,2))
