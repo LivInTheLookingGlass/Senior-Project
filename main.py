@@ -50,11 +50,15 @@ def main():
     testBounty('8.8.12348.8',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1090,"Malformed bounty 4 (ip failure)")
     testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGGww4ZEDmP7u9",1090,"Malformed bounty 5 (btc failure)")
     testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",-1090,"Malformed bounty 6 (reward failure)")
+    testBounty('8.8.8.8:8888',"1LhPsd4ng3AXmVPzrLWprWFx351pW4HJm8",1090,"Correctly formed bounty 2")
+    testBounty('8.8.8.8:8888',"1MWSdYMKEpfWVxC6BGYARxsksaQuyEWzG5",1090,"Correctly formed bounty 3")
+    testBounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",1090,"Correctly formed bounty 4")
     safeprint(bounty.getBountyList())
     bounty.saveToFile(bounty.bountyList)
     bounty.loadFromFile()
     bounty.bountyList = bounty.loadFromFile()
     safeprint(bounty.getBountyList())
+    safeprint(bounty.getBounty(settings.config.get('charity'),settings.config.get('propagate_factor')))
     
 if __name__ == "__main__":
     main()
