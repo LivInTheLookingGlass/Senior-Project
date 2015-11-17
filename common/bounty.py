@@ -138,7 +138,7 @@ def addBounty(bounty):
 
 def getBounty(charity, factor):
   a = getBountyList()
-  safeprint(a)
+  safeprint("bountyList = " + str(a))
   if a == []:
     return None
   elif charity:
