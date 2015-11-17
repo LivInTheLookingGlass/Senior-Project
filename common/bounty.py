@@ -14,16 +14,16 @@ class Bounty(object):
   ip = ""
   btc = ""
   reward = 0
-  data = []
+  data = {}
   
   def __repr__(self):
     return ("<Bounty: ip=" + str(self.ip) + ", btc=" + str(self.btc) + ", reward=" + str(self.reward) + ", data=" + str(self.data) + ">")
   
-  def __init__(self, ipAddress, btcAddress, rewardAmount, dataList=[]):
+  def __init__(self, ipAddress, btcAddress, rewardAmount, dataDict={}):
     self.ip = ipAddress
     self.btc = btcAddress
     self.reward = rewardAmount
-    self.data = dataList
+    self.data = dataDict
     
   def isValid(self):
     try:
