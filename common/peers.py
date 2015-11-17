@@ -86,9 +86,9 @@ def requestPeerlist(address):
         con.close()
         connected = False
       elif a == peer_request:
+        c = pickle.dumps(peerlist,1)
         if not ext_ip == "":
           c = pickle.dumps(peerlist + [ext_ip+":"+str(ext_port)],1)
-        c = pickle.dumps(peerlist,1)
         if type(c) != type("a".encode("utf-8")):
           safeprint("Test here")
           c = c.encode("utf-8")
