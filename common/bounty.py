@@ -122,10 +122,7 @@ def addBounty(bounty):
     try:
       bounty = bounty.encode('ascii','ignore')
     except:
-      try:
         bounty = str(bounty)
-      except:
-        safeprint("I guess we'll have to wing it")
   safeprint("External verify")
   a = verify(bounty)
   bounty = pickle.loads(bounty)
