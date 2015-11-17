@@ -50,7 +50,7 @@ class Bounty(object):
   
   def isPayable(self):
     #check if address has enough
-    return False
+    return True
 
 def checkAddressValid(bc):
   if not re.match(re.compile("^[a-zA-Z1-9]{26,35}$"),bc):
@@ -134,9 +134,18 @@ def addBounty(bounty):
   return (a and b)
 
 def getBounty(charity, factor):
-  for bounty in bountyList:
-    if best is None:
-      best = bounty
-    elif best.rewardAmount < bounty.rewardAmount and bounty.isValid() and (isPayable(factor) or charity):
-      best = bounty
-  return best
+  a = getBountyList()
+  if a == []:
+    return None
+  elif charity:
+    for bounty in a:
+      if bounty.isValid():
+        b = a.index(bounty)
+        return a.pop(b)
+  else:    
+    for bounty in bountyList:
+      if best is None:
+        best = bounty
+      elif best.rewardAmount < bounty.rewardAmount and bounty.isValid() and bounty.isPayable(factor):
+        best = bounty
+    return best
