@@ -95,7 +95,9 @@ def verify(string):
 def getBountyList():
   a = []
   with bountyLock:
+    safeprint(bountyList)
     a = bountyList
+  safeprint(a)
   return a
 
 def saveToFile(bountyList):
@@ -135,6 +137,7 @@ def addBounty(bounty):
 
 def getBounty(charity, factor):
   a = getBountyList()
+  safeprint(a)
   if a == []:
     return None
   elif charity:
@@ -143,7 +146,7 @@ def getBounty(charity, factor):
         b = a.index(bounty)
         return a.pop(b)
   else:    
-    for bounty in bountyList:
+    for bounty in a:
       if best is None:
         best = bounty
       elif best.rewardAmount < bounty.rewardAmount and bounty.isValid() and bounty.isPayable(factor):
