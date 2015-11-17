@@ -29,10 +29,10 @@ def main():
     stamp = time()
     while q.empty():
         if time() - 5 > stamp:
-            break
+            break #pragma: no cover
     try:
         feedback = q.get(False)
-    except:
+    except: #pragma: no cover
         safeprint("No feedback received from listener")
     ext_ip = ""
     ext_port = -1
@@ -56,9 +56,14 @@ def main():
     safeprint(bounty.getBountyList())
     bounty.saveToFile(bounty.bountyList)
     bounty.loadFromFile()
-#    bounty.bountyList = bounty.loadFromFile()
     safeprint(bounty.getBountyList())
     safeprint(bounty.getBounty(settings.config.get('charity'),settings.config.get('propagate_factor')))
+    safeprint(bounty.getBounty(False,2))
+    safeprint(bounty.getBounty(True,2))
+    settings.saveSettings()
+    settings.loadSettings()
+    saveToFile()
+    getFromFile()
     
 if __name__ == "__main__":
     main()
