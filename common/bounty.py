@@ -51,7 +51,7 @@ class Bounty(object):
     except:
       return False
   
-  def isPayable(self):
+  def isPayable(self, factor):
     #check if address has enough
     return True
 
