@@ -151,6 +151,6 @@ def getBounty(charity, factor):
     for bounty in a:
       if best is None:
         best = bounty
-      elif best.rewardAmount < bounty.rewardAmount and bounty.isValid() and bounty.isPayable(factor):
+      elif best.reward < bounty.reward and bounty.isValid() and bounty.isPayable(factor):
         best = bounty
     return best
