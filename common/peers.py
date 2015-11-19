@@ -10,16 +10,16 @@ ext_port = -1
 ext_ip = ""
 port = 44565
 
-if os.name != "nt": #pragma: no cover
+if os.name != "nt":
     import fcntl
     import struct
 
-    def get_interface_ip(ifname): #pragma: no cover
+    def get_interface_ip(ifname):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         return socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s',
                                 ifname[:15]))[20:24])
 
-def get_lan_ip(): #pragma: no cover
+def get_lan_ip(): 
     if sys.version_info[0] < 3:
         ip = socket.gethostbyname(socket.gethostname())
         if ip.startswith("127.") and os.name != "nt":
@@ -86,14 +86,7 @@ def requestPeerlist(address):
         con.close()
         connected = False
       elif a == peer_request:
-        c = pickle.dumps(peerlist,1)
-        if not ext_ip == "":
-          c = pickle.dumps(peerlist + [ext_ip+":"+str(ext_port)],1)
-        if type(c) != type("a".encode("utf-8")):
-          safeprint("Test here")
-          c = c.encode("utf-8")
-        con.send(c)
-        time.sleep(0.01)
+        handlePeerRequestWithoutExchange(con)
         con.send(close_signal)
       else:
         s += a.decode()
@@ -122,6 +115,33 @@ def requestPeerlist(address):
     safeprint(e)
     remove.extend([address])
     return []
+
+def requestBounties(address):
+  con = socket.socket()
+  con.settimeout(5)
+  safeprint(address)
+  try:
+    safeprint(address.split(":")[0] + ":" + address.split(":")[1])
+    con.connect((address.split(":")[0],int(address.split(":")[1])))
+    con.send(bounty_request)
+    connected = True
+    s = "".encode('utf-8')
+    while connected:
+      a = con.recv(64)
+      safeprint(a)
+      if a == close_signal:
+        con.close()
+        connected = False
+      else:
+        s += a
+    safeprint(pickle.loads(s))
+    b = pickle.loads(s)
+    for bounty in b:
+      addBounty(pickle.dumps(bounty,1))
+  except Exception as e:
+    safeprint("Failed:" + str(type(e)))
+    safeprint(e)
+    remove.extend([address])
 
 def initializePeerConnections(newPort,newip,newport):
   port = newPort
@@ -157,50 +177,53 @@ def trimPeers():
   del peerlist[:]
   peerlist.extend(temp)
 
-def listen(port, outbound,q): #pragma: no cover
+def listen(port, outbound, q, v, serv):
+  if serv:
+    from server.bounty import verify, addBounty
   server = socket.socket()
   server.bind(("0.0.0.0",port))
   server.listen(10)
+  server.settimeout(5)
   ext_ip = ""
   ext_port = -1
   if outbound is True:
     safeprint("UPnP mode is disabled")
   else:
     safeprint("UPnP mode is enabled")
-    import miniupnpc
-    u = miniupnpc.UPnP(None, None, 200, port)
-    safeprint('inital(default) values :')
-    safeprint(' discoverdelay' + str(u.discoverdelay))
-    safeprint(' lanaddr' + str(u.lanaddr))
-    safeprint(' multicastif' + str(u.multicastif))
-    safeprint(' minissdpdsocket' + str(u.minissdpdsocket))
-    #u.minissdpdsocket = '../minissdpd/minissdpd.sock'
-    # discovery process, it usualy takes several seconds (2 seconds or more)
-    safeprint('Discovering... delay=%ums' % u.discoverdelay)
-    safeprint(str(u.discover()) + 'device(s) detected')
     try:
+      import miniupnpc
+      u = miniupnpc.UPnP(None, None, 200, port)
+      safeprint('inital(default) values :')
+      safeprint(' discoverdelay' + str(u.discoverdelay))
+      safeprint(' lanaddr' + str(u.lanaddr))
+      safeprint(' multicastif' + str(u.multicastif))
+      safeprint(' minissdpdsocket' + str(u.minissdpdsocket))
+      #u.minissdpdsocket = '../minissdpd/minissdpd.sock'
+      # discovery process, it usualy takes several seconds (2 seconds or more)
+      safeprint('Discovering... delay=%ums' % u.discoverdelay)
+      safeprint(str(u.discover()) + 'device(s) detected')
       u.selectigd()
       ext_ip = u.externalipaddress()
       safeprint("external ip is: " + str(ext_ip))
-    except Exception as e:
-      safeprint("Failed: " + str(type(e)))
-      safeprint(e)
-      outbound = True
-  if outbound is False:
-    try:
       for i in range(0,20):
-        safeprint("Port forward try: " + str(i))
-        if u.addportmapping(port+i, 'TCP', get_lan_ip(), port, 'Bounty Net', ''):
-          ext_port = port + i
-          break
-      safeprint("External port is " + str(ext_port))
+        try:
+          safeprint("Port forward try: " + str(i))
+          if u.addportmapping(port+i, 'TCP', get_lan_ip(), port, 'Bounty Net', ''):
+            ext_port = port + i
+            safeprint("External port is " + str(ext_port))
+            break
+        except Exception as e:
+          safeprint("Failed: " + str(type(e)))
+          safeprint(e)
     except Exception as e:
       safeprint("Failed: " + str(type(e)))
       safeprint(e)
       outbound = True
+  if ext_port == -1:
+    outbound = True
   safeprint([outbound,ext_ip, ext_port])
   q.put([outbound,ext_ip,ext_port])
-  while True:
+  while v.value:    #is True is implicit
     safeprint("listening on " + str(get_lan_ip()) + ":" + str(port))
     if not outbound:
       safeprint("forwarded from " + ext_ip + ":" + str(ext_port))
@@ -210,50 +233,11 @@ def listen(port, outbound,q): #pragma: no cover
       b = a.recv(len(peer_request))
       safeprint("Received: " + b.decode())
       if b == peer_request:
-        if not outbound:
-          c = pickle.dumps(peerlist + [ext_ip+":"+str(ext_port)],1)
-        c = pickle.dumps(peerlist,1)
-        if type(c) != type("a".encode("utf-8")):
-          safeprint("Test here")
-          c = c.encode("utf-8")
-        a.send(c)
-        time.sleep(0.01)
-        a.send(peer_request)
-        connected = True
-        s = ""
-        while connected:
-          d = a.recv(64)
-          safeprint(d.decode())
-          if d == close_signal:
-            connected = False
-          elif d == peer_request:
-            continue
-          else:
-            s += d.decode()
-        s = s.encode('utf-8')
-        peerlist.extend(pickle.loads(s))
-        trimPeers()
+        handlePeerRequestWithExchange(a)
       elif b == bounty_request:
-        c = pickle.dumps(bountyList,1)
-        if type(c) != type("a".encode("utf-8")):
-          c = c.encode("utf-8")
-        a.send(c)
-        time.sleep(0.01)
+        handleBountyRequest(a)
       elif b == incoming_bounty:
-        connected = True
-        s = ""
-        while connected:
-          c = a.recv(len(close_signal))
-          safeprint(c.decode())
-          if not c == close_signal:
-            s += c.decode()
-          else:
-            connected = False
-        safeprint("Adding bounty: " + s)
-        if addBounty(s):
-          a.send(valid_signal)
-        else:
-          a.send(invalid_signal)
+        handleIncomingBounty(a)
       a.send(close_signal)
       time.sleep(0.01)
       a.close()
@@ -262,12 +246,70 @@ def listen(port, outbound,q): #pragma: no cover
       safeprint("Failed: " + str(type(e)))
       safeprint(e)
 
-class listener(multiprocessing.Process):  #pragma: no cover
-  def __init__(self, port, outbound,q):
+def handlePeerRequestWithExchange(conn):
+  if ext_port != -1:
+    c = pickle.dumps(peerlist + [ext_ip+":"+str(ext_port)],1)
+  c = pickle.dumps(peerlist,1)
+  if type(c) != type("a".encode("utf-8")):
+    safeprint("Test here")
+    c = c.encode("utf-8")
+  conn.send(c)
+  time.sleep(0.01)
+  conn.send(peer_request)
+  connected = True 
+  s = ""
+  while connected:
+    d = conn.recv(64)
+    safeprint(d.decode())
+    if d == close_signal:
+      connected = False
+    else:
+      s += d.decode()
+  s = s.encode('utf-8')
+  peerlist.extend(pickle.loads(s))
+  trimPeers()
+
+def handlePeerRequestWithoutExchange(conn):
+  if ext_port != -1:
+    c = pickle.dumps(peerlist + [ext_ip+":"+str(ext_port)],1)
+  c = pickle.dumps(peerlist,1)
+  if type(c) != type("a".encode("utf-8")):
+    safeprint("Test here")
+    c = c.encode("utf-8")
+  conn.send(c)
+  time.sleep(0.01)
+
+def handleIncomingBounty(conn):
+  connected = True
+  s = ""
+  while connected:
+    c = conn.recv(len(close_signal))
+    safeprint(c.decode())
+    if not c == close_signal:
+      s += c.decode()
+    else:
+      connected = False
+  safeprint("Adding bounty: " + s)
+  if addBounty(s):
+    conn.send(valid_signal)
+  else:
+    conn.send(invalid_signal)
+      
+def handleBountyRequest(conn):
+  c = pickle.dumps(bountyList,1)
+  if type(c) != type("a".encode("utf-8")):
+    c = c.encode("utf-8")
+  conn.send(c)
+  time.sleep(0.01)
+
+class listener(multiprocessing.Process):  
+  def __init__(self, port, outbound, q, v, serv):
     multiprocessing.Process.__init__(self)
     self.outbound = outbound
     self.port = port
     self.q = q
-  def run(self):
+    self.v = v
+    self.serv = serv
+  def run(self):#pragma: no cover
     safeprint("listener started")
-    listen(self.port,self.outbound,self.q)
+    listen(self.port,self.outbound,self.q,self.v,self.serv)

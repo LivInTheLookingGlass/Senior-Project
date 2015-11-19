@@ -114,7 +114,7 @@ test: off
  
 build_script:
   - "cd %HOME%"
-  - "%RUN% main.py"
+  - "%RUN% test.py"
   
 on_success:
   - "%PYTHON%\\Scripts\\coverage xml"
