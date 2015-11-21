@@ -184,7 +184,7 @@ def listen(port, outbound, q, v, serv):
   server.bind(("0.0.0.0",port))
   server.listen(10)
   server.settimeout(5)
-  if sys.version_info[0] == 2 and sys.platform == "win32":
+  if sys.version_info[0] < 3 and sys.platform == "win32":
     server.setblocking(True)
   ext_ip = ""
   ext_port = -1
@@ -192,35 +192,7 @@ def listen(port, outbound, q, v, serv):
     safeprint("UPnP mode is disabled")
   else:
     safeprint("UPnP mode is enabled")
-    try:
-      import miniupnpc
-      u = miniupnpc.UPnP(None, None, 200, port)
-      safeprint('inital(default) values :')
-      safeprint(' discoverdelay' + str(u.discoverdelay))
-      safeprint(' lanaddr' + str(u.lanaddr))
-      safeprint(' multicastif' + str(u.multicastif))
-      safeprint(' minissdpdsocket' + str(u.minissdpdsocket))
-      #u.minissdpdsocket = '../minissdpd/minissdpd.sock'
-      # discovery process, it usualy takes several seconds (2 seconds or more)
-      safeprint('Discovering... delay=%ums' % u.discoverdelay)
-      safeprint(str(u.discover()) + 'device(s) detected')
-      u.selectigd()
-      ext_ip = u.externalipaddress()
-      safeprint("external ip is: " + str(ext_ip))
-      for i in range(0,20):
-        try:
-          safeprint("Port forward try: " + str(i))
-          if u.addportmapping(port+i, 'TCP', get_lan_ip(), port, 'Bounty Net', ''):
-            ext_port = port + i
-            safeprint("External port is " + str(ext_port))
-            break
-        except Exception as e:
-          safeprint("Failed: " + str(type(e)))
-          safeprint(e)
-    except Exception as e:
-      safeprint("Failed: " + str(type(e)))
-      safeprint(e)
-      outbound = True
+    portForward(port)
   if ext_port == -1:
     outbound = True
   safeprint([outbound,ext_ip, ext_port])
@@ -230,19 +202,19 @@ def listen(port, outbound, q, v, serv):
     if not outbound:
       safeprint("forwarded from " + ext_ip + ":" + str(ext_port))
     try:
-      a, addr = server.accept()
+      conn, addr = server.accept()
       safeprint("connection accepted")
-      b = a.recv(len(peer_request))
+      b = conn.recv(len(peer_request))
       safeprint("Received: " + b.decode())
       if b == peer_request:
-        handlePeerRequestWithExchange(a)
+        handlePeerRequestWithExchange(conn)
       elif b == bounty_request:
-        handleBountyRequest(a)
+        handleBountyRequest(conn)
       elif b == incoming_bounty:
-        handleIncomingBounty(a)
-      a.send(close_signal)
+        handleIncomingBounty(conn)
+      conn.send(close_signal)
       time.sleep(0.01)
-      a.close()
+      conn.close()
       safeprint("connection closed")
     except Exception as e:
       safeprint("Failed: " + str(type(e)))
@@ -296,13 +268,44 @@ def handleIncomingBounty(conn):
     conn.send(valid_signal)
   else:
     conn.send(invalid_signal)
-      
+
 def handleBountyRequest(conn):
   c = pickle.dumps(bountyList,1)
   if type(c) != type("a".encode("utf-8")):
     c = c.encode("utf-8")
   conn.send(c)
   time.sleep(0.01)
+  
+def portForward(port):
+  try:
+    import miniupnpc
+    u = miniupnpc.UPnP(None, None, 200, port)
+    safeprint('inital(default) values :')
+    safeprint(' discoverdelay' + str(u.discoverdelay))
+    safeprint(' lanaddr' + str(u.lanaddr))
+    safeprint(' multicastif' + str(u.multicastif))
+    safeprint(' minissdpdsocket' + str(u.minissdpdsocket))
+    #u.minissdpdsocket = '../minissdpd/minissdpd.sock'
+    # discovery process, it usualy takes several seconds (2 seconds or more)
+    safeprint('Discovering... delay=%ums' % u.discoverdelay)
+    safeprint(str(u.discover()) + 'device(s) detected')
+    u.selectigd()
+    ext_ip = u.externalipaddress()
+    safeprint("external ip is: " + str(ext_ip))
+    for i in range(0,20):
+      try:
+        safeprint("Port forward try: " + str(i))
+        if u.addportmapping(port+i, 'TCP', get_lan_ip(), port, 'Bounty Net', ''):
+          ext_port = port + i
+          safeprint("External port is " + str(ext_port))
+          break
+      except Exception as e:
+        safeprint("Failed: " + str(type(e)))
+        safeprint(e)
+  except Exception as e:
+    safeprint("Failed: " + str(type(e)))
+    safeprint(e)
+    outbound = True
 
 class listener(multiprocessing.Process):  
   def __init__(self, port, outbound, q, v, serv):
