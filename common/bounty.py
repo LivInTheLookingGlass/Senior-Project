@@ -11,21 +11,40 @@ bountyLock = Lock()
 bountyPath = "data" + os.sep + "bounties.pickle"
 
 class Bounty(object):
+  """An object representation of a Bounty
+
+  Parts:
+  ip       -- The ip address of the requesting node
+  btc      -- The Bitcoin address of the requesting party
+  reward   -- The reward amount in Satoshis to be given over 24 hours (x | x == 0 or 1440 <= x <= 100000000)
+  data     -- A dictionary containing optional, additional information
+    author -- String which represents the group providing the Bounty
+    reqs   -- Dict containing requirements keyed by the related python calls ("sys.platform":"win32")
+    TDL    -- More to be defined in later versions
+  """
   ip = ""
   btc = ""
   reward = 0
   data = {}
   
   def __repr__(self):
+    """Gives a string representation of the bounty"""
     return ("<Bounty: ip=" + str(self.ip) + ", btc=" + str(self.btc) + ", reward=" + str(self.reward) + ", data=" + str(self.data) + ">")
   
   def __init__(self, ipAddress, btcAddress, rewardAmount, dataDict={}):
+    """Initialize a Bounty; constructor"""
     self.ip = ipAddress
     self.btc = btcAddress
     self.reward = rewardAmount
     self.data = dataDict
     
   def isValid(self):
+    """Internal method which checks the Bounty as valid under the most minimal version
+
+    ip     -- Must be in valid range
+    btc    -- Must be in valid namespace
+    reward -- Must be in valid range
+    """
     try:
       safeprint("Testing IP address")
       #is IP valid
@@ -47,21 +66,23 @@ class Bounty(object):
       #is reward valid
       safeprint("Testing reward")
       b = int(self.reward)
-      return (b >= 0)
+      return (b == 0 or (b >= 1440 and b <= 100000000))
     except:
       return False
   
   def isPayable(self, factor):
-    #check if address has enough
+    """check if address has enough"""
     return True
 
 def checkAddressValid(bc):
+  """Check to see if a Bitcoin address is within the valid namespace. Will potentially give false positives based on leading 1s"""
   if not re.match(re.compile("^[a-zA-Z1-9]{26,35}$"),bc):
     return False
   n = 0
   for char in bc:
       n = n * 58 + '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'.index(char)
   if sys.version_info[0] < 3:
+      """long does not have a to_bytes() in versions less than 3. This is an equivalent function"""
       bcbytes = (('%%0%dx' % (25 << 1) % n).decode('hex')[-25:])
       return bcbytes[-4:] == sha256(sha256(bcbytes[:-4]).digest()).digest()[:4]
   else:
@@ -69,6 +90,12 @@ def checkAddressValid(bc):
       return bcbytes[-4:] == sha256(sha256(bcbytes[:-4]).digest()).digest()[:4]
 
 def verify(string):
+  """External method which checks the Bounty as valid under implementation-specific requirements. This can be defined per user.
+
+  ip     -- Must be in valid range
+  btc    -- Must be in valid namespace
+  reward -- Must be in valid range
+  """
   test = pickle.loads(string)
   try:
     safeprint("Testing IP address")
@@ -91,23 +118,26 @@ def verify(string):
     #is reward valid
     safeprint("Testing reward")
     b = int(test.reward)
-    return (b >= 0)
+    return (b == 0 or (b >= 1440 and b <= 100000000))
   except:
     return False
     
 def getBountyList():
+  """Retrieves the bounty list. Temporary method"""
   a = []
   with bountyLock:
     a = bountyList
   return a
 
 def saveToFile(bountyList):
+  """Save the current bounty list to a file"""
   if not os.path.exists(bountyPath.split(os.sep)[0]):
     os.mkdir(bountyPath.split(os.sep)[0])
   pickle.dump(bountyList,open(bountyPath, "wb"),1)
   return True
 
 def loadFromFile():
+  """Load a previous bounty list from a file"""
   if os.path.exists(bountyPath):
     with bountyLock:
       bountyList = pickle.load(open(bountyPath,"rb"))
@@ -115,6 +145,7 @@ def loadFromFile():
   return False
   
 def addBounty(bounty):
+  """Verify a bounty, and add it to the list if it is valid"""
   a = False
   safeprint((sys.version_info[0],sys.version_info[1],sys.version_info[2]))
   if sys.version_info[0] == 2 and sys.version_info[1] == 6 and (type(bounty) == type("aaa") or type(bounty) == type(unicode("aaa"))):
@@ -137,6 +168,7 @@ def addBounty(bounty):
   return (a and b)
 
 def getBounty(charity, factor):
+  """Retrieve the next best bounty from the list"""
   a = getBountyList()
   safeprint("bountyList = " + str(a))
   if a == []:

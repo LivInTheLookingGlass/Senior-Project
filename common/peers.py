@@ -19,7 +19,8 @@ if os.name != "nt":
         return socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s',
                                 ifname[:15]))[20:24])
 
-def get_lan_ip(): 
+def get_lan_ip():
+    """Retrieves the LAN ip. Unfortunately uses an external connection in Python 3."""
     if sys.version_info[0] < 3:
         ip = socket.gethostbyname(socket.gethostname())
         if ip.startswith("127.") and os.name != "nt":
@@ -55,21 +56,25 @@ invalid_signal  = "Bounty was invalid.".encode("utf-8")
 Alive = True
 
 def getFromFile():
+  """Load peerlist from a file"""
   if os.path.exists(peers_file):
     peerlist = pickle.load(open(peers_file,"rb"))
 
 def saveToFile():
+  """Save peerlist to a file"""
   if not os.path.exists(peers_file.split(os.sep)[0]):
     os.mkdir(peers_file.split(os.sep)[0])
   pickle.dump(peerlist,open(peers_file,"wb"),1)
 
 def getFromSeeds():
+  """Make peer requests to each address on the seedlist"""
   for seed in seedlist:
     safeprint(seed)
     peerlist.extend(requestPeerlist(seed))
     time.sleep(1)
 
 def requestPeerlist(address):
+  """Request the peerlist of another node. Currently has additional test commands"""
   con = socket.socket()
   con.settimeout(5)
   safeprint(address)
@@ -117,6 +122,7 @@ def requestPeerlist(address):
     return []
 
 def requestBounties(address):
+  """Request the bountylist of another node"""
   con = socket.socket()
   con.settimeout(5)
   safeprint(address)
@@ -144,6 +150,7 @@ def requestBounties(address):
     remove.extend([address])
 
 def initializePeerConnections(newPort,newip,newport):
+  """Populate the peer list from a previous session, seeds, and from the peer list if its size is less than 12. Then save this new list to a file"""
   port = newPort
   ext_ip = newip
   ext_port = newport
@@ -167,6 +174,7 @@ def initializePeerConnections(newPort,newip,newport):
   safeprint([ext_ip, ext_port])
 
 def trimPeers():
+  """Trim the peerlist to a single set, and remove any that were marked as erroneous before"""
   temp = list(set(peerlist))
   for peer in remove:
     try:
@@ -178,6 +186,7 @@ def trimPeers():
   peerlist.extend(temp)
 
 def listen(port, outbound, q, v, serv):
+  """BLOCKING function which should only be run in a daemon thread. Listens and responds to other nodes"""
   if serv:
     from server.bounty import verify, addBounty
   server = socket.socket()
@@ -221,6 +230,7 @@ def listen(port, outbound, q, v, serv):
       safeprint(e)
 
 def handlePeerRequest(conn, exchange):
+  """Given a socket, send the proper messages to complete a peer request"""
   if ext_port != -1:
     c = pickle.dumps(peerlist + [ext_ip+":"+str(ext_port)],1)
   c = pickle.dumps(peerlist,1)
@@ -231,7 +241,7 @@ def handlePeerRequest(conn, exchange):
   time.sleep(0.01)
   if exchange:
     conn.send(peer_request)
-    connected = True 
+    connected = True
     s = ""
     while connected:
       d = conn.recv(64)
@@ -245,6 +255,7 @@ def handlePeerRequest(conn, exchange):
     trimPeers()
 
 def handleIncomingBounty(conn):
+  """Given a socket, store an incoming bounty, and report it valid or invalid"""
   connected = True
   s = ""
   while connected:
@@ -261,13 +272,15 @@ def handleIncomingBounty(conn):
     conn.send(invalid_signal)
 
 def handleBountyRequest(conn):
+  """Given a socket, send the proper messages to handle a bounty request"""
   c = pickle.dumps(bountyList,1)
   if type(c) != type("a".encode("utf-8")):
     c = c.encode("utf-8")
   conn.send(c)
   time.sleep(0.01)
-  
+
 def portForward(port):
+  """Attempt to forward a port on your router to the specified local port. Prints lots of debug info."""
   try:
     import miniupnpc
     u = miniupnpc.UPnP(None, None, 200, port)
@@ -298,7 +311,8 @@ def portForward(port):
     safeprint(e)
     outbound = True
 
-class listener(multiprocessing.Process):  
+class listener(multiprocessing.Process):
+  """A class to deal with the listener method"""
   def __init__(self, port, outbound, q, v, serv):
     multiprocessing.Process.__init__(self)
     self.outbound = outbound

@@ -1,5 +1,7 @@
 from common import bounty
 
+"""Contains overrides to the common.bounty package to deal with server-specific functions"""
+
 def verify(string):
   test = pickle.loads(string)
   try:

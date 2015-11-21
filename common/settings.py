@@ -10,15 +10,18 @@ config = {'accept_latency':2000,
 settings_file = "data" + os.sep + "settings.conf"
 
 def saveSettings():
+    """Save settings to a file"""
     if not os.path.exists(settings_file.split(os.sep)[0]):
         os.mkdir(settings_file.split(os.sep)[0])
     pickle.dump(config,open(settings_file,"wb"),1)
 
 def loadSettings():
+    """Load settings from a file"""
     if os.path.exists(settings_file):
         config.update(pickle.load(open(settings_file,"rb")))
 
 def setup():
+    """Parses and stores the command line arguments given, and override default and saved settings"""
     parser = optparse.OptionParser()
     parser.add_option('-c',
                       '--charity',
