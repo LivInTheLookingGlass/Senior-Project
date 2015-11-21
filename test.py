@@ -4,7 +4,7 @@ from common import settings #pragma: no cover
 from common.safeprint import safeprint #pragma: no cover
 from multiprocessing import Queue, Process, Value #pragma: no cover
 from time import sleep, time #pragma: no cover
-import pickle #pragma: no cover
+import pickle, sys #pragma: no cover
 from main import * #pragma: no cover
 
 def waitForty(v,q): #pragma: no cover
@@ -50,9 +50,10 @@ if __name__ == "__main__": #pragma: no cover
     settings.loadSettings()
     saveToFile()
     getFromFile()
-#    safeprint("Test listener begin")
-#    v = Value('b',True)
-#    q = Queue()
-#    a = Process(target=waitForty,args=(v,q))
-#    a.start()
-#    listen(44566,False,q,v,False)
+    if not (sys.version_info[0] < 3 and sys.platform == "win32"):
+        safeprint("Test listener begin")
+        v = Value('b',True)
+        q = Queue()
+        a = Process(target=waitForty,args=(v,q))
+        a.start()
+        listen(44566,False,q,v,False)
