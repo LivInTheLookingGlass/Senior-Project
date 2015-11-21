@@ -184,7 +184,8 @@ def listen(port, outbound, q, v, serv):
   server.bind(("0.0.0.0",port))
   server.listen(10)
   server.settimeout(5)
-  server.setblocking(True)
+  if sys.version_info[0] == 2 and sys.platform == "win32":
+    server.setblocking(True)
   ext_ip = ""
   ext_port = -1
   if outbound is True:
