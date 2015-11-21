@@ -86,7 +86,7 @@ def requestPeerlist(address):
         con.close()
         connected = False
       elif a == peer_request:
-        handlePeerRequestWithoutExchange(con)
+        handlePeerRequest(con,False)
         con.send(close_signal)
       else:
         s += a.decode()
@@ -207,7 +207,7 @@ def listen(port, outbound, q, v, serv):
       b = conn.recv(len(peer_request))
       safeprint("Received: " + b.decode())
       if b == peer_request:
-        handlePeerRequestWithExchange(conn)
+        handlePeerRequest(conn,True)
       elif b == bounty_request:
         handleBountyRequest(conn)
       elif b == incoming_bounty:
@@ -220,7 +220,7 @@ def listen(port, outbound, q, v, serv):
       safeprint("Failed: " + str(type(e)))
       safeprint(e)
 
-def handlePeerRequestWithExchange(conn):
+def handlePeerRequest(conn, exchange):
   if ext_port != -1:
     c = pickle.dumps(peerlist + [ext_ip+":"+str(ext_port)],1)
   c = pickle.dumps(peerlist,1)
@@ -229,29 +229,20 @@ def handlePeerRequestWithExchange(conn):
     c = c.encode("utf-8")
   conn.send(c)
   time.sleep(0.01)
-  conn.send(peer_request)
-  connected = True 
-  s = ""
-  while connected:
-    d = conn.recv(64)
-    safeprint(d.decode())
-    if d == close_signal:
-      connected = False
-    else:
-      s += d.decode()
-  s = s.encode('utf-8')
-  peerlist.extend(pickle.loads(s))
-  trimPeers()
-
-def handlePeerRequestWithoutExchange(conn):
-  if ext_port != -1:
-    c = pickle.dumps(peerlist + [ext_ip+":"+str(ext_port)],1)
-  c = pickle.dumps(peerlist,1)
-  if type(c) != type("a".encode("utf-8")):
-    safeprint("Test here")
-    c = c.encode("utf-8")
-  conn.send(c)
-  time.sleep(0.01)
+  if exchange:
+    conn.send(peer_request)
+    connected = True 
+    s = ""
+    while connected:
+      d = conn.recv(64)
+      safeprint(d.decode())
+      if d == close_signal:
+        connected = False
+      else:
+        s += d.decode()
+    s = s.encode('utf-8')
+    peerlist.extend(pickle.loads(s))
+    trimPeers()
 
 def handleIncomingBounty(conn):
   connected = True
