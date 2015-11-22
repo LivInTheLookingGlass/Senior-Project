@@ -2,6 +2,8 @@
 
 You'll probably find the [web format](https://gappleto97.github.io/Senior-Project) a bit nicer to read. It's also kept more up to date.
 
+If you're looking to contribute, [go here](https://github.com/gappleto97/Senior-Project/blob/master/documentation/Contributing.md)
+
 #Issues
 If you do not have a GitHub account, please submit your issue with [this link](https://gitreports.com/issue/gappleto97/Senior-Project). Otherwise, use the [standard issue tracker](https://github.com/gappleto97/Senior-Project/issues/new). 
 
