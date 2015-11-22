@@ -242,27 +242,26 @@ def handlePeerRequest(conn, exchange):
   if exchange:
     conn.send(peer_request)
     connected = True
-    s = ""
+    s = "".encode('utf-8')
     while connected:
-      d = conn.recv(64)
-      safeprint(d.decode())
+      d = conn.recv(len(close_signal))
+      safeprint(d)
       if d == close_signal:
         connected = False
       else:
-        s += d.decode()
-    s = s.encode('utf-8')
+        s += d
     peerlist.extend(pickle.loads(s))
     trimPeers()
 
 def handleIncomingBounty(conn):
   """Given a socket, store an incoming bounty, and report it valid or invalid"""
   connected = True
-  s = ""
+  s = "".encode('utf-8')
   while connected:
     c = conn.recv(len(close_signal))
-    safeprint(c.decode())
+    safeprint(c)
     if not c == close_signal:
-      s += c.decode()
+      s += c
     else:
       connected = False
   safeprint("Adding bounty: " + s)
