@@ -18,3 +18,11 @@ Contributions will go as follows
 5. Pull request is merged
 
 You can also make an issue, and it may get tackled that way.
+
+###Naming standard
+
+These are tentative and subject to change
+
+* Temporary variables: keep to one word (ie, manager, string, etc)
+* Constant variables:  all_lowercase_with_underscores
+* All others:          camelCase
