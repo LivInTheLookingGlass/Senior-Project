@@ -66,7 +66,7 @@ def setup():
     loadSettings()
     saveSettings()
     kill = []
-    for key in overrides:
+    for key in overrides:               #Remove keys with None, just to be safe
         if overrides.get(key) is None:
             kill += [key]
     for key in kill:

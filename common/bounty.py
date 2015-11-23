@@ -8,7 +8,7 @@ global bountyLock
 global bountyPath
 bountyList = []
 bountyLock = Lock()
-bountyPath = "data" + os.sep + "bounties.pickle"
+bounty_path = "data" + os.sep + "bounties.pickle"
 
 class Bounty(object):
   """An object representation of a Bounty
@@ -17,6 +17,7 @@ class Bounty(object):
   ip       -- The ip address of the requesting node
   btc      -- The Bitcoin address of the requesting party
   reward   -- The reward amount in Satoshis to be given over 24 hours (x | x == 0 or 1440 <= x <= 100000000)
+  id       -- A value set by the issuer to determine which problem/test to send
   data     -- A dictionary containing optional, additional information
     author -- String which represents the group providing the Bounty
     reqs   -- Dict containing requirements keyed by the related python calls ("sys.platform":"win32")
@@ -48,12 +49,12 @@ class Bounty(object):
     try:
       safeprint("Testing IP address")
       #is IP valid
-      b = int(self.ip.split(":")[1]) in range(1024,49152)
-      b = int(self.ip.split(":")[0].split(".")[0]) in range(0,256) and b
-      b = int(self.ip.split(":")[0].split(".")[1]) in range(0,256) and b
-      b = int(self.ip.split(":")[0].split(".")[2]) in range(0,256) and b
-      b = int(self.ip.split(":")[0].split(".")[3]) in range(0,256) and b
-      if not b:
+      boolean = int(self.ip.split(":")[1]) in range(1024,49152)
+      boolean = int(self.ip.split(":")[0].split(".")[0]) in range(0,256) and boolean
+      boolean = int(self.ip.split(":")[0].split(".")[1]) in range(0,256) and boolean
+      boolean = int(self.ip.split(":")[0].split(".")[2]) in range(0,256) and boolean
+      boolean = int(self.ip.split(":")[0].split(".")[3]) in range(0,256) and boolean
+      if not boolean:
         return False
       #ping IP
       #is Bitcoin address valid
@@ -65,8 +66,8 @@ class Bounty(object):
         return False
       #is reward valid
       safeprint("Testing reward")
-      b = int(self.reward)
-      return (b == 0 or (b >= 1440 and b <= 100000000))
+      reward = int(self.reward)
+      return (reward == 0 or (reward >= 1440 and reward <= 100000000))
     except:
       return False
   
@@ -74,19 +75,19 @@ class Bounty(object):
     """check if address has enough"""
     return True
 
-def checkAddressValid(bc):
+def checkAddressValid(address):
   """Check to see if a Bitcoin address is within the valid namespace. Will potentially give false positives based on leading 1s"""
-  if not re.match(re.compile("^[a-zA-Z1-9]{26,35}$"),bc):
+  if not re.match(re.compile("^[a-zA-Z1-9]{26,35}$"),address):
     return False
-  n = 0
-  for char in bc:
-      n = n * 58 + '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'.index(char)
+  decimal = 0
+  for char in address:
+      decimal = decimal * 58 + '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'.index(char)
   if sys.version_info[0] < 3:
       """long does not have a to_bytes() in versions less than 3. This is an equivalent function"""
-      bcbytes = (('%%0%dx' % (25 << 1) % n).decode('hex')[-25:])
+      bcbytes = (('%%0%dx' % (25 << 1) % decimal).decode('hex')[-25:])
       return bcbytes[-4:] == sha256(sha256(bcbytes[:-4]).digest()).digest()[:4]
   else:
-      bcbytes = n.to_bytes(25, 'big')
+      bcbytes = decimal.to_bytes(25, 'big')
       return bcbytes[-4:] == sha256(sha256(bcbytes[:-4]).digest()).digest()[:4]
 
 def verify(string):
@@ -100,12 +101,12 @@ def verify(string):
   try:
     safeprint("Testing IP address")
     #is IP valid
-    b = int(test.ip.split(":")[1]) in range(1024,49152)
-    b = int(test.ip.split(":")[0].split(".")[0]) in range(0,256) and b
-    b = int(test.ip.split(":")[0].split(".")[1]) in range(0,256) and b
-    b = int(test.ip.split(":")[0].split(".")[2]) in range(0,256) and b
-    b = int(test.ip.split(":")[0].split(".")[3]) in range(0,256) and b
-    if not b:
+    boolean = int(test.ip.split(":")[1]) in range(1024,49152)
+    boolean = int(test.ip.split(":")[0].split(".")[0]) in range(0,256) and boolean
+    boolean = int(test.ip.split(":")[0].split(".")[1]) in range(0,256) and boolean
+    boolean = int(test.ip.split(":")[0].split(".")[2]) in range(0,256) and boolean
+    boolean = int(test.ip.split(":")[0].split(".")[3]) in range(0,256) and boolean
+    if not boolean:
       return False
     #ping IP
     #is Bitcoin address valid
@@ -117,37 +118,37 @@ def verify(string):
       return False
     #is reward valid
     safeprint("Testing reward")
-    b = int(test.reward)
-    return (b == 0 or (b >= 1440 and b <= 100000000))
+    reward = int(test.reward)
+    return (reward == 0 or (reward >= 1440 and reward <= 100000000))
   except:
     return False
     
 def getBountyList():
   """Retrieves the bounty list. Temporary method"""
-  a = []
+  temp = []
   with bountyLock:
-    a = bountyList
-  return a
+    temp = bountyList
+  return temp
 
 def saveToFile(bountyList):
   """Save the current bounty list to a file"""
-  if not os.path.exists(bountyPath.split(os.sep)[0]):
-    os.mkdir(bountyPath.split(os.sep)[0])
-  pickle.dump(bountyList,open(bountyPath, "wb"),1)
+  if not os.path.exists(bounty_path.split(os.sep)[0]):
+    os.mkdir(bounty_path.split(os.sep)[0])
+  pickle.dump(bountyList,open(bounty_path, "wb"),1)
   return True
 
 def loadFromFile():
   """Load a previous bounty list from a file"""
-  if os.path.exists(bountyPath):
+  if os.path.exists(bounty_path):
     with bountyLock:
-      bountyList = pickle.load(open(bountyPath,"rb"))
+      bountyList = pickle.load(open(bounty_path,"rb"))
     return True
   return False
   
 def addBounty(bounty):
   """Verify a bounty, and add it to the list if it is valid"""
-  a = False
-  safeprint((sys.version_info[0],sys.version_info[1],sys.version_info[2]))
+  first = False
+  safeprint([sys.version_info[0],sys.version_info[1],sys.version_info[2]])
   if sys.version_info[0] == 2 and sys.version_info[1] == 6 and (type(bounty) == type("aaa") or type(bounty) == type(unicode("aaa"))):
     safeprint("Fed as string in 2.6; encoding ascii and ignoring errors")
     try:
@@ -158,26 +159,26 @@ def addBounty(bounty):
     safeprint("Fed as string; encoding utf-8")
     bounty = bounty.encode('utf-8')
   safeprint("External verify")
-  a = verify(bounty)
+  first = verify(bounty)
   bounty = pickle.loads(bounty)
   safeprint("Internal verify")
-  b = bounty.isValid()
-  if a and b:
+  second = bounty.isValid()
+  if first and second:
     with bountyLock:
       bountyList.append(bounty)
-  return (a and b)
+  return (first and second)
 
 def getBounty(charity, factor):
   """Retrieve the next best bounty from the list"""
-  a = getBountyList()
-  safeprint("bountyList = " + str(a))
-  if a == []:
+  temp = getBountyList()
+  safeprint("bountyList = " + str(temp))
+  if temp == []:
     return None
   elif charity:
-    for bounty in a:
+    for bounty in temp:
       if bounty.isValid():
-        b = a.index(bounty)
-        return a.pop(b)
+        index = a.index(bounty)
+        return a.pop(index)
   else:
     best = None
     for bounty in a:
