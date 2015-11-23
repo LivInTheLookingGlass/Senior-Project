@@ -114,10 +114,9 @@ test: off
  
 build_script:
   - "cd %HOME%"
-  - "%RUN% test.py > test.txt"
-  - "type test.txt"
-  - "%RUN% main.py > main.txt"
-  - "type main.txt"
+  - "%RUN% test.py > nul 2>&1"
+  - "%RUN% main.py > nul 2>&1"
+  - "type output.txt"
   
 on_success:
   - "%PYTHON%\\Scripts\\coverage xml"
