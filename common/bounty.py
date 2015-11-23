@@ -177,8 +177,8 @@ def getBounty(charity, factor):
   elif charity:
     for bounty in temp:
       if bounty.isValid():
-        index = a.index(bounty)
-        return a.pop(index)
+        index = temp.index(bounty)
+        return temp.pop(index)
   else:
     best = None
     for bounty in temp:
