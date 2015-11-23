@@ -58,11 +58,11 @@ def setup():
                       dest='server',
                       default=None,
                       action="store_true",
-                      help='Sets whether you operate as a server or client (Default: client)')        
+                      help='Sets whether you operate as a server or client (Default: client)')
     (options, args) = parser.parse_args()
 
     safeprint("options parsed")
-    overrides = options.__dict__  
+    overrides = options.__dict__
     loadSettings()
     saveSettings()
     kill = []
