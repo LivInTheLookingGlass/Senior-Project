@@ -262,7 +262,7 @@ def handleIncomingBounty(conn):
             received += packet
         else:
             connected = False
-    safeprint("Adding bounty: " + received)
+    safeprint("Adding bounty: " + received.decode())
     if addBounty(received):
         conn.send(valid_signal)
     else:
