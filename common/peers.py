@@ -208,6 +208,7 @@ def listen(port, outbound, q, v, serv):
       safeprint("forwarded from " + ext_ip + ":" + str(ext_port))
     try:
       conn, addr = server.accept()
+      server.setblocking(True)
       safeprint("connection accepted")
       packet = conn.recv(len(peer_request))
       safeprint("Received: " + packet.decode())
@@ -220,6 +221,7 @@ def listen(port, outbound, q, v, serv):
       conn.send(close_signal)
       time.sleep(0.01)
       conn.close()
+      server.settimeout(5)
       safeprint("connection closed")
     except Exception as error:
       safeprint("Failed: " + str(type(error)))
