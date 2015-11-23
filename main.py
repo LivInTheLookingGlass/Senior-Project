@@ -45,7 +45,7 @@ def main():
     initializePeerConnections(settings.config['port'], ext_ip, ext_port)
     requestBounties(get_lan_ip() + ":44565")    #Test function
     requestBounties("localhost:44565")          #test function
-    v.value = False
+    live.value = False
     
 if __name__ == "__main__":
     main()

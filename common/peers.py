@@ -111,7 +111,7 @@ def requestPeerlist(address):
     time.sleep(0.01)
     con.close()
     #end test section
-    return pickle.loads(s)
+    return pickle.loads(received)
   except Exception as error:
     safeprint("Failed:" + str(type(error)))
     safeprint(error)
@@ -289,12 +289,14 @@ def portForward(port):
     safeprint(str(u.discover()) + 'device(s) detected')
     #End Debug info
     u.selectigd()
+    global ext_ip
     ext_ip = u.externalipaddress()
     safeprint("external ip is: " + str(ext_ip))
     for i in range(0,20):
       try:
         safeprint("Port forward try: " + str(i))
         if u.addportmapping(port+i, 'TCP', get_lan_ip(), port, 'Bounty Net', ''):
+          global ext_port
           ext_port = port + i
           safeprint("External port is " + str(ext_port))
           return True
