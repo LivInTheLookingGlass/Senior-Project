@@ -62,7 +62,7 @@ def saveToFile():
     """Save peerlist to a file"""
     if not os.path.exists(peers_file.split(os.sep)[0]):
         os.mkdir(peers_file.split(os.sep)[0])
-    pickle.dump(peerlist,open(peers_file,"wb"),1)
+    pickle.dump(peerlist,open(peers_file,"wb"),0)
 
 def getFromSeeds():
     """Make peer requests to each address on the seedlist"""
@@ -101,7 +101,7 @@ def requestPeerlist(address):
         con.send(incoming_bounty)
         time.sleep(0.01)
         bounty = Bounty(get_lan_ip() + ":44565","1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1440)
-        bounty = pickle.dumps(bounty,1)
+        bounty = pickle.dumps(bounty,0)
         if type(bounty) == type("a"):
             bounty = bounty.encode('utf-8')
         safeprint(bounty)
@@ -140,7 +140,7 @@ def requestBounties(address):
         safeprint(pickle.loads(received))
         bounties = pickle.loads(received)
         for bounty in bounties:
-            addBounty(pickle.dumps(bounty,1))
+            addBounty(pickle.dumps(bounty,0))
     except Exception as error:
         safeprint("Failed:" + str(type(error)))
         safeprint(error)
@@ -230,8 +230,8 @@ def listen(port, outbound, q, v, serv):
 def handlePeerRequest(conn, exchange):
     """Given a socket, send the proper messages to complete a peer request"""
     if ext_port != -1:
-        send = pickle.dumps(peerlist + [ext_ip+":"+str(ext_port)],1)
-    send = pickle.dumps(peerlist,1)
+        send = pickle.dumps(peerlist + [ext_ip+":"+str(ext_port)],0)
+    send = pickle.dumps(peerlist,0)
     if type(send) != type("a".encode("utf-8")):
         safeprint("Test here")
         send = send.encode("utf-8")
@@ -270,7 +270,7 @@ def handleIncomingBounty(conn):
 
 def handleBountyRequest(conn):
     """Given a socket, send the proper messages to handle a bounty request"""
-    send = pickle.dumps(bountyList,1)
+    send = pickle.dumps(bountyList,0)
     if type(send) != type("a".encode("utf-8")):
         send = send.encode("utf-8")
     conn.send(send)
