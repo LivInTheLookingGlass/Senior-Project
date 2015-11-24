@@ -17,7 +17,8 @@ class Bounty(object):
     ip       -- The ip address of the requesting node
     btc      -- The Bitcoin address of the requesting party
     reward   -- The reward amount in Satoshis to be given over 24 hours (x | x == 0 or 1440 <= x <= 100000000)
-    id       -- A value set by the issuer to determine which problem/test to send
+    ident    -- A value set by the issuer to determine which problem/test to send
+    timeout  -- Unix time at which the bounty expires
     data     -- A dictionary containing optional, additional information
       author -- String which represents the group providing the Bounty
       reqs   -- Dict containing requirements keyed by the related python calls ("sys.platform":"win32")
@@ -26,29 +27,82 @@ class Bounty(object):
     ip = ""
     btc = ""
     reward = 0
+    ident = None
+    timeout = 0
     data = {}
 
     def __repr__(self):
         """Gives a string representation of the bounty"""
-        return ("<Bounty: ip=" + str(self.ip) + ", btc=" + str(self.btc) + ", reward=" + str(self.reward) + ", data=" + str(self.data) + ">")
+        output = "<Bounty: ip=" + str(self.ip) + ", btc=" + str(self.btc) + ", reward=" + str(self.reward)
+        if self.ident != None:
+            output = output + ", id=" + str(self.ident)
+        if self.timeout != None:
+            from calendar import timegm
+            from time import gmtime
+            output = output + ", time_left=" + str(self.timeout - timegm(gmtime()))
+        if self.data != {} and self.data != None:
+            output = output + ", data=" + str(self.data)
+        output = output + ">"
+        return output
 
-    def __init__(self, ipAddress, btcAddress, rewardAmount, dataDict={}):
+    def __eq__(self, other):
+        """Determines whether the bounties are equal"""
+        return (self.reward == other.reward) and (self.ident == other.ident) and (self.data.get('author') == other.data.get('author'))
+        
+    def __ne__(self, other):
+        """Determines whether the bounties are unequal"""
+        return not self.__eq__(other)
+        
+    def __lt__(self, other):
+        """Determines whether this bounty has a lower priority"""
+        if self.reward < other.reward:
+            return True
+        elif self.timeout < other.timeout:
+            return True
+        else:
+            return False
+        
+    def __gt__(self, other):
+        """Determines whether this bounty has a higher priority"""
+        if self.reward > other.reward:
+            return True
+        elif self.timeout > other.timeout:
+            return True
+        else:
+            return False
+        
+    def __le__(self, other):
+        """Determines whether this bounty has a lower or equal priority"""
+        return not self.__gt__(other)
+        
+    def __ge__(self, other):
+        """Determines whether this bounty has a higher or equal priority"""
+        return not self.__lt__(other)
+      
+    def __init__(self, ipAddress, btcAddress, rewardAmount, timeout=None, ident=None, dataDict={}):
         """Initialize a Bounty; constructor"""
         self.ip = ipAddress
         self.btc = btcAddress
         self.reward = rewardAmount
         self.data = dataDict
+        self.ident = ident
+        if timeout is None:
+            from calendar import timegm
+            from time import gmtime
+            self.timeout = timegm(gmtime()) + 86400 #24 hours from now in UTC (forced)
+        else:
+            self.timeout = timeout
 
     def isValid(self):
         """Internal method which checks the Bounty as valid under the most minimal version
 
-        ip     -- Must be in valid range
-        btc    -- Must be in valid namespace
-        reward -- Must be in valid range
+        ip      -- Must be in valid range
+        btc     -- Must be in valid namespace
+        reward  -- Must be in valid range
+        timeout -- Must be greater than the current time
         """
         try:
             safeprint("Testing IP address")
-            #is IP valid
             boolean = int(self.ip.split(":")[1]) in range(1024,49152)
             boolean = int(self.ip.split(":")[0].split(".")[0]) in range(0,256) and boolean
             boolean = int(self.ip.split(":")[0].split(".")[1]) in range(0,256) and boolean
@@ -56,18 +110,21 @@ class Bounty(object):
             boolean = int(self.ip.split(":")[0].split(".")[3]) in range(0,256) and boolean
             if not boolean:
                 return False
-            #ping IP
-            #is Bitcoin address valid
             safeprint("Testing Bitcoin address")
             address = str(self.btc)
             #The following is a soft check
             #A deeper check will need to be done in order to assure this is correct
             if not checkAddressValid(address):
                 return False
-            #is reward valid
             safeprint("Testing reward")
             reward = int(self.reward)
-            return (reward == 0 or (reward >= 1440 and reward <= 100000000))
+            boolean = (reward == 0 or (reward >= 1440 and reward <= 100000000))
+            if boolean is False:
+                return False
+            safeprint("Testing timeout")
+            from calendar import timegm
+            from time import gmtime
+            return self.timeout > timegm(gmtime()) #check against current UTC
         except:
             return False
 
@@ -93,14 +150,19 @@ def checkAddressValid(address):
 def verify(string):
     """External method which checks the Bounty as valid under implementation-specific requirements. This can be defined per user.
 
-    ip     -- Must be in valid range
-    btc    -- Must be in valid namespace
-    reward -- Must be in valid range
+    ip      -- Must be in valid range
+    btc     -- Must be in valid namespace
+    reward  -- Must be in valid range
+    timeout -- Must be greater than the current time
     """
-    test = pickle.loads(string)
+    test = None
+    if type(string) == type(Bounty(None,None,None)):
+        safeprint("You fed this as a Bounty. This is inefficient for addBounty(). Don't do that.")
+        test = string
+    else:
+        test = pickle.loads(string)
     try:
         safeprint("Testing IP address")
-        #is IP valid
         boolean = int(test.ip.split(":")[1]) in range(1024,49152)
         boolean = int(test.ip.split(":")[0].split(".")[0]) in range(0,256) and boolean
         boolean = int(test.ip.split(":")[0].split(".")[1]) in range(0,256) and boolean
@@ -108,18 +170,21 @@ def verify(string):
         boolean = int(test.ip.split(":")[0].split(".")[3]) in range(0,256) and boolean
         if not boolean:
             return False
-        #ping IP
-        #is Bitcoin address valid
         safeprint("Testing Bitcoin address")
         address = str(test.btc)
         #The following is a soft check
         #A deeper check will need to be done in order to assure this is correct
         if not checkAddressValid(address):
             return False
-        #is reward valid
         safeprint("Testing reward")
         reward = int(test.reward)
-        return (reward == 0 or (reward >= 1440 and reward <= 100000000))
+        boolean = (reward == 0 or (reward >= 1440 and reward <= 100000000))
+        if boolean is False:
+            return False
+        safeprint("Testing timeout")
+        from calendar import timegm
+        from time import gmtime
+        return self.timeout > timegm(gmtime()) #check against current UTC
     except:
         return False
 
