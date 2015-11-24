@@ -4,52 +4,52 @@ environment:
     - PYTHON: "C:\\Python26"
       PYTHON_VERSION: "2.6.x"
       PYTHON_ARCH: "32"  
-      RUN: "%PYTHON%\\Scripts\\coverage run"
+      RUN: "%PYTHON%\\Scripts\\coverage run --parallel-mode"
 
     - PYTHON: "C:\\Python27"
       PYTHON_VERSION: "2.7.8"
       PYTHON_ARCH: "32"
-      RUN: "%PYTHON%\\Scripts\\coverage run"
+      RUN: "%PYTHON%\\Scripts\\coverage run --parallel-mode"
  
     - PYTHON: "C:\\Python33"
       PYTHON_VERSION: "3.3.5"
       PYTHON_ARCH: "32"
-      RUN: "%PYTHON%\\Scripts\\coverage run"
+      RUN: "%PYTHON%\\Scripts\\coverage run --parallel-mode"
  
     - PYTHON: "C:\\Python34"
       PYTHON_VERSION: "3.4.1"
       PYTHON_ARCH: "32"
-      RUN: "%PYTHON%\\Scripts\\coverage run"
+      RUN: "%PYTHON%\\Scripts\\coverage run --parallel-mode"
       
     - PYTHON: "C:\\Python35"
       PYTHON_VERSION: "3.5.0"
       PYTHON_ARCH: "32"
-      RUN: "%PYTHON%\\Scripts\\coverage run"
+      RUN: "%PYTHON%\\Scripts\\coverage run --parallel-mode"
       
     - PYTHON: "C:\\Python26-x64"
       PYTHON_VERSION: "2.6.x"
       PYTHON_ARCH: "64"        
-      RUN: "%PYTHON%\\Scripts\\coverage run"
+      RUN: "%PYTHON%\\Scripts\\coverage run --parallel-mode"
  
     - PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7.8"
       PYTHON_ARCH: "64"
-      RUN: "%PYTHON%\\Scripts\\coverage run"
+      RUN: "%PYTHON%\\Scripts\\coverage run --parallel-mode"
  
     - PYTHON: "C:\\Python33-x64"
       PYTHON_VERSION: "3.3.5"
       PYTHON_ARCH: "64"
-      RUN: "%PYTHON%\\Scripts\\coverage run"
+      RUN: "%PYTHON%\\Scripts\\coverage run --parallel-mode"
  
     - PYTHON: "C:\\Python34-x64"
       PYTHON_VERSION: "3.4.1"
       PYTHON_ARCH: "64"
-      RUN: "%PYTHON%\\Scripts\\coverage run"
+      RUN: "%PYTHON%\\Scripts\\coverage run --parallel-mode"
 
     - PYTHON: "C:\\Python35-x64"
       PYTHON_VERSION: "3.5.0"
       PYTHON_ARCH: "64"
-      RUN: "%PYTHON%\\Scripts\\coverage run"
+      RUN: "%PYTHON%\\Scripts\\coverage run --parallel-mode"
   
 #    - PYTHON: "C:\\Python26"
 #      PYTHON_VERSION: "2.6.x"
@@ -119,6 +119,7 @@ build_script:
   - "type output.txt"
   
 on_success:
+  - "%PYTHON%\\Scripts\\coverage combine"
   - "%PYTHON%\\Scripts\\coverage xml"
   - "%PYTHON%\\Scripts\\codecov --token=0482d032-e24c-461b-a116-f0e3dbc88734"
  
