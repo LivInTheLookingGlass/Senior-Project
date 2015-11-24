@@ -223,6 +223,7 @@ def addBounty(bounty):
     elif type(bounty) == type("aaa") and sys.version_info[0] >= 3:
         safeprint("Fed as string; encoding utf-8")
         bounty = bounty.encode('utf-8')
+    safeprint(pickle.loads(bounty))
     safeprint("External verify")
     first = verify(bounty)
     bounty = pickle.loads(bounty)
