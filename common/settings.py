@@ -13,7 +13,7 @@ def saveSettings():
     """Save settings to a file"""
     if not os.path.exists(settings_file.split(os.sep)[0]):
         os.mkdir(settings_file.split(os.sep)[0])
-    pickle.dump(config,open(settings_file,"wb"),1)
+    pickle.dump(config,open(settings_file,"wb"),0)
 
 def loadSettings():
     """Load settings from a file"""
