@@ -134,7 +134,7 @@ class Bounty(object):
 
 def checkAddressValid(address):
     """Check to see if a Bitcoin address is within the valid namespace. Will potentially give false positives based on leading 1s"""
-    if not re.match(re.compile("^[a-zA-Z1-9]{26,35}$"),address):
+    if not re.match(re.compile("^[a-km-zA-HJ-Z1-9]{26,35}$"),address):
         return False
     decimal = 0
     for char in address:
@@ -250,6 +250,6 @@ def getBounty(charity, factor):
         for bounty in temp:
             if best is None:
                 best = bounty
-            elif best.reward < bounty.reward and bounty.isValid() and bounty.isPayable(factor):
+            elif best < bounty and bounty.isValid() and bounty.isPayable(factor):
                 best = bounty
         return best
