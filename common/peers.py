@@ -100,7 +100,7 @@ def requestPeerlist(address):
         con.connect((address.split(":")[0],int(address.split(":")[1])))
         con.send(incoming_bounty)
         time.sleep(0.01)
-        bounty = Bounty(get_lan_ip() + ":44565","1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1150)
+        bounty = Bounty(get_lan_ip() + ":44565","1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1440)
         bounty = pickle.dumps(bounty,1)
         if type(bounty) == type("a"):
             bounty = bounty.encode('utf-8')
