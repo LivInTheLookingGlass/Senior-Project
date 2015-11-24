@@ -275,7 +275,7 @@ def handleBountyRequest(conn):
     if type(send) != type("a".encode("utf-8")):
         send = send.encode("utf-8")
     conn.send(send)
-    time.sleep(0.01 + 0.001 * len(send))
+    time.sleep(0.01 + 0.005 * len(send))
 
 def portForward(port):
     """Attempt to forward a port on your router to the specified local port. Prints lots of debug info."""
