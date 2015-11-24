@@ -209,6 +209,7 @@ def listen(port, outbound, q, v, serv):
         try:
             conn, addr = server.accept()
             server.setblocking(True)
+            conn.setblocking(True)
             safeprint("connection accepted")
             packet = conn.recv(len(peer_request))
             safeprint("Received: " + packet.decode())
