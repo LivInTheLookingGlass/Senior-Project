@@ -124,7 +124,7 @@ class Bounty(object):
             safeprint("Testing timeout")
             from calendar import timegm
             from time import gmtime
-            return self.timeout > timegm(gmtime()) #check against current UTC
+            return test.timeout > timegm(gmtime()) #check against current UTC
         except:
             return False
 
