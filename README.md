@@ -10,12 +10,24 @@ If you do not have a GitHub account, please submit your issue with [this link](h
 # Senior Project
 
 ##Abstract
-propose a peer to peer distributed computing network where given problems are solved by participants. Results are tested with a java-based test program, and valid results lead to payment of a bounty to the participant responsible for the solution. Nodes communicate via a websocket network.
+A generalized, peer-to-peer platform for programs like Folding at Home, which rewards users with micropayments for solving NP-complete problems.
 
 ##Introduction
 With the rise of distributed computing projects, from [Folding at Home](https://folding.stanford.edu/), [SETI](https://setiathome.ssl.berkeley.edu/), etc., there is a distinct lack of standardization in their distribution methods. Because of this, anyone who wants to tap into this trove of information must design their own platform and market this to the world. It’s not surprising that it’s been slow to diversify.
 
 Another problem is that clients have no incentive to run these programs, save for charitable inclinations. Until recently, it would have been next to impossible to provide an incentive. However, with the onset of cryptocurrencies, there is now an easy solution. If people are provided a bounty for problems, they can gain a passive income for their idle resources. This becomes their incentive.<sup>[1](#myfootnote1)</sup>
+
+##Design Goals
+There are four attacks that I currently anticipate on this platform. Each of them must be addressed in its design, and throughout this proposal I will point out when they are.
+
+1. Mallicious user
+	* This is a Denial of Service attack on the servers. By spoofing an active user (not solving the problems it is sent), an attacker could waste the money and processing time of the server.
+2. Mallicious server
+	* This is a Denial of Service attack on the user and charity servers (one which does not pay). By spoofing a charity server, an attacker could send useless programs, which, for instance, add random sums forever. Such an attack would go against the wishes of the user (not contributing towards general research), and force real charity servers to provide payment which they may not be able to afford.
+3. Dishonest server
+	* This is a Denial of Service attack on the user and platform. By broadcasting a bounty with a substantial reward, an attacker could trick nodes into wasting their computational time. This would drive up the general price of the platform, and possibly force it to a halt.
+4. Outside actors
+	* It is very possible that an outside bad actor could misuse the platform. One such misuse could be hiring out a botnet.
 
 ##Bounties
 A bounty is a request that fits a standard format. There are three required data fields, and an array to store extra information.
