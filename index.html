@@ -112,21 +112,19 @@
 
 <pre class="line-numbers  language-python">
   <code class=" language-python">
-    """An object representation of a Bounty
-    Parts:
-    ip       -- The ip address of the requesting node
-    btc      -- The Bitcoin address of the requesting party
-    reward   -- The reward amount in satoshis to be given over 24 hours (x | x == 0 or 1440 <= x <= 100000000) (1440 is 1 satoshi/minute)
-    ident    -- A value set by the issuer to determine which problem/test to send
-    timeout  -- Unix time at which the bounty expires (defaults to 24 hours)
-    data     -- A dictionary containing optional, additional information
-      author -- String which represents the group providing the Bounty
-      reqs   -- Dict containing requirements keyed by the related python calls ("sys.platform":"win32")
-      perms  -- Dict containing the minimum required security policies (if empty, most restrictive assumed)
-      TDL    -- More to be defined in later versions
-    """
-  </code>
-</pre>
+"""An object representation of a Bounty
+Parts:
+ip       -- The ip address of the requesting node
+btc      -- The Bitcoin address of the requesting party
+reward   -- The reward amount in satoshis to be given over 24 hours (x | x == 0 or 1440 <= x <= 100000000) (1440 is 1 satoshi/minute)
+ident    -- A value set by the issuer to determine which problem/test to send
+timeout  -- Unix time at which the bounty expires (defaults to 24 hours)
+data     -- A dictionary containing optional, additional information
+	author -- String which represents the group providing the Bounty
+	reqs   -- Dict containing requirements keyed by the related python calls ("sys.platform":"win32")
+	perms  -- Dict containing the minimum required security policies (if empty, most restrictive assumed)
+	TDL    -- More to be defined in later versions
+"""</code></pre>
 
 <p>There are two tools used to validate a bounty. It comes with an object method to validate itself to the minimum definition, and there is also an external method which the user can change as needed. This allows a user to filter out the ips of known attackers, or permissions that it cannot use.</p>
 
