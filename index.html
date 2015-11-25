@@ -72,6 +72,31 @@
 
 <p>Another problem is that clients have no incentive to run these programs, save for charitable inclinations. Until recently, it would have been next to impossible to provide an incentive. However, with the onset of cryptocurrencies, there is now an easy solution. If people are provided a reward for problems, they can gain a passive income for their idle resources. This becomes their incentive.<script type="text/javascript">addFootnote("Users will have the option of running this for free. The bounty is to encourage participation, and is not strictly necessary.");</script></p>
 
+<h2>Design Goals</h2>
+<p>There are four attacks that I currently anticipate on this platform. Each of them must be addressed in its design, and throughout this proposal I will point out when they are.</p>
+<ol>
+	<li>Mallicious user
+		<ul>
+			<li>This is a Denial of Service attack on the servers. By spoofing an active user (not solving the problems it is sent), an attacker could waste the money and processing time of the server.</li>
+		</ul>
+	</li>
+	<li>Mallicious server
+		<ul>
+			<li>This is a Denial of Service attack on the user and charity servers (one which does not pay). By spoofing a charity server, an attacker could send useless programs, which, for instance, add random sums forever. Such an attack would go against the wishes of the user (not contributing towards general research), and force real charity servers to provide payment which they may not be able to afford.</li>
+		</ul>
+	</li>
+	<li>Dishonest server
+		<ul>
+			<li>This is a Denial of Service attack on the user and platform. By broadcasting a bounty with a substantial reward, an attacker could trick nodes into wasting their computational time. This would drive up the general price of the platform, and possibly force it to a halt.</li>
+		</ul>
+	</li>
+	<li>Outside actors
+		<ul>
+			<li>It is very possible that an outside bad actor could misuse the platform. One such misuse could be hiring out a botnet.</li>
+		</ul>
+	</li>
+</ol>
+
 <h2>
 <a id="bounties" class="anchor" href="#bounties" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bounties</h2>
 
