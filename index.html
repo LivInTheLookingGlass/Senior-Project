@@ -110,7 +110,7 @@
 
 <p>A bounty is the mechanism by which one notifies the network of a new problem to solve. It is sent as an object with all the data a user needs to verify, prioritize, connect to the sending server, and select the proper security policy.</p>
 
-marked("""An object representation of a Bounty
+<script type="text/javascript">marked("\"\"\""An object representation of a Bounty
 Parts:
 ip       -- The ip address of the requesting node
 btc      -- The Bitcoin address of the requesting party
@@ -122,7 +122,7 @@ data     -- A dictionary containing optional, additional information
 	reqs   -- Dict containing requirements keyed by the related python calls ("sys.platform":"win32")
 	perms  -- Dict containing the minimum required security policies (if empty, most restrictive assumed)
 	TDL    -- More to be defined in later versions
-""")
+\"\"\"")</script>
 
 <p>There are two tools used to validate a bounty. It comes with an object method to validate itself to the minimum definition, and there is also an external method which the user can change as needed. This allows a user to filter out the ips of known attackers, or permissions that it cannot use.</p>
 
