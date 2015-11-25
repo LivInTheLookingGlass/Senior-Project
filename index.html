@@ -74,11 +74,15 @@
 
 <h2>
 <a id="design" class="anchor" href="#design" aria-hidden="true"><span class="octicon octicon-link"></span></a>Design Goals</h2>
-<p>There are four attacks that I currently anticipate on this platform. Each of them must be addressed in its design, and throughout this proposal I will point out when they are.</p>
+
+<p>Because this platform will involve a great number of moving parts, and because it will be dealing with people's money, it is important that there is no central point of failure. While this may complicate things, it is very important to me that I make this platform as robust as I can before it is opened for public development. That means that it must be decentralized, flexible, and secure.</p>
+
+<p>There are five attacks that I currently anticipate on this platform. Each of them must be addressed in its design, and throughout this proposal I will point out when they are.</p>
+
 <ol>
 	<li>Mallicious user
 		<ul>
-			<li>This is a Denial of Service attack on the servers. By spoofing an active user (not solving the problems it is sent), an attacker could waste the money and processing time of the server.</li>
+			<li>This is a Denial of Service attack on the servers. By spoofing an active user (not solving the problems it is sent), an attacker could waste the money and processing time of the server. This has a proposed solution, but it may be difficult.</li>
 		</ul>
 	</li>
 	<li>Mallicious server
@@ -94,6 +98,11 @@
 	<li>Outside actors
 		<ul>
 			<li>It is very possible that an outside bad actor could misuse the platform. One such misuse could be hiring out a botnet.</li>
+		</ul>
+	</li>
+	<li>Bounty spammers
+		<ul>
+			<li>This is an attempt to overwhelm the user end of the network. If they spend all their time verifying incoming bounties, the network cannot funciton properly. This does not yet have a proposed solution.</li>
 		</ul>
 	</li>
 </ol>
