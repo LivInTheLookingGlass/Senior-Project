@@ -104,10 +104,8 @@ class Bounty(object):
         try:
             safeprint("Testing IP address")
             boolean = int(self.ip.split(":")[1]) in range(1024,49152)
-            boolean = int(self.ip.split(":")[0].split(".")[0]) in range(0,256) and boolean
-            boolean = int(self.ip.split(":")[0].split(".")[1]) in range(0,256) and boolean
-            boolean = int(self.ip.split(":")[0].split(".")[2]) in range(0,256) and boolean
-            boolean = int(self.ip.split(":")[0].split(".")[3]) in range(0,256) and boolean
+            for sect in self.ip.split(":")[0].split("."):
+                boolean = int(sect) in range(0,256) and boolean
             if not boolean:
                 return False
             safeprint("Testing Bitcoin address")
@@ -164,10 +162,8 @@ def verify(string):
     try:
         safeprint("Testing IP address")
         boolean = int(test.ip.split(":")[1]) in range(1024,49152)
-        boolean = int(test.ip.split(":")[0].split(".")[0]) in range(0,256) and boolean
-        boolean = int(test.ip.split(":")[0].split(".")[1]) in range(0,256) and boolean
-        boolean = int(test.ip.split(":")[0].split(".")[2]) in range(0,256) and boolean
-        boolean = int(test.ip.split(":")[0].split(".")[3]) in range(0,256) and boolean
+        for sect in test.ip.split(":")[0].split("."):
+            boolean = int(sect) in range(0,256) and boolean
         if not boolean:
             return False
         safeprint("Testing Bitcoin address")
