@@ -80,27 +80,27 @@
 <p>There are five attacks that I currently anticipate on this platform. Each of them must be addressed in its design, and throughout this proposal I will point out when they are.</p>
 
 <ol>
-	<li>Mallicious user
+	<li><a id="MalliciousUser"></a>Mallicious user
 		<ul>
 			<li>This is a Denial of Service attack on the servers. By spoofing an active user (not solving the problems it is sent), an attacker could waste the money and processing time of the server.</li>
 		</ul>
 	</li>
-	<li>Mallicious server
+	<li><a id="MallicousServer"></a>Mallicious server
 		<ul>
 			<li>This is a Denial of Service attack on the user and charity servers (one which does not pay). By spoofing a charity server, an attacker could send useless programs, which, for instance, add random sums forever. Such an attack would go against the wishes of the user (not contributing towards general research), and force real charity servers to provide payment which they may not be able to afford.</li>
 		</ul>
 	</li>
-	<li>Dishonest server
+	<li><a id="DishonestServer"></a>Dishonest server
 		<ul>
 			<li>This is a Denial of Service attack on the user and platform. By broadcasting a bounty with a substantial reward, an attacker could trick nodes into wasting their computational time. This would drive up the general price of the platform, and possibly force it to a halt.</li>
 		</ul>
 	</li>
-	<li>Outside actors
+	<li><a id="OutsideActors"></a>Outside actors
 		<ul>
 			<li>It is very possible that an outside bad actor could misuse the platform. One such misuse could be hiring out a botnet.</li>
 		</ul>
 	</li>
-	<li>Bounty spammers
+	<li><a id="BountySpammers"></a>Bounty spammers
 		<ul>
 			<li>This is an attempt to overwhelm the user end of the network. If they spend all their time verifying incoming bounties, the network cannot funciton properly. This does not yet have a proposed solution.</li>
 		</ul>
@@ -110,9 +110,9 @@
 <h2>
 <a id="security" class="anchor" href="#security" aria-hidden="true"><span class="octicon octicon-link"></span></a>Security</h2>
 
-<p>Because a client is allowing other people to run unknown code on their computer, there needs to be a way to keep things secure. This is possible by the use of a sandbox, making Java an ideal language for this platform. While this is less efficient than other languages, it builds a security solution into the network and client itself.</p>
+<p>Because a client is allowing other people to run unknown code on their computer, there needs to be a way to keep things secure. This is possible by the use of a sandbox, making Java an ideal language for this platform. While this is less efficient than other languages, it builds a security solution into the network and client itself. This is a solution for the <a href="#OutsideActors">Outside Actor</a> problem.</p>
 
-<p>There will also be cases where one will want to run it in a bigger sandbox. Support for this type of operation is critical for companies like Intel, AMD, NVidia, and Samsung, which may want to test edge cases of their products in the wild. If everything is completely sandboxed, there’s no way for them to easily guarantee that they are getting to the correct devices. These use cases will be investigated, as they could make up most of the demand for this network. If they are feasible, a permissioning system will be used to select different security policies for each program</p>
+<p>There will also be cases where one will want to run it in a bigger sandbox. Support for this type of operation is critical for companies like Intel, AMD, NVidia, and Samsung, which may want to test edge cases of their products in the wild. If everything is completely sandboxed, there’s no way for them to easily guarantee that they are getting to the correct devices. These use cases will be investigated, as they could make up most of the demand for this network. If they are feasible, a permissioning system will be used to select different security policies for each program.</p>
 
 <h2>
 <a id="bounties" class="anchor" href="#bounties" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bounties</h2>
@@ -123,7 +123,7 @@
 
 <p>There are two tools used to validate a bounty. It comes with an object method to validate itself to the minimum definition, and there is also an external method which the user can change as needed. This allows a user to filter out the IPs of known attackers, or permissions that it cannot use.</p>
 
-<p>The object verification method checks four things. First it checks if the IP address is in the valid IPv4 range. Second, it checks if the Bitcoin address is in the proper namespace (but does not check if it has enough funds until later). Next, it checks if the reward is in the valid range. Finally, it checks the timeout value. If all of these are valid, it propagates the bounty to its peers.</p>
+<p>The object verification method checks four things. First it checks if the IP address is in the valid IPv4 range. Second, it checks if the Bitcoin address is in the proper namespace (but does not check if it has enough funds until later). Next, it checks if the reward is in the valid range. Finally, it checks the timeout value. If all of these are valid, it propagates the bounty to its peers. This shallow check takes ~239μs to complete.<script type="text/javascript">addFootnote("On my Asus Q550LF running Linux Mint 17.2 (KDE), Python 3.4.3<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;855μs on Python 2.7.6");</script></p>
 
 <h2>
 <a id="tests" class="anchor" href="#tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tests</h2>
