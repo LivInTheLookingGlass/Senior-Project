@@ -128,7 +128,13 @@
 <h2>
 <a id="tests" class="anchor" href="#tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tests</h2>
 
-<p>Tests are a vital part of the network. Like there are ways for clients to exclude invalid requests, there must also be a way for servers to exclude inappropriate clients. They can do this with small bits of test code. The client will then send them the result of this code, and if it is correct, will receive the real problem.</p>
+<p>Tests are a vital part of the network. Like there are ways for clients to exclude invalid requests, there must also be a way for servers to exclude inappropriate clients. They can do this with permissions, requirements, and small bits of test code.</p>
+
+<p>Before the user follows through on a bounty, it checks the <code>data['reqs']</code> and <code>data['perms']</code> fields. If the user does not fit the desired client, or the server is requesting too large a sandbox, the user will not follow through.</p> 
+
+<p>This connection is made by sending a specified header, an instance of the Bounty object, and a dict of the client's system info. This allows the server to determine which test/query combination to use. After parsing this request, the server will send the test code.</p>
+
+<p>The client sends the server the output of this code, and if it is correct, is sent the query.</p>
 
 <h2>
 <a id="queries" class="anchor" href="#queries" aria-hidden="true"><span class="octicon octicon-link"></span></a>Queries</h2>
