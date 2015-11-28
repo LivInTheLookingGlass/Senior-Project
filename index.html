@@ -139,17 +139,15 @@
 <h2>
 <a id="queries" class="anchor" href="#queries" aria-hidden="true"><span class="octicon octicon-link"></span></a>Queries</h2>
 
-<p>After all of this, the query is finally sent to the client. Simultaneously, a <a href="https://bitcoin.org/en/developer-guide#micropayment-channel">payment channel</a><script type="text/javascript">addFootnote("This opens up a security risk to the user because their private key is exposed to my program. This is the single biggest reason that this must be an open source project. Encryption will be explored.");</script> is opened. This channel will be updated once per minute as long as there is an active connection between the server and client, and will grow at a linear rate until a result is achieved, but will never reach the full bounty until a result is submitted. This is to protect from fraud on both the server and user end. The server is protected in that the client has an incentive to stay online, and the user is protected in that the connection will expire if a predetermined time goes by without a result.</p>
+<p>After all of this, the query is finally sent to the client. Simultaneously, a <a href="https://bitcoin.org/en/developer-guide#micropayment-channel">payment channel</a><script type="text/javascript">addFootnote("This opens up a security risk to the user because their private key is exposed to my program. This is the single biggest reason that this must be an open source project. Encryption will be explored.");</script> is opened.</p>
+
+<p><img src="https://bitcoin.org/img/dev/en-micropayment-channel.svg" alt="payment channel"/></p>
+
+<p>This channel will be updated once per minute as long as there is an active connection between the server and user, and will grow at a linear rate until a result is achieved, but will never reach the full bounty until a result is submitted. This is to protect from fraud on both the server and user end. The server is protected in that the user has an incentive to stay online, and the user is protected in that the connection will expire if a predetermined time goes by without a result. This is a solution to the <a href="#DishonestServer">Dishonest Server</a> problem.</p>
+
+<p>In addition to this, the server can implement a flagging system. By making their program print a predetermined flag, they can request the user to send the following line to the server. This gives the server both an indication that the user is still working, and an estimation of their speed. This is a solution to the <a href="#MalliciousUser">Mallicious User</a> problem.</p>
 
 <p>Upon closing the connection, the reward is distributed between the two parties in the way agreed upon in the last transaction broadcast. If a result is given, the full bounty will be delivered. The transactions are always broadcast with a lock-time of 24 hours.
-<img src="https://i.imgur.com/I25QiL0.png" alt=""></p>
-
-<h2>
-<a id="servers" class="anchor" href="#servers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Servers</h2>
-
-<p>The server side of this has two additional components: a propagator and a parser. The propagator handles requests from various clients. It is comprised of a wallet,<script type="text/javascript">addFootnote("Part of the common library.");</script> a socket,<script type="text/javascript">addFootnote("Overrides of the standard peer management system.");</script> and (at least) two files. The wallet is used to pay clients in the manner described above. By necessity it spawns large numbers of threads—one per client connected. The socket decides which file to send to clients, and then sends them. When the socket receives a file, it passes it on to the parser.</p>
-
-<p>The parser has two purposes: analyze test results, and move problem results to the proper area. Because of this, test results take the priority. This piece must be written by the server maintainers; there is no general solution for it. When it is not doing this, the parser moves solution files to a different folder, where it can be analyzed without slowing down the rest of the server.</p>
 
 <h1>
 <a id="progress" class="anchor" href="#progress" aria-hidden="true"><span class="octicon octicon-link"></span></a>Progress</h1>
