@@ -227,13 +227,19 @@ def addBounty(bounty):
     safeprint(pickle.loads(bounty))
     safeprint("External verify")
     first = verify(bounty)
-    bounty = pickle.loads(bounty)
-    safeprint("Internal verify")
-    second = bounty.isValid()
-    if first and second:
-        with bountyLock:
-            bountyList.append(bounty)
-    return (first and second)
+    try:
+        bounty = pickle.loads(bounty)
+    except:
+        safeprint("Bounty was unpicklable")
+    try:
+        safeprint("Internal verify")
+        second = bounty.isValid()
+        if first and second:
+            with bountyLock:
+                bountyList.append(bounty)
+        return (first and second)
+    except:
+        return False
 
 def getBounty(charity, factor):
     """Retrieve the next best bounty from the list"""
