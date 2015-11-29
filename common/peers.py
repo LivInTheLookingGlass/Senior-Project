@@ -141,6 +141,7 @@ def requestBounties(address):
         bounties = pickle.loads(received)
         for bounty in bounties:
             addBounty(pickle.dumps(bounty,0))
+            safeprint("Bounty added")
     except Exception as error:
         safeprint("Failed:" + str(type(error)))
         safeprint(error)
