@@ -128,11 +128,11 @@
 <h2>
 <a id="Charities" class="anchor" href="#Charities" aria-hidden="true"><span class="octicon octicon-link"></span></a>Charities</h2>
 
-<p>The <a href="#MallicousServer">Mallicious Server</a> problem forces an extra step for non-paying servers. In order to distinguish between attackers and genuine charities, they must be vetted by a third party. This can be done by making a signiture authority. If a user encounters an unpaid bounty, the user will verify its signiture. It does this as follows:</p>
+<p>The <a href="#MallicousServer">Mallicious Server</a> problem forces an extra step for non-paying servers. In order to distinguish between attackers and genuine charities, they must be vetted by a third party. This can be done by making a signature authority. If a user encounters an unpaid bounty, the user will verify its signature. It does this as follows:</p>
 
 <p><script type="text/javascript">document.write(marked("```python\ndef verify(self):\n    expected = str(self).encode('utf-8')\n    if self.key in keyList:\n        return self.key.verify(expected, self.sig)\n    return False\n```"));</script></p>
 
-<p>In the worse case scenario (the bounty contains a signiture, but is invalid), this verification takes an additional 340μs.<script type="text/javascript">addFootnote("Average of 1000 tries on my Asus Q550LF running Linux Mint 17.2 (KDE), Python 3.4.3<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;194μs on Python 2.7.6");</script></p>
+<p>In the worse case scenario (the bounty contains a signature, but is invalid), this verification takes an additional 340μs.<script type="text/javascript">addFootnote("Average of 1000 tries on my Asus Q550LF running Linux Mint 17.2 (KDE), Python 3.4.3<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;194μs on Python 2.7.6");</script> While this is by no means ideal, it is (as of yet) the best available solution. The signature authority will be spun off to the overall Bitcoin community in order to keep some element of decentralization.</p>
 
 <h2>
 <a id="tests" class="anchor" href="#tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tests</h2>
