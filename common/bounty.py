@@ -14,40 +14,40 @@ class Bounty(object):
     """An object representation of a Bounty
 
     Parts:
-    ip       -- The ip address of the requesting node
-    btc      -- The Bitcoin address of the requesting party
-    reward   -- The reward amount in Satoshis to be given over 24 hours (x | x == 0 or 1440 <= x <= 100000000)
-    ident    -- A value set by the issuer to determine which problem/test to send
-    timeout  -- Unix time at which the bounty expires
-    data     -- A dictionary containing optional, additional information
-      author -- String which represents the group providing the Bounty
-      reqs   -- Dict containing requirements keyed by the related python calls ("sys.platform":"win32")
-      TDL    -- More to be defined in later versions
+    ip         -- The ip address of the requesting node
+    btc        -- The Bitcoin address of the requesting party
+    reward     -- The reward amount in satoshis to be given over 24 hours
+                   (x | x == 0 or 1440 <= x <= 100000000) (1440 is 1 satoshi/minute)
+    ident      -- A value set by the issuer to determine which problem/test to send
+    timeout    -- Unix time at which the bounty expires (defaults to 24 hours)
+    data       -- A dictionary containing optional, additional information
+        author -- String which represents the group providing the Bounty
+        reqs   -- Dict containing requirements keyed by the related python calls
+                   ("sys.platform":"win32")
+        perms  -- Dict containing the minimum required security policies
+                   (if empty, most restrictive assumed)
+        key    -- An RSA object (via Pycrypto) which contains the public key used in this Bounty
+                   (required only when reward is 0)
+        sig    --  A unicode string of this Bounty signed by the above key
+                   (required only when reward is 0)
+        TDL    -- More to be defined in later versions
     """
-    ip = ""
-    btc = ""
-    reward = 0
-    ident = None
-    timeout = 0
-    data = {}
+    defaultData = {'author':"",'reqs':{},'perms':{},'key':"".encode('utf-8'),'sig':(1L,)}
 
     def __repr__(self):
         """Gives a string representation of the bounty"""
         output = "<Bounty: ip=" + str(self.ip) + ", btc=" + str(self.btc) + ", reward=" + str(self.reward)
-        if self.ident != None:
+        if self.ident is not None:
             output = output + ", id=" + str(self.ident)
-        if self.timeout != None:
-            from calendar import timegm
-            from time import gmtime
-            output = output + ", time_left=" + str(self.timeout - timegm(gmtime()))
-        if self.data != {} and self.data != None:
-            output = output + ", data=" + str(self.data)
-        output = output + ">"
-        return output
+        if self.timeout is not None:
+            output = output + ", timeout=" + str(self.timeout)
+        if self.data != self.defaultData and self.data is not None:
+            output = output + ", author=" + str(self.data.get('author')) + ", reqs=" + str(self.data.get('reqs')) + ", perms=" + str(self.data.get('perms'))
+        return output + ">"
 
     def __eq__(self, other):
         """Determines whether the bounties are equal"""
-        return (self.reward == other.reward) and (self.ident == other.ident) and (self.data.get('author') == other.data.get('author'))
+        return (self.reward == other.reward) and (self.ident == other.ident) and (self.data == other.data)
         
     def __ne__(self, other):
         """Determines whether the bounties are unequal"""
@@ -72,24 +72,33 @@ class Bounty(object):
             return False
         
     def __le__(self, other):
-        """Determines whether this bounty has a lower or equal priority"""
-        return not self.__gt__(other)
+        """Determines whether this bounty has a lower priority or is equal"""
+        boolean = self.__lt__(other)
+        if boolean:
+            return boolean
+        else:
+            return self.__eq__(other)
         
     def __ge__(self, other):
-        """Determines whether this bounty has a higher or equal priority"""
-        return not self.__lt__(other)
+        """Determines whether this bounty has a higher priority or is equal"""
+        boolean = self.__gt__(other)
+        if boolean:
+            return boolean
+        else:
+            return self.__eq__(other)
       
-    def __init__(self, ipAddress, btcAddress, rewardAmount, timeout=None, ident=None, dataDict={}):
+    def __init__(self, ipAddress, btcAddress, rewardAmount, timeout=None, ident=None, dataDict=None):
         """Initialize a Bounty; constructor"""
         self.ip = ipAddress
         self.btc = btcAddress
         self.reward = rewardAmount
-        self.data = dataDict
         self.ident = ident
+        if dataDict is None:
+            self.data = self.defaultData
+        else:
+            self.data = dataDict
         if timeout is None:
-            from calendar import timegm
-            from time import gmtime
-            self.timeout = timegm(gmtime()) + 86400 #24 hours from now in UTC (forced)
+            self.timeout = getUTC() + 86400 #24 hours from now in UTC (forced)
         else:
             self.timeout = timeout
 
@@ -115,14 +124,10 @@ class Bounty(object):
             if not checkAddressValid(address):
                 return False
             safeprint("Testing reward")
-            reward = int(self.reward)
-            boolean = (reward == 0 or (reward >= 1440 and reward <= 100000000))
-            if boolean is False:
+            if not int(self.reward) in ([0] + range(1440,100000001)):   #Range starts at 1440 because this is 1 satoshi/minute
                 return False
             safeprint("Testing timeout")
-            from calendar import timegm
-            from time import gmtime
-            return self.timeout > timegm(gmtime()) #check against current UTC
+            return self.timeout > getUTC() #check against current UTC
         except:
             return False
 
@@ -144,6 +149,11 @@ def checkAddressValid(address):
     else:
         bcbytes = decimal.to_bytes(25, 'big')
         return bcbytes[-4:] == sha256(sha256(bcbytes[:-4]).digest()).digest()[:4]
+
+def getUTC():
+    from calendar import timegm
+    from time import gmtime
+    return timegm(gmtime())
 
 def verify(string):
     """External method which checks the Bounty as valid under implementation-specific requirements. This can be defined per user.
@@ -167,20 +177,15 @@ def verify(string):
         if not boolean:
             return False
         safeprint("Testing Bitcoin address")
-        address = str(test.btc)
         #The following is a soft check
         #A deeper check will need to be done in order to assure this is correct
-        if not checkAddressValid(address):
+        if not checkAddressValid(str(test.btc)):
             return False
         safeprint("Testing reward")
-        reward = int(test.reward)
-        boolean = (reward == 0 or (reward >= 1440 and reward <= 100000000))
-        if boolean is False:
+        if not int(test.reward) in ([0] + range(1440,100000001)):   #Range starts at 1440 because this is 1 satoshi/minute
             return False
         safeprint("Testing timeout")
-        from calendar import timegm
-        from time import gmtime
-        return test.timeout > timegm(gmtime()) #check against current UTC
+        return test.timeout > getUTC() #check against current UTC
     except:
         return False
 
