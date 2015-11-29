@@ -32,7 +32,7 @@ class Bounty(object):
                    (required only when reward is 0)
         TDL    -- More to be defined in later versions
     """
-    defaultData = {'author':"",'reqs':{},'perms':{},'key':"".encode('utf-8'),'sig':(1L,)}
+    defaultData = {'author':"",'reqs':{},'perms':{},'key':"".encode('utf-8'),'sig':(0,)}
 
     def __repr__(self):
         """Gives a string representation of the bounty"""
