@@ -43,6 +43,7 @@ def main():
             ext_ip = feedback[1]
             ext_port = feedback[2]
     initializePeerConnections(settings.config['port'], ext_ip, ext_port)
+    safeprint("End of main")
     requestBounties(get_lan_ip() + ":44565")    #Test function
     requestBounties("localhost:44565")          #test function
     live.value = False
