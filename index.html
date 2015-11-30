@@ -57,20 +57,20 @@
         <section id="main-content">
           <p>To see the original version of this <a href="old.html">click here</a>.</p>
 
-<h1>
-<a id="abstract" class="anchor" href="#abstract" aria-hidden="true"><span class="octicon octicon-link"></span></a>Abstract</h1>
+<h2>
+<a id="abstract" class="anchor" href="#abstract" aria-hidden="true"><span class="octicon octicon-link"></span></a>Abstract</h2>
 
 <p>A generalized, peer-to-peer platform for programs like Folding at Home, which rewards users with micropayments for solving NP problems.</p>
 
-<h1>
-<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h1>
+<h2>
+<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h2>
 
 <p>With the rise of distributed computing projects, from <a href="https://folding.stanford.edu/">Folding at Home</a>, <a href="http://setiathome.ssl.berkeley.edu/">SETI</a>, etc., there is a distinct lack of standardization in their distribution methods. Because of this, anyone who wants to tap into this trove of information must design their own platform and market this to the world. It’s not surprising that it’s been slow to diversify.</p>
 
 <p>Another problem is that clients have no incentive to run these programs, save for charitable inclinations. Until recently, it would have been next to impossible to provide an incentive. However, with the onset of cryptocurrencies, there is now an easy solution. If people are provided a reward for problems, they can gain a passive income for their idle resources. This becomes their incentive.<script type="text/javascript">addFootnote("Users will have the option of running this for free. The bounty is to encourage participation, and is not strictly necessary.");</script></p>
 
-<h1>
-<a id="design" class="anchor" href="#design" aria-hidden="true"><span class="octicon octicon-link"></span></a>Design Goals</h1>
+<h2>
+<a id="design" class="anchor" href="#design" aria-hidden="true"><span class="octicon octicon-link"></span></a>Design Goals</h2>
 
 <p>Because this platform will involve a great number of moving parts, and because it will be dealing with people's money, it is important that there is no central point of failure. While this may complicate things, it is very important to me that I make this platform as robust as I can before it is opened for public development. That means that it must be decentralized, flexible, and secure.</p>
 
@@ -104,15 +104,15 @@
 	</li>
 </ol>
 
-<h1>
-<a id="security" class="anchor" href="#security" aria-hidden="true"><span class="octicon octicon-link"></span></a>Security</h1>
+<h2>
+<a id="security" class="anchor" href="#security" aria-hidden="true"><span class="octicon octicon-link"></span></a>Security</h2>
 
 <p>Because a client is allowing other people to run unknown code on their computer, there needs to be a way to keep things secure. This is possible by the use of a sandbox, making Java an ideal language for this platform. While this is less efficient than other languages, it builds a security solution into the network and client itself. This is a solution for the <a href="#OutsideActors">Outside Actor</a> problem.</p>
 
 <p>There will also be cases where one will want to run it in a bigger sandbox. Support for this type of operation is critical for companies like Intel, AMD, NVidia, and Samsung, which may want to test edge cases of their products in the wild. If everything is completely sandboxed, there’s no way for them to easily guarantee that they are getting to the correct devices. These use cases will be investigated, as they could make up most of the demand for this network. If they are feasible, a permissioning system will be used to select different security policies for each program.</p>
 
-<h1>
-<a id="bounties" class="anchor" href="#bounties" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bounties</h1>
+<h2>
+<a id="bounties" class="anchor" href="#bounties" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bounties</h2>
 
 <p>A bounty is the mechanism by which one notifies the network of a new problem to solve. It is sent as an object with all the data a user needs to verify, prioritize, connect to the sending server, and select the proper security policy.</p>
 
@@ -122,8 +122,8 @@
 
 <p>The object verification method checks four things. First it checks if the IP address is in the valid IPv4 range. Second, it checks if the Bitcoin address is in the proper namespace (but does not check if it has enough funds until later). Next, it checks if the reward is in the valid range. Finally, it checks the timeout value. If all of these are valid, it propagates the bounty to its peers. This shallow check takes ~239μs to complete.<script type="text/javascript">addFootnote("Average of 1000 tries on my Asus Q550LF running Linux Mint 17.2 (KDE), Python 3.4.3<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;855μs on Python 2.7.6");</script></p>
 
-<h1>
-<a id="Charities" class="anchor" href="#Charities" aria-hidden="true"><span class="octicon octicon-link"></span></a>Charities</h1>
+<h2>
+<a id="Charities" class="anchor" href="#Charities" aria-hidden="true"><span class="octicon octicon-link"></span></a>Charities</h2>
 
 <p>The <a href="#MallicousServer">Mallicious Server</a> problem forces an extra step for non-paying servers. In order to distinguish between attackers and genuine charities, they must be vetted by a third party. This can be done by making a signature authority. If a user encounters an unpaid bounty, the user will verify its signature. It does this as follows:</p>
 
@@ -131,8 +131,8 @@
 
 <p>In the worse case scenario (the bounty contains a signature, but is invalid), this verification takes an additional 340μs.<script type="text/javascript">addFootnote("Average of 1000 tries on my Asus Q550LF running Linux Mint 17.2 (KDE), Python 3.4.3<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;194μs on Python 2.7.6");</script> While this is by no means ideal, it is (as of yet) the best available solution. The signature authority will be spun off to the overall Bitcoin community in order to keep some element of decentralization.</p>
 
-<h1>
-<a id="tests" class="anchor" href="#tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tests</h1>
+<h2>
+<a id="tests" class="anchor" href="#tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tests</h2>
 
 <p>Tests are a vital part of the network. Like there are ways for clients to exclude invalid requests, there must also be a way for servers to exclude inappropriate clients. They can do this with permissions, requirements, and small bits of test code.</p>
 
@@ -142,8 +142,8 @@
 
 <p>The client sends the server the output of this code, and if it is correct, is sent the query.</p>
 
-<h1>
-<a id="queries" class="anchor" href="#queries" aria-hidden="true"><span class="octicon octicon-link"></span></a>Queries</h1>
+<h2>
+<a id="queries" class="anchor" href="#queries" aria-hidden="true"><span class="octicon octicon-link"></span></a>Queries</h2>
 
 <p>After all of this, the query is finally sent to the client. Simultaneously, a <a href="https://bitcoin.org/en/developer-guide#micropayment-channel">payment channel</a><script type="text/javascript">addFootnote("This opens up a security risk to the user because their private key is exposed to my program. This is the single biggest reason that this must be an open source project. Encryption will be explored.");</script> is opened.</p>
 
