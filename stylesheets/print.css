@@ -227,7 +227,7 @@ footer a {
 * html .clearfix {height: 1%;}
 .clearfix {display: block;}
 
-#issuesection, #button {
+#issuesection, .button {
   display: none;  
 }
 
