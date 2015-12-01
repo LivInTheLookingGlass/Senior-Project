@@ -34,6 +34,12 @@ q:before, q:after {
   content: '';
   content: none;
 }
+ol  {
+  list-style:decimal;
+}
+ul  {
+  list-style:disc;
+}
 table {
   border-spacing: 0;
   border-collapse: collapse;
