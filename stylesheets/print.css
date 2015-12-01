@@ -228,7 +228,7 @@ footer a {
 .clearfix {display: block;}
 
 #issuesection {
-  visibility: hidden;  
+  display: none;  
 }
 
 }
