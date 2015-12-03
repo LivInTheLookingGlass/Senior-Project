@@ -2,6 +2,8 @@ import os, pickle, re, sys
 from common.safeprint import safeprint
 from multiprocessing import Lock
 from hashlib import sha256
+import Crypto
+from Crypto.PublicKey import RSA
 
 global bountyList
 global bountyLock
@@ -124,8 +126,9 @@ class Bounty(object):
             if not checkAddressValid(address):
                 return False
             safeprint("Testing reward")
-            if not int(self.reward) in ([0] + range(1440,100000001)):   #Range starts at 1440 because this is 1 satoshi/minute
-                return False
+            if not int(self.reward) in xrange(1440,100000001):   #Range starts at 1440 because this is 1 satoshi/minute
+                if not (int(self.reward) == 0 and self.checkSign()):
+                    return False
             safeprint("Testing timeout")
             return self.timeout > getUTC() #check against current UTC
         except:
@@ -134,6 +137,20 @@ class Bounty(object):
     def isPayable(self, factor):
         """check if address has enough"""
         return True
+    
+    def checkSign(self):
+        if self.key in keyList:
+            expected = str(self).encode('utf-8')
+            return self.key.verify(expected, self.sig)
+        return False
+    
+    def sign(keypair):
+        try:
+            self.sig = keypair.sign(str(a).encode('utf-8'),64)
+            self.key = keypair.publickey()
+            return True
+        except:
+            return False
 
 def checkAddressValid(address):
     """Check to see if a Bitcoin address is within the valid namespace. Will potentially give false positives based on leading 1s"""
