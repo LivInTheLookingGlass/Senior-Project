@@ -91,7 +91,7 @@ class Bounty(object):
             return False
         
     def __le__(self, other):
-        """Determines whether this bounty has a lower or equal priority"""
+    """Determines whether this bounty has a lower priority or is equal"""
         boolean = self.__lt__(other)
         if boolean:
             return boolean
@@ -99,7 +99,7 @@ class Bounty(object):
             return self.__eq__(other)
         
     def __ge__(self, other):
-        """Determines whether this bounty has a higher or equal priority"""
+        """Determines whether this bounty has a higher or is equal"""
         boolean = self.__gt__(other)
         if boolean:
             return boolean
