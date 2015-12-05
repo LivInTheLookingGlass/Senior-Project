@@ -30,11 +30,11 @@ install:
 script: 
   - if [ $Cov == 'true'  ]; then coverage run -a main.py; fi
   - if [ $Cov == 'false' ]; then python main.py; fi
-  - if [ $Cov == 'true'  ]; then coverage run test.py; fi
+  - if [ $Cov == 'true'  ]; then coverage run -a test.py; fi
   - if [ $Cov == 'false' ]; then python test.py; fi
 before_install:
   - echo $TRAVIS_OS_NAME;
   - if [ $TRAVIS_OS_NAME == "osx" ]; then wget https://raw.githubusercontent.com/pyca/cryptography/master/.travis/install.sh; sh install.sh; fi
   - if [ $Cov == 'true'  ]; then pyver=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))'); echo $pyver; if ! [[ $pyver =~ 3\.6\.* ]]; then pip install coverage==3.7.1 ; fi; pip install codecov; fi
 after_success:
-  - if [ $Cov == 'true'  ]; then codecov --token=0482d032-e24c-461b-a116-f0e3dbc88734; fi 
+  - if [ $Cov == 'true'  ]; then coverage combine; codecov --token=0482d032-e24c-461b-a116-f0e3dbc88734; fi 
