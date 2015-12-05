@@ -108,6 +108,8 @@ install:
 #  - "powershell appveyor\\install.ps1"
   - "set HOME=%APPVEYOR_BUILD_FOLDER%"
   - "%PYTHON%\\Scripts\\pip install coverage==3.7.1 codecov"
+  - "cd %HOME%"
+  - "%PYTHON%\\Scripts\\pip install -r requirements.txt"
   - "%UPnP%"
  
 test: off
