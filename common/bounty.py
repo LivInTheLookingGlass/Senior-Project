@@ -2,19 +2,24 @@ import os, pickle, re, sys
 from common.safeprint import safeprint
 from multiprocessing import Lock
 from hashlib import sha256
-import Crypto
 from Crypto.PublicKey import RSA
 
 global bountyList
 global bountyLock
 global bountyPath
+global keyList
 bountyList = []
 bountyLock = Lock()
 bounty_path = "data" + os.sep + "bounties.pickle"
+keyList = []
+
+def getUTC():
+    from calendar import timegm
+    from time import gmtime
+    return timegm(gmtime())
 
 class Bounty(object):
     """An object representation of a Bounty
-
     Parts:
     ip         -- The ip address of the requesting node
     btc        -- The Bitcoin address of the requesting party
@@ -28,23 +33,35 @@ class Bounty(object):
                    ("sys.platform":"win32")
         perms  -- Dict containing the minimum required security policies
                    (if empty, most restrictive assumed)
-        key    -- An RSA object (via Pycrypto) which contains the public key used in this Bounty
+        key    -- An RSA object (via Pycrypto) which contains the public key for this Bounty
                    (required only when reward is 0)
-        sig    --  A unicode string of this Bounty signed by the above key
+        sig    -- A tuple of the Bounty's print output signed by the above key
                    (required only when reward is 0)
         TDL    -- More to be defined in later versions
     """
-    defaultData = {'author':"",'reqs':{},'perms':{},'key':"".encode('utf-8'),'sig':(0,)}
+    ip = ""
+    btc = ""
+    reward = 0
+    ident = None
+    timeout = getUTC() + 86400
+    data = {'author':'',
+            'reqs':{},
+            'perms':{}}
 
     def __repr__(self):
         """Gives a string representation of the bounty"""
         output = "<Bounty: ip=" + str(self.ip) + ", btc=" + str(self.btc) + ", reward=" + str(self.reward)
-        if self.ident is not None:
+        if self.ident != None:
             output = output + ", id=" + str(self.ident)
-        if self.timeout is not None:
+        if self.timeout != None:
             output = output + ", timeout=" + str(self.timeout)
-        if self.data != self.defaultData and self.data is not None:
-            output = output + ", author=" + str(self.data.get('author')) + ", reqs=" + str(self.data.get('reqs')) + ", perms=" + str(self.data.get('perms'))
+        if self.data and self.data != {'author':'','reqs':{},'perms':{}}:
+            if self.data.get('author') and self.data.get('author') != '':
+                output = output + ", author=" + str(self.data.get('author'))
+            if self.data.get('reqs') and self.data.get('reqs') != {}:
+                output = output + ", reqs=" + str(self.data.get('reqs'))
+            if self.data.get('perms') and self.data.get('perms') != {}:
+                output = output + ", perms=" + str(self.data.get('perms'))
         return output + ">"
 
     def __eq__(self, other):
@@ -74,7 +91,7 @@ class Bounty(object):
             return False
         
     def __le__(self, other):
-        """Determines whether this bounty has a lower priority or is equal"""
+        """Determines whether this bounty has a lower or equal priority"""
         boolean = self.__lt__(other)
         if boolean:
             return boolean
@@ -82,27 +99,24 @@ class Bounty(object):
             return self.__eq__(other)
         
     def __ge__(self, other):
-        """Determines whether this bounty has a higher priority or is equal"""
+        """Determines whether this bounty has a higher or equal priority"""
         boolean = self.__gt__(other)
         if boolean:
             return boolean
         else:
             return self.__eq__(other)
       
-    def __init__(self, ipAddress, btcAddress, rewardAmount, timeout=None, ident=None, dataDict=None):
+    def __init__(self, ipAddress, btcAddress, rewardAmount, timeout=None, ident=None, dataDict={}, keypair=None):
         """Initialize a Bounty; constructor"""
         self.ip = ipAddress
         self.btc = btcAddress
         self.reward = rewardAmount
         self.ident = ident
-        if dataDict is None:
-            self.data = self.defaultData
-        else:
-            self.data = dataDict
-        if timeout is None:
-            self.timeout = getUTC() + 86400 #24 hours from now in UTC (forced)
-        else:
+        self.data.update(dataDict)
+        if timeout is not None:
             self.timeout = timeout
+        if keypair is not None:
+            self.sign(keypair)
 
     def isValid(self):
         """Internal method which checks the Bounty as valid under the most minimal version
@@ -126,9 +140,12 @@ class Bounty(object):
             if not checkAddressValid(address):
                 return False
             safeprint("Testing reward")
-            if not int(self.reward) in xrange(1440,100000001):   #Range starts at 1440 because this is 1 satoshi/minute
-                if not (int(self.reward) == 0 and self.checkSign()):
-                    return False
+            reward = int(self.reward)
+            boolean = reward >= 1440 and reward <= 100000000
+            if reward == 0 or reward is None:
+                boolean = self.checkSign()
+            if boolean is False:
+                return False
             safeprint("Testing timeout")
             return self.timeout > getUTC() #check against current UTC
         except:
@@ -136,21 +153,26 @@ class Bounty(object):
 
     def isPayable(self, factor):
         """check if address has enough"""
-        return True
-    
+        return True #later make this a wrapper for pywallet.balance()
+
     def checkSign(self):
-        if self.key in keyList:
+        safeprint(keyList)
+        if self.data.get('key') in keyList:
             expected = str(self).encode('utf-8')
-            return self.key.verify(expected, self.sig)
+            if not self.data['key'].size() / 4 + 1 < len(expected):
+                return self.data['key'].verify(expected,self.data['sig'])
         return False
-    
-    def sign(keypair):
-        try:
-            self.sig = keypair.sign(str(a).encode('utf-8'),64)
-            self.key = keypair.publickey()
-            return True
-        except:
+
+    def sign(self,keypair):
+        expected = str(self).encode('utf-8')
+        if keypair.size() / 4 + 1 < len(expected):
             return False
+        self.data.update({"sig":keypair.sign(expected,64),"key":keypair.publickey()})
+        return True
+
+def addKey(key):
+    global keyList
+    keyList.append(key)
 
 def checkAddressValid(address):
     """Check to see if a Bitcoin address is within the valid namespace. Will potentially give false positives based on leading 1s"""
@@ -166,11 +188,6 @@ def checkAddressValid(address):
     else:
         bcbytes = decimal.to_bytes(25, 'big')
         return bcbytes[-4:] == sha256(sha256(bcbytes[:-4]).digest()).digest()[:4]
-
-def getUTC():
-    from calendar import timegm
-    from time import gmtime
-    return timegm(gmtime())
 
 def verify(string):
     """External method which checks the Bounty as valid under implementation-specific requirements. This can be defined per user.
@@ -194,12 +211,17 @@ def verify(string):
         if not boolean:
             return False
         safeprint("Testing Bitcoin address")
+        address = str(test.btc)
         #The following is a soft check
         #A deeper check will need to be done in order to assure this is correct
-        if not checkAddressValid(str(test.btc)):
+        if not checkAddressValid(address):
             return False
         safeprint("Testing reward")
-        if not int(test.reward) in ([0] + range(1440,100000001)):   #Range starts at 1440 because this is 1 satoshi/minute
+        reward = int(test.reward)
+        boolean = reward >= 1440 and reward <= 100000000
+        if reward == 0 or reward is None:
+            boolean = False #later replace this with sigVerify()
+        if boolean is False:
             return False
         safeprint("Testing timeout")
         return test.timeout > getUTC() #check against current UTC
@@ -244,19 +266,13 @@ def addBounty(bounty):
     safeprint(pickle.loads(bounty))
     safeprint("External verify")
     first = verify(bounty)
-    try:
-        bounty = pickle.loads(bounty)
-    except:
-        safeprint("Bounty was unpicklable")
-    try:
-        safeprint("Internal verify")
-        second = bounty.isValid()
-        if first and second:
-            with bountyLock:
-                bountyList.append(bounty)
-        return (first and second)
-    except:
-        return False
+    bounty = pickle.loads(bounty)
+    safeprint("Internal verify")
+    second = bounty.isValid()
+    if first and second:
+        with bountyLock:
+            bountyList.append(bounty)
+    return (first and second)
 
 def getBounty(charity, factor):
     """Retrieve the next best bounty from the list"""
