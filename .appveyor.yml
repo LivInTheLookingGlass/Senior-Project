@@ -116,8 +116,8 @@ test: off
  
 build_script:
   - "cd %HOME%"
-  - "%RUN% test.py > nul 2>&1"
-  - "%RUN% main.py > nul 2>&1"
+  - "%RUN% test.py"
+  - "%RUN% main.py"
   - "type output.txt"
   
 on_success:
