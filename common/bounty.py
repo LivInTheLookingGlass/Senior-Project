@@ -106,7 +106,7 @@ class Bounty(object):
         else:
             return self.__eq__(other)
       
-    def __init__(self, ipAddress, btcAddress, rewardAmount, timeout=None, ident=None, dataDict=None):
+    def __init__(self, ipAddress, btcAddress, rewardAmount, timeout=None, ident=None, dataDict=None, keypair=None):
         """Initialize a Bounty; constructor"""
         self.ip = ipAddress
         self.btc = btcAddress
@@ -116,6 +116,8 @@ class Bounty(object):
             self.data = dataDict
         if timeout is not None:
             self.timeout = timeout
+        if keypair is not None:
+            self.sign(keypair)
 
     def isValid(self):
         """Internal method which checks the Bounty as valid under the most minimal version
@@ -161,6 +163,13 @@ class Bounty(object):
             if not self.data['key'].size() / 4 + 1 < len(expected):
                 return self.data['key'].verify(expected,self.data['sig'])
         return False
+
+    def sign(self,keypair):
+        expected = str(self).encode('utf-8')
+        if keypair.size() / 4 + 1 < len(expected):
+            return False
+        self.data.update({"sig":keypair.sign(expected,64),"key":keypair.publickey()})
+        return True
 
 def addKey(key):
     global keyList
