@@ -2,13 +2,16 @@ import os, pickle, re, sys
 from common.safeprint import safeprint
 from multiprocessing import Lock
 from hashlib import sha256
+from Crypto.PublicKey import RSA
 
 global bountyList
 global bountyLock
 global bountyPath
+global keyList
 bountyList = []
 bountyLock = Lock()
 bounty_path = "data" + os.sep + "bounties.pickle"
+keyList = []
 
 def getUTC():
     from calendar import timegm
@@ -139,7 +142,7 @@ class Bounty(object):
             reward = int(self.reward)
             boolean = reward >= 1440 and reward <= 100000000
             if reward == 0 or reward is None:
-                boolean = False #later replace this with sigVerify()
+                boolean = self.checkSign()
             if boolean is False:
                 return False
             safeprint("Testing timeout")
@@ -150,6 +153,18 @@ class Bounty(object):
     def isPayable(self, factor):
         """check if address has enough"""
         return True #later make this a wrapper for pywallet.balance()
+
+    def checkSign(self):
+        safeprint(keyList)
+        if self.data.get('key') in keyList:
+            expected = str(self).encode('utf-8')
+            if not self.data['key'].size() / 4 + 1 < len(expected):
+                return self.data['key'].verify(expected,self.data['sig'])
+        return False
+
+def addKey(key):
+    global keyList
+    keyList.append(key)
 
 def checkAddressValid(address):
     """Check to see if a Bitcoin address is within the valid namespace. Will potentially give false positives based on leading 1s"""
