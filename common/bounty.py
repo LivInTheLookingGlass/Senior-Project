@@ -106,14 +106,13 @@ class Bounty(object):
         else:
             return self.__eq__(other)
       
-    def __init__(self, ipAddress, btcAddress, rewardAmount, timeout=None, ident=None, dataDict=None, keypair=None):
+    def __init__(self, ipAddress, btcAddress, rewardAmount, timeout=None, ident=None, dataDict={}, keypair=None):
         """Initialize a Bounty; constructor"""
         self.ip = ipAddress
         self.btc = btcAddress
         self.reward = rewardAmount
         self.ident = ident
-        if dataDict is not None:
-            self.data = dataDict
+        self.data.update(dataDict)
         if timeout is not None:
             self.timeout = timeout
         if keypair is not None:
