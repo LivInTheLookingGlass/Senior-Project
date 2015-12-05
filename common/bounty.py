@@ -10,26 +10,40 @@ bountyList = []
 bountyLock = Lock()
 bounty_path = "data" + os.sep + "bounties.pickle"
 
+def getUTC():
+    from calendar import timegm
+    from time import gmtime
+    return timegm(gmtime())
+
 class Bounty(object):
     """An object representation of a Bounty
-
     Parts:
-    ip       -- The ip address of the requesting node
-    btc      -- The Bitcoin address of the requesting party
-    reward   -- The reward amount in Satoshis to be given over 24 hours (x | x == 0 or 1440 <= x <= 100000000)
-    ident    -- A value set by the issuer to determine which problem/test to send
-    timeout  -- Unix time at which the bounty expires
-    data     -- A dictionary containing optional, additional information
-      author -- String which represents the group providing the Bounty
-      reqs   -- Dict containing requirements keyed by the related python calls ("sys.platform":"win32")
-      TDL    -- More to be defined in later versions
+    ip         -- The ip address of the requesting node
+    btc        -- The Bitcoin address of the requesting party
+    reward     -- The reward amount in satoshis to be given over 24 hours
+                   (x | x == 0 or 1440 <= x <= 100000000) (1440 is 1 satoshi/minute)
+    ident      -- A value set by the issuer to determine which problem/test to send
+    timeout    -- Unix time at which the bounty expires (defaults to 24 hours)
+    data       -- A dictionary containing optional, additional information
+        author -- String which represents the group providing the Bounty
+        reqs   -- Dict containing requirements keyed by the related python calls
+                   ("sys.platform":"win32")
+        perms  -- Dict containing the minimum required security policies
+                   (if empty, most restrictive assumed)
+        key    -- An RSA object (via Pycrypto) which contains the public key for this Bounty
+                   (required only when reward is 0)
+        sig    -- A tuple of the Bounty's print output signed by the above key
+                   (required only when reward is 0)
+        TDL    -- More to be defined in later versions
     """
     ip = ""
     btc = ""
     reward = 0
     ident = None
-    timeout = 0
-    data = {}
+    timeout = getUTC() + 86400
+    data = {'author':'',
+            'reqs':{},
+            'perms':{}}
 
     def __repr__(self):
         """Gives a string representation of the bounty"""
@@ -39,7 +53,7 @@ class Bounty(object):
         if self.timeout != None:
             from calendar import timegm
             from time import gmtime
-            output = output + ", time_left=" + str(self.timeout - timegm(gmtime()))
+            output = output + ", timeout=" + str(self.timeout)
         if self.data != {} and self.data != None:
             output = output + ", data=" + str(self.data)
         output = output + ">"
@@ -79,18 +93,15 @@ class Bounty(object):
         """Determines whether this bounty has a higher or equal priority"""
         return not self.__lt__(other)
       
-    def __init__(self, ipAddress, btcAddress, rewardAmount, timeout=None, ident=None, dataDict={}):
+    def __init__(self, ipAddress, btcAddress, rewardAmount, timeout=None, ident=None, dataDict=None):
         """Initialize a Bounty; constructor"""
         self.ip = ipAddress
         self.btc = btcAddress
         self.reward = rewardAmount
-        self.data = dataDict
         self.ident = ident
-        if timeout is None:
-            from calendar import timegm
-            from time import gmtime
-            self.timeout = timegm(gmtime()) + 86400 #24 hours from now in UTC (forced)
-        else:
+        if dataDict is not None:
+            self.data = dataDict
+        if timeout is not None:
             self.timeout = timeout
 
     def isValid(self):
