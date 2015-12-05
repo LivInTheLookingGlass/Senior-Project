@@ -51,17 +51,19 @@ class Bounty(object):
         if self.ident != None:
             output = output + ", id=" + str(self.ident)
         if self.timeout != None:
-            from calendar import timegm
-            from time import gmtime
             output = output + ", timeout=" + str(self.timeout)
-        if self.data != {} and self.data != None:
-            output = output + ", data=" + str(self.data)
-        output = output + ">"
-        return output
+        if self.data and self.data != {'author':'','reqs':{},'perms':{}}:
+            if self.data.get('author') and self.data.get('author') != '':
+                output = output + ", author=" + str(self.data.get('author'))
+            if self.data.get('reqs') and self.data.get('reqs') != {}:
+                output = output + ", reqs=" + str(self.data.get('reqs'))
+            if self.data.get('perms') and self.data.get('perms') != {}:
+                output = output + ", perms=" + str(self.data.get('perms'))
+        return output + ">"
 
     def __eq__(self, other):
         """Determines whether the bounties are equal"""
-        return (self.reward == other.reward) and (self.ident == other.ident) and (self.data.get('author') == other.data.get('author'))
+        return (self.reward == other.reward) and (self.ident == other.ident) and (self.data == other.data)
         
     def __ne__(self, other):
         """Determines whether the bounties are unequal"""
