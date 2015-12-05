@@ -141,6 +141,7 @@ def requestBounties(address):
         bounties = pickle.loads(received)
         for bounty in bounties:
             addBounty(pickle.dumps(bounty,0))
+            safeprint("Bounty added")
     except Exception as error:
         safeprint("Failed:" + str(type(error)))
         safeprint(error)
@@ -264,10 +265,13 @@ def handleIncomingBounty(conn):
         else:
             connected = False
     safeprint("Adding bounty: " + received.decode())
-    if addBounty(received):
-        conn.send(valid_signal)
-    else:
-        conn.send(invalid_signal)
+    try:
+        if addBounty(received):
+            conn.send(valid_signal)
+        else:
+            conn.send(invalid_signal)
+    except:
+        safeprint("They closed too early")
 
 def handleBountyRequest(conn):
     """Given a socket, send the proper messages to handle a bounty request"""

@@ -18,16 +18,20 @@ def waitForty(v,q): #pragma: no cover
         safeprint("No feedback received from listener")
     safeprint("YOUR IP IS " + get_lan_ip() + ":44566")
     requestPeerlist(get_lan_ip() + ":44566")
+    sleep(4)
     requestPeerlist("localhost:44566")
-    requestBounties(get_lan_ip() + ":44566")
-    requestBounties("localhost:44566")
+    sleep(4)
+    if sys.version_info[0] == 3:
+        requestBounties(get_lan_ip() + ":44566")
+        sleep(4)
+        requestBounties("localhost:44566")
+        sleep(4)
     #TODO move test incoming_bounty here
     #TODO move test incoming_bounty here
     safeprint("Sending term signal")
     v.value = False
 
 if __name__ == "__main__": #pragma: no cover
-    main()
     testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1440,"Correctly formed bounty")
     testBounty('8.8.8.8',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1440,"Malformed bounty 1 (ip failure)")
     testBounty('8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1440,"Malformed bounty 2 (ip failure)")

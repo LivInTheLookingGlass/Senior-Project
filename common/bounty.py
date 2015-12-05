@@ -51,7 +51,7 @@ class Bounty(object):
     def __repr__(self):
         """Gives a string representation of the bounty"""
         output = "<Bounty: ip=" + str(self.ip) + ", btc=" + str(self.btc) + ", reward=" + str(self.reward)
-        if self.ident != None:
+        if self.ident is not None:
             output = output + ", id=" + str(self.ident)
         if self.timeout != None:
             output = output + ", timeout=" + str(self.timeout)
@@ -91,15 +91,14 @@ class Bounty(object):
             return False
         
     def __le__(self, other):
-        """Determines whether this bounty has a lower or equal priority"""
-        boolean = self.__lt__(other)
+        """Determines whether this bounty has a lower priority or is equal"""        boolean = self.__lt__(other)
         if boolean:
             return boolean
         else:
             return self.__eq__(other)
         
     def __ge__(self, other):
-        """Determines whether this bounty has a higher or equal priority"""
+        """Determines whether this bounty has a higher priority or is equal"""
         boolean = self.__gt__(other)
         if boolean:
             return boolean
@@ -169,6 +168,20 @@ class Bounty(object):
             return False
         self.data.update({"sig":keypair.sign(expected,64),"key":keypair.publickey()})
         return True
+    
+    def checkSign(self):
+        if self.key in keyList:
+            expected = str(self).encode('utf-8')
+            return self.key.verify(expected, self.sig)
+        return False
+    
+    def sign(keypair):
+        try:
+            self.sig = keypair.sign(str(a).encode('utf-8'),64)
+            self.key = keypair.publickey()
+            return True
+        except:
+            return False
 
 def addKey(key):
     global keyList
@@ -188,6 +201,11 @@ def checkAddressValid(address):
     else:
         bcbytes = decimal.to_bytes(25, 'big')
         return bcbytes[-4:] == sha256(sha256(bcbytes[:-4]).digest()).digest()[:4]
+
+def getUTC():
+    from calendar import timegm
+    from time import gmtime
+    return timegm(gmtime())
 
 def verify(string):
     """External method which checks the Bounty as valid under implementation-specific requirements. This can be defined per user.
@@ -211,10 +229,9 @@ def verify(string):
         if not boolean:
             return False
         safeprint("Testing Bitcoin address")
-        address = str(test.btc)
         #The following is a soft check
         #A deeper check will need to be done in order to assure this is correct
-        if not checkAddressValid(address):
+        if not checkAddressValid(str(test.btc)):
             return False
         safeprint("Testing reward")
         reward = int(test.reward)
@@ -266,13 +283,19 @@ def addBounty(bounty):
     safeprint(pickle.loads(bounty))
     safeprint("External verify")
     first = verify(bounty)
-    bounty = pickle.loads(bounty)
-    safeprint("Internal verify")
-    second = bounty.isValid()
-    if first and second:
-        with bountyLock:
-            bountyList.append(bounty)
-    return (first and second)
+    try:
+        bounty = pickle.loads(bounty)
+    except:
+        safeprint("Bounty was unpicklable")
+    try:
+        safeprint("Internal verify")
+        second = bounty.isValid()
+        if first and second:
+            with bountyLock:
+                bountyList.append(bounty)
+        return (first and second)
+    except:
+        return False
 
 def getBounty(charity, factor):
     """Retrieve the next best bounty from the list"""
