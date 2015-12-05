@@ -89,11 +89,19 @@ class Bounty(object):
         
     def __le__(self, other):
         """Determines whether this bounty has a lower or equal priority"""
-        return not self.__gt__(other)
+        boolean = self.__lt__(other)
+        if boolean:
+            return boolean
+        else:
+            return self.__eq__(other)
         
     def __ge__(self, other):
         """Determines whether this bounty has a higher or equal priority"""
-        return not self.__lt__(other)
+        boolean = self.__gt__(other)
+        if boolean:
+            return boolean
+        else:
+            return self.__eq__(other)
       
     def __init__(self, ipAddress, btcAddress, rewardAmount, timeout=None, ident=None, dataDict=None):
         """Initialize a Bounty; constructor"""
@@ -129,19 +137,19 @@ class Bounty(object):
                 return False
             safeprint("Testing reward")
             reward = int(self.reward)
-            boolean = (reward == 0 or (reward >= 1440 and reward <= 100000000))
+            boolean = reward >= 1440 and reward <= 100000000
+            if reward == 0 or reward is None:
+                boolean = False #later replace this with sigVerify()
             if boolean is False:
                 return False
             safeprint("Testing timeout")
-            from calendar import timegm
-            from time import gmtime
-            return self.timeout > timegm(gmtime()) #check against current UTC
+            return self.timeout > getUTC() #check against current UTC
         except:
             return False
 
     def isPayable(self, factor):
         """check if address has enough"""
-        return True
+        return True #later make this a wrapper for pywallet.balance()
 
 def checkAddressValid(address):
     """Check to see if a Bitcoin address is within the valid namespace. Will potentially give false positives based on leading 1s"""
@@ -187,13 +195,13 @@ def verify(string):
             return False
         safeprint("Testing reward")
         reward = int(test.reward)
-        boolean = (reward == 0 or (reward >= 1440 and reward <= 100000000))
+        boolean = reward >= 1440 and reward <= 100000000
+        if reward == 0 or reward is None:
+            boolean = False #later replace this with sigVerify()
         if boolean is False:
             return False
         safeprint("Testing timeout")
-        from calendar import timegm
-        from time import gmtime
-        return test.timeout > timegm(gmtime()) #check against current UTC
+        return test.timeout > getUTC() #check against current UTC
     except:
         return False
 
