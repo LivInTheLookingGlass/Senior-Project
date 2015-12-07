@@ -6,6 +6,10 @@ This is a common library. It has files that are shared between both the server a
 
 This contains the definition for the `Bounty` class, as well as several utility methods for dealing with them.
 
+###Call
+
+A library to call arbitrary python code. This is used by `Bounty` to parse system requirements. Specific module/command combination will likely be blocked for security reasons, but I have not yet seen a vulnerability worthy of this.
+
 ###Coins
 
 This will contain all coin control methods. It will likely be a wrapper for `pywallet`.
