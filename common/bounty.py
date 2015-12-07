@@ -148,7 +148,7 @@ class Bounty(object):
             if boolean is False:
                 return False
             safeprint("Testing timeout")
-            if self.timeout > getUTC(): #check against current UTC
+            if self.timeout < getUTC(): #check against current UTC
                 return False
             from common.call import parse
             safeprint("Testing bounty requirements")
@@ -230,7 +230,7 @@ def verify(string):
         if boolean is False:
             return False
         safeprint("Testing timeout")
-        if test.timeout > getUTC(): #check against current UTC
+        if test.timeout < getUTC(): #check against current UTC
             return False
         from common.call import parse
         safeprint("Testing bounty requirements")
