@@ -39,14 +39,6 @@ class Bounty(object):
                    (required only when reward is 0)
         TDL    -- More to be defined in later versions
     """
-    ip = ""
-    btc = ""
-    reward = 0
-    ident = None
-    timeout = getUTC() + 86400
-    data = {'author':'',
-            'reqs':{},
-            'perms':{}}
 
     def __repr__(self):
         """Gives a string representation of the bounty"""
@@ -111,11 +103,18 @@ class Bounty(object):
         self.ip = ipAddress
         self.btc = btcAddress
         self.reward = rewardAmount
-        self.ident = ident
-        if dataDict is not None:
-            self.data.update(dataDict)
+        self.ident = None
         if timeout is not None:
             self.timeout = timeout
+        else:
+            self.timeout = getUTC() + 86400
+        self.data = {'author':'',
+                     'reqs':{},
+                     'perms':{}}
+        if ident is not None:
+            self.ident = None
+        if dataDict is not None:
+            self.data.update(dataDict)
         if keypair is not None:
             self.sign(keypair)
 
