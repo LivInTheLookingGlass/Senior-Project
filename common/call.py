@@ -11,7 +11,7 @@ def call(mod,cmd,*args,**kargs):
         if you don't know what command you need to run at compile time
     """
     if mod == "__builtins__":
-        m = __builtins__
+        m = __import__("__builtin__")
     else:
         m = __import__(mod)
     func = getattr(m,cmd)
