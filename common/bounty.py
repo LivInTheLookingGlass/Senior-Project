@@ -203,10 +203,12 @@ def verify(string):
     """
     test = None
     if type(string) == type(Bounty(None,None,None)):
-        safeprint("You fed this as a Bounty. This is inefficient for addBounty(). Don't do that.")
         test = string
     else:
-        test = pickle.loads(string)
+        try:
+            test = pickle.loads(string)
+        except:
+            return False
     try:
         safeprint("Testing IP address")
         boolean = int(test.ip.split(":")[1]) in range(1024,49152)
@@ -274,8 +276,11 @@ def addBounty(bounty):
         bounty = bounty.encode('utf-8')
     safeprint(pickle.loads(bounty))
     safeprint("External verify")
+    try:
+        bounty = pickle.loads(bounty)
+    except:
+        return False
     first = verify(bounty)
-    bounty = pickle.loads(bounty)
     safeprint("Internal verify")
     second = bounty.isValid()
     if first and second:
