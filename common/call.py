@@ -65,10 +65,10 @@ def parse(d):
     """
     if d == {} or d is None:
         return True
+    if len(d) == 1:
+        return process(list(d.items())[0])
     from multiprocessing import Pool
-    p = []
-    for item in d:
-        p.append((item,d[item]))
+    p = list(d.items())
     r = Pool().map(process,p)
     for res in r:
         if not res:
