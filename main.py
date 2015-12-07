@@ -6,9 +6,9 @@ from multiprocessing import Queue, Value
 from time import sleep, time
 import pickle
 
-def testBounty(ip, btc, rwd, desc):
+def testBounty(ip, btc, rwd, desc, data=None):
     safeprint(desc)
-    test = bounty.Bounty(ip,btc,rwd)
+    test = bounty.Bounty(ip,btc,rwd,dataDict=data)
     dumped = pickle.dumps(test,1)
     safeprint(bounty.addBounty(dumped))
 
