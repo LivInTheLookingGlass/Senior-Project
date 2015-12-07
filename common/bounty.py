@@ -143,11 +143,16 @@ class Bounty(object):
             reward = int(self.reward)
             boolean = reward >= 1440 and reward <= 100000000
             if reward == 0 or reward is None:
+                safeprint("Testing signature validity")
                 boolean = self.checkSign()
             if boolean is False:
                 return False
             safeprint("Testing timeout")
-            return self.timeout > getUTC() #check against current UTC
+            if self.timeout > getUTC(): #check against current UTC
+                return False
+            from common.call import parse
+            safeprint("Testing bounty requirements")
+            return parse(self.data.get('reqs'))
         except:
             return False
 
@@ -220,11 +225,16 @@ def verify(string):
         reward = int(test.reward)
         boolean = reward >= 1440 and reward <= 100000000
         if reward == 0 or reward is None:
-            boolean = False #later replace this with sigVerify()
+            safeprint("Testing signature validity")
+            boolean = test.checkSign()
         if boolean is False:
             return False
         safeprint("Testing timeout")
-        return test.timeout > getUTC() #check against current UTC
+        if test.timeout > getUTC(): #check against current UTC
+            return False
+        from common.call import parse
+        safeprint("Testing bounty requirements")
+        return parse(test.data.get('reqs'))
     except:
         return False
 
