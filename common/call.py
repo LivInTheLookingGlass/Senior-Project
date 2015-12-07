@@ -63,6 +63,8 @@ def parse(d):
         Value:
             The expected return value
     """
+    if d == {} or d is None:
+        return True
     from multiprocessing import Pool
     p = []
     for item in d:
