@@ -165,11 +165,6 @@
 <h2>Required</h2>
 <ul>
 	<li>Java</li>
-	<li>PyCrypto</li>
-	<li>For PyCrypto:</li>
-	<ul>
-		<li>winrandom (Windows only)</li>
-	</ul>
 	<li>For PyWallet:</li>
 	<ul>
 		<li>Twisted</li>
@@ -180,6 +175,11 @@
 <h2>Recommended</h2>
 <ul>
 	<li>MiniUPNPc</li>
+	<li>PyCrypto</li>
+	<li>For PyCrypto:</li>
+	<ul>
+		<li>winrandom (Windows only)</li>
+	</ul>
 </ul>
 
 <div id="progresssection">
@@ -234,12 +234,11 @@
 	
 	<ul>
 	<li>Basic networking capabilities
-	
-	<ul>
-	<li>Send messages</li>
-	<li>Listen and respond (concurrently)</li>
-	<li>On a custom port, if desired</li>
-	</ul>
+		<ul>
+			<li>Send messages</li>
+			<li>Listen and respond (concurrently)</li>
+			<li>On a custom port, if desired</li>
+		</ul>
 	</li>
 	<li>Transparent settings storage</li>
 	<li>UPnP forwarding (Linux, OSX)</li>
@@ -250,8 +249,14 @@
 	
 	<ul>
 	<li>Dedicated server mode</li>
+	<li>More complete bounty definition</li>
 	<li>More complete settings controls</li>
-	<li>UPnP forwarding (Windows)</li>
+	<li>Windows dependency fixes
+		<ul>
+			PyCrypto  (Python 3.x runtime error)
+			MiniUPNPc (compile-time error)
+		</ul>
+	</li>
 	</ul>
 	
 	<h2>
@@ -266,7 +271,6 @@
 	<li>Secure wallet storage</li>
 	</ul>
 	</li>
-	<li>More complete bounty definition</li>
 	<li>Network discovery</li>
 	<li>Sandboxed Execution</li>
 	</ul>
