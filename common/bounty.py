@@ -2,7 +2,6 @@ import os, pickle, re, sys
 from common.safeprint import safeprint
 from multiprocessing import Lock
 from hashlib import sha256
-from Crypto.PublicKey import RSA
 
 global bountyList
 global bountyLock
