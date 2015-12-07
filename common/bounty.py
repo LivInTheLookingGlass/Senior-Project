@@ -112,7 +112,8 @@ class Bounty(object):
         self.btc = btcAddress
         self.reward = rewardAmount
         self.ident = ident
-        self.data.update(dataDict)
+        if dataDict is not None:
+            self.data.update(dataDict)
         if timeout is not None:
             self.timeout = timeout
         if keypair is not None:
