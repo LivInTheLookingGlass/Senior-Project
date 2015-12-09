@@ -24,9 +24,19 @@ matrix:
     - os: osx
   include:
     - language: c
+      python: 2.7
       os: osx
       env: Cov='true' UPnP='true'
     - language: c
+      python: 2.7
+      os: osx
+      env: Cov='true' UPnP='false'
+    - language: c
+      python: 3.5
+      os: osx
+      env: Cov='true' UPnP='true'
+    - language: c
+      python: 3.5
       os: osx
       env: Cov='true' UPnP='false'
 # command to install dependencies
