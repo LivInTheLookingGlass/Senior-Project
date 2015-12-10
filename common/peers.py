@@ -106,7 +106,7 @@ def requestPeerlist(address):
             bounty = bounty.encode('utf-8')
         safeprint(bounty)
         con.send(bounty)
-        time.sleep(0.01)
+        time.sleep(0.02)
         con.send(close_signal)
         time.sleep(0.01)
         con.close()
