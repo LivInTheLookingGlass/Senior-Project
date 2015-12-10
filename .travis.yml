@@ -2,7 +2,6 @@ language: python
 repo_token: qtRAezgFkEsUBFIQrtXCxQRe2arC3H9Ta
 os:
   - linux
-#  - osx
 python:
   - "2.6"
   - "2.7"
@@ -13,46 +12,110 @@ python:
   - "3.5-dev" # 3.5 development branch
   - "nightly" # currently points to 3.6-dev
 env:
-  - Cov='true' UPnP='true'
-  - Cov='true' UPnP='false'
-  - Cov='false' UPnP='true'
-  - Cov='false' UPnP='false'
+  - Cov='true' UPnP='true' coverage="coverage" pipinstall="pip install"
+  - Cov='true' UPnP='false' coverage="coverage" pipinstall="pip install"
+  - Cov='false' UPnP='true' coverage="coverage" pipinstall="pip install"
+  - Cov='false' UPnP='false' coverage="coverage" pipinstall="pip install"
 matrix:
   allow_failures:
     - env: Cov='true' UPnP='true'
     - env: Cov='true' UPnP='false'
     - os: osx
   include:
-    - language: c
+    - language: generic
+      python: 2.6
+      os: osx
+      env: Cov='false' UPnP='true' TOXENV=py26 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: 2.6
+      os: osx
+      env: Cov='false' UPnP='false' TOXENV=py26 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: 2.6
+      os: osx
+      env: Cov='true' UPnP='true' TOXENV=py26 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: 2.6
+      os: osx
+      env: Cov='true' UPnP='false' TOXENV=py26 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
       python: 2.7
       os: osx
-      env: Cov='true' UPnP='true'
-    - language: c
+      env: Cov='false' UPnP='true' TOXENV=py27 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
       python: 2.7
       os: osx
-      env: Cov='true' UPnP='false'
-    - language: c
+      env: Cov='false' UPnP='false' TOXENV=py27 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: 2.7
+      os: osx
+      env: Cov='true' UPnP='true' TOXENV=py27 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: 2.7
+      os: osx
+      env: Cov='true' UPnP='false' TOXENV=py27 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: 3.3
+      os: osx
+      env: Cov='false' UPnP='true' TOXENV=py33 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: 3.3
+      os: osx
+      env: Cov='false' UPnP='false' TOXENV=py33 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: 3.3
+      os: osx
+      env: Cov='true' UPnP='true' TOXENV=py33 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: 3.3
+      os: osx
+      env: Cov='true' UPnP='false' TOXENV=py33 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: 3.4
+      os: osx
+      env: Cov='false' UPnP='true' TOXENV=py34 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: 3.4
+      os: osx
+      env: Cov='false' UPnP='false' TOXENV=py34 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: 3.4
+      os: osx
+      env: Cov='true' UPnP='true' TOXENV=py34 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: 3.4
+      os: osx
+      env: Cov='true' UPnP='false' TOXENV=py34 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
       python: 3.5
       os: osx
-      env: Cov='true' UPnP='true'
-    - language: c
+      env: Cov='false' UPnP='true' TOXENV=py35 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
       python: 3.5
       os: osx
-      env: Cov='true' UPnP='false'
+      env: Cov='false' UPnP='false' TOXENV=py35 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: 3.5
+      os: osx
+      env: Cov='true' UPnP='true' TOXENV=py35 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: 3.5
+      os: osx
+      env: Cov='true' UPnP='false' TOXENV=py35 coverage="python -m coverage" pipinstall="sudo pip install"
 # command to install dependencies
-install: 
-  - if [ $UPnP == 'true'  ]; then pip install miniupnpc; fi
-  - pip install -r requirements.txt
-  - pip install -r optional.txt
-# command to run tests
-script: 
-  - if [ $Cov == 'true'  ]; then python -m coverage run -a main.py; fi
-  - if [ $Cov == 'false' ]; then python main.py; fi
-  - if [ $Cov == 'true'  ]; then python -m coverage run -a test.py; fi
-  - if [ $Cov == 'false' ]; then python test.py; fi
 before_install:
   - echo $TRAVIS_OS_NAME;
   - if [ $TRAVIS_OS_NAME == "osx" ]; then wget https://raw.githubusercontent.com/pyca/cryptography/master/.travis/install.sh; sh install.sh; fi
-  - if [ $Cov == 'true'  ]; then pyver=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))'); echo $pyver; if ! [[ $pyver =~ 3\.6\.* ]]; then pip install coverage==3.7.1 ; fi; pip install codecov; fi
+  - if [ $Cov == 'true'  ]; then pyver=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))'); echo $pyver; if ! [[ $pyver =~ 3\.6\.* ]]; then $pipinstall coverage==3.7.1 ; fi; $pipinstall codecov; fi
+install: 
+  - if [ $UPnP == 'true'  ]; then $pipinstall miniupnpc; fi
+  - $pipinstall -r requirements.txt
+  - $pipinstall -r optional.txt
+# command to run tests
+script: 
+  - if [ $Cov == 'true'  ]; then $coverage run -a main.py; fi
+  - if [ $Cov == 'false' ]; then python main.py; fi
+  - if [ $Cov == 'true'  ]; then $coverage run -a test.py; fi
+  - if [ $Cov == 'false' ]; then python test.py; fi
 after_success:
-  - if [ $Cov == 'true'  ]; then python -m coverage combine; python -m codecov --token=0482d032-e24c-461b-a116-f0e3dbc88734; fi 
+  - if [ $Cov == 'true'  ]; then $coverage combine; python -m codecov --token=0482d032-e24c-461b-a116-f0e3dbc88734; fi 
