@@ -11,11 +11,6 @@ environment:
       PYTHON_ARCH: "32"
       RUN: "%PYTHON%\\Scripts\\coverage run --parallel-mode"
  
-    - PYTHON: "C:\\Python32"
-      PYTHON_VERSION: "3.2.5"
-      PYTHON_ARCH: "32"
-      RUN: "%PYTHON%\\Scripts\\coverage run --parallel-mode"
- 
     - PYTHON: "C:\\Python33"
       PYTHON_VERSION: "3.3.5"
       PYTHON_ARCH: "32"
@@ -38,11 +33,6 @@ environment:
  
     - PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7.8"
-      PYTHON_ARCH: "64"
-      RUN: "%PYTHON%\\Scripts\\coverage run --parallel-mode"
- 
-    - PYTHON: "C:\\Python32-X64"
-      PYTHON_VERSION: "3.2.5"
       PYTHON_ARCH: "64"
       RUN: "%PYTHON%\\Scripts\\coverage run --parallel-mode"
  
