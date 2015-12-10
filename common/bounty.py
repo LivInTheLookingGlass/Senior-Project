@@ -266,7 +266,10 @@ def loadFromFile():
     """Load a previous bounty list from a file"""
     if os.path.exists(bounty_path):
         with bountyLock:
-            bountyList = pickle.load(open(bounty_path,"rb"))
+            try:
+                bountyList = pickle.load(open(bounty_path,"rb"))
+            except:
+                return False
         return True
     return False
 
