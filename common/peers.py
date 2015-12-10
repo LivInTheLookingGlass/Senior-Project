@@ -56,7 +56,10 @@ def get_lan_ip():
 def getFromFile():
     """Load peerlist from a file"""
     if os.path.exists(peers_file):
-        peerlist = pickle.load(open(peers_file,"rb"))
+        try:
+            peerlist = pickle.load(open(peers_file,"rb"))
+        except:
+            safeprint("Could not load peerlist from file")
 
 def saveToFile():
     """Save peerlist to a file"""
