@@ -18,8 +18,8 @@ env:
   - Cov='false' UPnP='false' coverage="coverage" pipinstall="pip install"
 matrix:
   allow_failures:
-    - env: Cov='true' UPnP='true'
-    - env: Cov='true' UPnP='false'
+    - env: Cov='true' UPnP='true' coverage="coverage" pipinstall="pip install"
+    - env: Cov='true' UPnP='false' coverage="coverage" pipinstall="pip install"
     - os: osx
   include:
     - language: generic
