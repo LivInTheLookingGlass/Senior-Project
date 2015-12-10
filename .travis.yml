@@ -5,12 +5,13 @@ os:
 python:
   - "2.6"
   - "2.7"
-  - "3.2"
   - "3.3"
   - "3.4"
   - "3.5"
   - "3.5-dev" # 3.5 development branch
   - "nightly" # currently points to 3.6-dev
+  - "pypy"
+  - "pypy3"
 env:
   - Cov='true' UPnP='true' coverage="coverage" pipinstall="pip install"
   - Cov='true' UPnP='false' coverage="coverage" pipinstall="pip install"
@@ -102,6 +103,38 @@ matrix:
       python: 3.5
       os: osx
       env: Cov='true' UPnP='false' TOXENV=py35 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: pypy
+      os: osx
+      env: Cov='false' UPnP='true' TOXENV=pypy coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: pypy
+      os: osx
+      env: Cov='false' UPnP='false' TOXENV=pypy coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic-covered
+      python: pypy
+      os: osx
+      env: Cov='true' UPnP='true' TOXENV=pypy coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic-covered
+      python: pypy
+      os: osx
+      env: Cov='true' UPnP='false' TOXENV=pypy coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: pypy3
+      os: osx
+      env: Cov='false' UPnP='true' TOXENV=pypy3 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic
+      python: pypy3
+      os: osx
+      env: Cov='false' UPnP='false' TOXENV=pypy3 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic-covered
+      python: pypy3
+      os: osx
+      env: Cov='true' UPnP='true' TOXENV=pypy3 coverage="python -m coverage" pipinstall="sudo pip install"
+    - language: generic-covered
+      python: pypy3
+      os: osx
+      env: Cov='true' UPnP='false' TOXENV=pypy3 coverage="python -m coverage" pipinstall="sudo pip install"
 # command to install dependencies
 before_install:
   - echo $TRAVIS_OS_NAME;
