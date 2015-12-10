@@ -18,7 +18,10 @@ def saveSettings():
 def loadSettings():
     """Load settings from a file"""
     if os.path.exists(settings_file):
-        config.update(pickle.load(open(settings_file,"rb")))
+    	try:
+        	config.update(pickle.load(open(settings_file,"rb")))
+        except:
+        	safeprint("Could not load from file")
 
 def setup():
     """Parses and stores the command line arguments given, and override default and saved settings"""
