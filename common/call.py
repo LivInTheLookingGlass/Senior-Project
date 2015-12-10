@@ -70,7 +70,4 @@ def parse(d):
     from multiprocessing import Pool
     p = list(d.items())
     r = Pool().map(process,p)
-    for res in r:
-        if not res:
-            return False
-    return True
+    return not (False in r)
