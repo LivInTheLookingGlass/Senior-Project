@@ -30,6 +30,7 @@ def waitForty(v,q): #pragma: no cover
     #TODO move test incoming_bounty here
     safeprint("Sending term signal")
     v.value = False
+    requestPeerlist("localhost:44566")
 
 if __name__ == "__main__": #pragma: no cover
     testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1440,"Correctly formed bounty")
