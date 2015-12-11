@@ -6,7 +6,7 @@ environment:
       PYTHON_ARCH: "32"
       RUN: "pypy"
       PIP: "pypy -m pip"
-      PYPY: "\Python27\python -c \"import urllib; urllib.urlretrieve ('http://bitbucket.org/pypy/pypy/downloads/pypy-4.0.1-win32.zip', r'pypy-4.0.1-win32.zip')\"\r\n\Python27\python -c \"import urllib; urllib.urlretrieve ('https://bootstrap.pypa.io/get-pip.py', r'get-pip.py')\"\r\n7z x pypy-4.0.1-win32.zip\r\npypy-4.0.1-win32\\pypy get-pip.py\r\n$env:path = \"$env:appveyor_build_folder\\pypy-4.0.1-win32;$env:path\""
+      PYPY: "\\Python27\\python -c \"import urllib; urllib.urlretrieve ('http://bitbucket.org/pypy/pypy/downloads/pypy-4.0.1-win32.zip', r'pypy-4.0.1-win32.zip')\"\r\n\\Python27\\python -c \"import urllib; urllib.urlretrieve ('https://bootstrap.pypa.io/get-pip.py', r'get-pip.py')\"\r\n7z x pypy-4.0.1-win32.zip\r\npypy-4.0.1-win32\\pypy get-pip.py\r\n$env:path = \"$env:appveyor_build_folder\\pypy-4.0.1-win32;$env:path\""
       
     - PYTHON: ""
       PYTHON_VERSION: "pypy3"
