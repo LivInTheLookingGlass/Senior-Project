@@ -5,61 +5,73 @@ environment:
       PYTHON_VERSION: "2.6.x"
       PYTHON_ARCH: "32"  
       RUN: "%PYTHON%\\python"
+      PIP: "%PYTHON%\\Scripts\\pip"
 
     - PYTHON: "C:\\Python27"
       PYTHON_VERSION: "2.7.8"
       PYTHON_ARCH: "32"
       RUN: "%PYTHON%\\python"
+      PIP: "%PYTHON%\\Scripts\\pip"
  
     - PYTHON: "C:\\Python33"
       PYTHON_VERSION: "3.3.5"
       PYTHON_ARCH: "32"
       RUN: "%PYTHON%\\python"
+      PIP: "%PYTHON%\\Scripts\\pip"
  
     - PYTHON: "C:\\Python34"
       PYTHON_VERSION: "3.4.1"
       PYTHON_ARCH: "32"
       RUN: "%PYTHON%\\python"
+      PIP: "%PYTHON%\\Scripts\\pip"
       
     - PYTHON: "C:\\Python35"
       PYTHON_VERSION: "3.5.0"
       PYTHON_ARCH: "32"
       RUN: "%PYTHON%\\python"
+      PIP: "%PYTHON%\\Scripts\\pip"
  
     - PYTHON: ""
       PYTHON_VERSION: "pypy2"
       PYTHON_ARCH: "32"
       RUN: "pypy"
+      PIP: "%PYTHON% -m pip"
       
     - PYTHON: ""
       PYTHON_VERSION: "pypy3"
       PYTHON_ARCH: "32"
       RUN: "pypy"
+      PIP: "%PYTHON% -m pip"
       
     - PYTHON: "C:\\Python26-x64"
       PYTHON_VERSION: "2.6.x"
       PYTHON_ARCH: "64"        
       RUN: "%PYTHON%\\python"
+      PIP: "%PYTHON%\\Scripts\\pip"
  
     - PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7.8"
       PYTHON_ARCH: "64"
       RUN: "%PYTHON%\\python"
+      PIP: "%PYTHON%\\Scripts\\pip"
  
     - PYTHON: "C:\\Python33-x64"
       PYTHON_VERSION: "3.3.5"
       PYTHON_ARCH: "64"
       RUN: "%PYTHON%\\python"
+      PIP: "%PYTHON%\\Scripts\\pip"
  
     - PYTHON: "C:\\Python34-x64"
       PYTHON_VERSION: "3.4.1"
       PYTHON_ARCH: "64"
       RUN: "%PYTHON%\\python"
+      PIP: "%PYTHON%\\Scripts\\pip"
 
     - PYTHON: "C:\\Python35-x64"
       PYTHON_VERSION: "3.5.0"
       PYTHON_ARCH: "64"
       RUN: "%PYTHON%\\python"
+      PIP: "%PYTHON%\\Scripts\\pip"
  
 init:
   - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH% %APPVEYOR_BUILD_FOLDER%"
@@ -67,11 +79,11 @@ init:
 install:
 #  - "powershell appveyor\\install.ps1"
   - "set HOME=%APPVEYOR_BUILD_FOLDER%"
-  - "powershell If (%PYTHON_VERSION% -eq \"pypy2\") {(New-Object Net.WebClient).DownloadFile('https://bitbucket.org/pypy/pypy/downloads/pypy-4.0.1-win32.zip', '$env:appveyor_build_folder\\pypy-4.0.1-win32.zip'); (New-Object Net.WebClient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', '$env:appveyor_build_folder\\get-pip.py'); 7z x pypy-4.0.1-win32.zip; $env:path = '$env:appveyor_build_folder\\pypy-4.0.1-win32;$env:path'; pypy get-pip.py}"
-  - "powershell If (%PYTHON_VERSION% -eq \"pypy3\") {(New-Object Net.WebClient).DownloadFile('https://bitbucket.org/pypy/pypy/downloads/pypy3-2.4.0-win32.zip', '$env:appveyor_build_folder\\pypy3-2.4.0-win32.zip'); (New-Object Net.WebClient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', '$env:appveyor_build_folder\\get-pip.py'); 7z x pypy-4.0.1-win32.zip; $env:path = '$env:appveyor_build_folder\\pypy3-2.4.0-win32;$env:path'; pypy get-pip.py}"
-  - "%RUN% -m pip install coverage==3.7.1 codecov"
+  - "powershell If (\"%PYTHON_VERSION%\" -eq \"pypy2\") {(New-Object Net.WebClient).DownloadFile('https://bitbucket.org/pypy/pypy/downloads/pypy-4.0.1-win32.zip', '$env:appveyor_build_folder\\pypy-4.0.1-win32.zip'); (New-Object Net.WebClient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', '$env:appveyor_build_folder\\get-pip.py'); 7z x pypy-4.0.1-win32.zip; $env:path = '$env:appveyor_build_folder\\pypy-4.0.1-win32;$env:path'; pypy get-pip.py}"
+  - "powershell If (\"%PYTHON_VERSION%\" -eq \"pypy3\") {(New-Object Net.WebClient).DownloadFile('https://bitbucket.org/pypy/pypy/downloads/pypy3-2.4.0-win32.zip', '$env:appveyor_build_folder\\pypy3-2.4.0-win32.zip'); (New-Object Net.WebClient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', '$env:appveyor_build_folder\\get-pip.py'); 7z x pypy-4.0.1-win32.zip; $env:path = '$env:appveyor_build_folder\\pypy3-2.4.0-win32;$env:path'; pypy get-pip.py}"
+  - "%PIP% install coverage==3.7.1 codecov"
   - "cd %HOME%"
-  - "%RUN% -m pip install -r requirements.txt"
+  - "%PIP% install -r requirements.txt"
   - "%UPnP%"
  
 test: off
