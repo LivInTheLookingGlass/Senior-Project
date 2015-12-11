@@ -6,12 +6,14 @@ environment:
       PYTHON_ARCH: "32"
       RUN: "pypy"
       PIP: "pypy -m pip"
+      PYPY: "(New-Object Net.WebClient).DownloadFile('https://bitbucket.org/pypy/pypy/downloads/pypy-4.0.1-win32.zip', '$env:appveyor_build_folder\\pypy-4.0.1-win32.zip'); (New-Object Net.WebClient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', '$env:appveyor_build_folder\\get-pip.py'); 7z x pypy-4.0.1-win32.zip; $env:path = '$env:appveyor_build_folder\\pypy-4.0.1-win32;$env:path'; pypy get-pip.py"
       
     - PYTHON: ""
       PYTHON_VERSION: "pypy3"
       PYTHON_ARCH: "32"
       RUN: "pypy"
       PIP: "pypy -m pip"
+      PYPY: "(New-Object Net.WebClient).DownloadFile('https://bitbucket.org/pypy/pypy/downloads/pypy3-2.4.0-win32.zip', '$env:appveyor_build_folder\\pypy3-2.4.0-win32.zip'); (New-Object Net.WebClient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', '$env:appveyor_build_folder\\get-pip.py'); 7z x pypy-4.0.1-win32.zip; $env:path = '$env:appveyor_build_folder\\pypy3-2.4.0-win32;$env:path'; pypy get-pip.py"
       
     - PYTHON: "C:\\Python26"
       PYTHON_VERSION: "2.6.x"
@@ -79,8 +81,7 @@ init:
 install:
 #  - "powershell appveyor\\install.ps1"
   - "set HOME=%APPVEYOR_BUILD_FOLDER%"
-  - "If (\"%PYTHON_VERSION%\" -eq \"pypy2\") {(New-Object Net.WebClient).DownloadFile('https://bitbucket.org/pypy/pypy/downloads/pypy-4.0.1-win32.zip', '$env:appveyor_build_folder\\pypy-4.0.1-win32.zip'); (New-Object Net.WebClient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', '$env:appveyor_build_folder\\get-pip.py'); 7z x pypy-4.0.1-win32.zip; $env:path = '$env:appveyor_build_folder\\pypy-4.0.1-win32;$env:path'; pypy get-pip.py}"
-  - "If (\"%PYTHON_VERSION%\" -eq \"pypy3\") {(New-Object Net.WebClient).DownloadFile('https://bitbucket.org/pypy/pypy/downloads/pypy3-2.4.0-win32.zip', '$env:appveyor_build_folder\\pypy3-2.4.0-win32.zip'); (New-Object Net.WebClient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', '$env:appveyor_build_folder\\get-pip.py'); 7z x pypy-4.0.1-win32.zip; $env:path = '$env:appveyor_build_folder\\pypy3-2.4.0-win32;$env:path'; pypy get-pip.py}"
+  - %PYPY%
   - "%PIP% install coverage==3.7.1 codecov"
   - "cd %HOME%"
   - "%PIP% install -r requirements.txt"
