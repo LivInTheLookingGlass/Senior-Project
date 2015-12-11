@@ -79,8 +79,8 @@ init:
 install:
 #  - "powershell appveyor\\install.ps1"
   - "set HOME=%APPVEYOR_BUILD_FOLDER%"
-  - "powershell If (\"%PYTHON_VERSION%\" -eq \"pypy2\") {(New-Object Net.WebClient).DownloadFile('https://bitbucket.org/pypy/pypy/downloads/pypy-4.0.1-win32.zip', '$env:appveyor_build_folder\\pypy-4.0.1-win32.zip'); (New-Object Net.WebClient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', '$env:appveyor_build_folder\\get-pip.py'); 7z x pypy-4.0.1-win32.zip; $env:path = '$env:appveyor_build_folder\\pypy-4.0.1-win32;$env:path'; pypy get-pip.py}"
-  - "powershell If (\"%PYTHON_VERSION%\" -eq \"pypy3\") {(New-Object Net.WebClient).DownloadFile('https://bitbucket.org/pypy/pypy/downloads/pypy3-2.4.0-win32.zip', '$env:appveyor_build_folder\\pypy3-2.4.0-win32.zip'); (New-Object Net.WebClient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', '$env:appveyor_build_folder\\get-pip.py'); 7z x pypy-4.0.1-win32.zip; $env:path = '$env:appveyor_build_folder\\pypy3-2.4.0-win32;$env:path'; pypy get-pip.py}"
+  - "If (\"%PYTHON_VERSION%\" -eq \"pypy2\") {(New-Object Net.WebClient).DownloadFile('https://bitbucket.org/pypy/pypy/downloads/pypy-4.0.1-win32.zip', '$env:appveyor_build_folder\\pypy-4.0.1-win32.zip'); (New-Object Net.WebClient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', '$env:appveyor_build_folder\\get-pip.py'); 7z x pypy-4.0.1-win32.zip; $env:path = '$env:appveyor_build_folder\\pypy-4.0.1-win32;$env:path'; pypy get-pip.py}"
+  - "If (\"%PYTHON_VERSION%\" -eq \"pypy3\") {(New-Object Net.WebClient).DownloadFile('https://bitbucket.org/pypy/pypy/downloads/pypy3-2.4.0-win32.zip', '$env:appveyor_build_folder\\pypy3-2.4.0-win32.zip'); (New-Object Net.WebClient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', '$env:appveyor_build_folder\\get-pip.py'); 7z x pypy-4.0.1-win32.zip; $env:path = '$env:appveyor_build_folder\\pypy3-2.4.0-win32;$env:path'; pypy get-pip.py}"
   - "%PIP% install coverage==3.7.1 codecov"
   - "cd %HOME%"
   - "%PIP% install -r requirements.txt"
