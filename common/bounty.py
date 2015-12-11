@@ -50,9 +50,9 @@ class Bounty(object):
             if self.data.get('author') and self.data.get('author') != '':
                 output = output + ", author=" + str(self.data.get('author'))
             if self.data.get('reqs') and self.data.get('reqs') != {} and type(self.data.get('reqs')) == type({}):
-                output = output + ", reqs=" + str(sorted(self.data.get('reqs').items(), key=lambda (k,v): k))
+                output = output + ", reqs=" + str(sorted(self.data.get('reqs').items(), key=lambda x: x[1]))
             if self.data.get('perms') and self.data.get('perms') != {} and type(self.data.get('perms')) == type({}):
-                output = output + ", perms=" + str(sorted(self.data.get('perms').items(), key=lambda (k,v): k))         
+                output = output + ", perms=" + str(sorted(self.data.get('perms').items(), key=lambda x: x[1]))         
             if self.data.get('perms') and self.data.get('perms') != {}:
                 output = output + ", perms=" + str(self.data.get('perms'))
         return output + ">"
