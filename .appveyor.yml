@@ -6,7 +6,7 @@ environment:
       PYTHON_ARCH: "32"
       RUN: "pypy"
       PIP: "pypy -m pip"
-      PYPY: "powershell.exe %HOME%\\installpypy2.ps1; PATH=%PATH%;%APPVEYOR_BUILD_FOLDER%\\pypy-4.0.1-win32;"
+      PYPY: "powershell.exe %HOME%\\installpypy2.ps1; set PATH=%PATH%;%APPVEYOR_BUILD_FOLDER%\\pypy-4.0.1-win32;"
       
     - PYTHON: ""
       PYTHON_VERSION: "pypy3"
