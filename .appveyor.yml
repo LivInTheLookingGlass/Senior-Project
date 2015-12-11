@@ -7,6 +7,7 @@ environment:
       RUN: "%APPVEYOR_BUILD_FOLDER%\\pypy-4.0.1-win32\\pypy"
       PIP: "%RUN% -m pip"
       PYPY: 'powershell.exe %APPVEYOR_BUILD_FOLDER%\\installpypy2.ps1'
+      COV: "%RUN% -m coverage"
       
     - PYTHON: ""
       PYTHON_VERSION: "pypy3"
@@ -14,66 +15,77 @@ environment:
       RUN: "%APPVEYOR_BUILD_FOLDER%\\pypy3-2.4.0-win32\\pypy"
       PIP: "%RUN% -m pip"
       PYPY: "powershell.exe %APPVEYOR_BUILD_FOLDER%\\installpypy3.ps1"
+      COV: "%RUN% -m coverage"
       
     - PYTHON: "C:\\Python26"
       PYTHON_VERSION: "2.6.x"
       PYTHON_ARCH: "32"  
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
+      COV: "%PYTHON%\\Scripts\\coverage"
 
     - PYTHON: "C:\\Python27"
       PYTHON_VERSION: "2.7.8"
       PYTHON_ARCH: "32"
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
+      COV: "%PYTHON%\\Scripts\\coverage"
  
     - PYTHON: "C:\\Python33"
       PYTHON_VERSION: "3.3.5"
       PYTHON_ARCH: "32"
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
+      COV: "%PYTHON%\\Scripts\\coverage"
  
     - PYTHON: "C:\\Python34"
       PYTHON_VERSION: "3.4.1"
       PYTHON_ARCH: "32"
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
+      COV: "%PYTHON%\\Scripts\\coverage"
       
     - PYTHON: "C:\\Python35"
       PYTHON_VERSION: "3.5.0"
       PYTHON_ARCH: "32"
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
+      COV: "%PYTHON%\\Scripts\\coverage"
       
     - PYTHON: "C:\\Python26-x64"
       PYTHON_VERSION: "2.6.x"
       PYTHON_ARCH: "64"        
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
+      COV: "%PYTHON%\\Scripts\\coverage"
  
     - PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7.8"
       PYTHON_ARCH: "64"
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
+      COV: "%PYTHON%\\Scripts\\coverage"
  
     - PYTHON: "C:\\Python33-x64"
       PYTHON_VERSION: "3.3.5"
       PYTHON_ARCH: "64"
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
+      COV: "%PYTHON%\\Scripts\\coverage"
  
     - PYTHON: "C:\\Python34-x64"
       PYTHON_VERSION: "3.4.1"
       PYTHON_ARCH: "64"
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
+      COV: "%PYTHON%\\Scripts\\coverage"
 
     - PYTHON: "C:\\Python35-x64"
       PYTHON_VERSION: "3.5.0"
       PYTHON_ARCH: "64"
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
+      COV: "%PYTHON%\\Scripts\\coverage"
  
 init:
   - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH% %APPVEYOR_BUILD_FOLDER%"
@@ -82,7 +94,7 @@ install:
 #  - "powershell appveyor\\install.ps1"
   - "set HOME=%APPVEYOR_BUILD_FOLDER%"
   - "%PYPY%"
-  - "%PIP% install coverage==3.7.1 codecov"
+  - "%PIP% install setuptools coverage==3.7.1 codecov"
   - "cd %HOME%"
   - "%PIP% install -r requirements.txt"
   - "%UPnP%"
@@ -91,14 +103,14 @@ test: off
  
 build_script:
   - "cd %HOME%"
-  - "%RUN% -m coverage run -a test.py"
-  - "%RUN% -m coverage run -a main.py"
+  - "%COV% run -a test.py"
+  - "%COV% run -a main.py"
   - "type output.txt"
   
 on_success:
   - "dir"
-  - "%RUN% -m coverage combine"
-  - "%RUN% -m coverage xml"
+  - "%COV% combine"
+  - "%COV% xml"
   - "dir"
   - "%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
 
