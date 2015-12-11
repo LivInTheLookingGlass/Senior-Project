@@ -1,6 +1,18 @@
 environment:
   fast_finish: true
   matrix:
+    - PYTHON: ""
+      PYTHON_VERSION: "pypy2"
+      PYTHON_ARCH: "32"
+      RUN: "pypy"
+      PIP: "pypy -m pip"
+      
+    - PYTHON: ""
+      PYTHON_VERSION: "pypy3"
+      PYTHON_ARCH: "32"
+      RUN: "pypy"
+      PIP: "pypy -m pip"
+      
     - PYTHON: "C:\\Python26"
       PYTHON_VERSION: "2.6.x"
       PYTHON_ARCH: "32"  
@@ -30,18 +42,6 @@ environment:
       PYTHON_ARCH: "32"
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
- 
-    - PYTHON: ""
-      PYTHON_VERSION: "pypy2"
-      PYTHON_ARCH: "32"
-      RUN: "pypy"
-      PIP: "%PYTHON% -m pip"
-      
-    - PYTHON: ""
-      PYTHON_VERSION: "pypy3"
-      PYTHON_ARCH: "32"
-      RUN: "pypy"
-      PIP: "%PYTHON% -m pip"
       
     - PYTHON: "C:\\Python26-x64"
       PYTHON_VERSION: "2.6.x"
