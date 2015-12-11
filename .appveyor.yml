@@ -4,16 +4,16 @@ environment:
     - PYTHON: ""
       PYTHON_VERSION: "pypy2"
       PYTHON_ARCH: "32"
-      RUN: "pypy"
-      PIP: "pypy -m pip"
-      PYPY: 'powershell.exe %HOME%\\installpypy2.ps1; set PATH="%PATH%;%HOME%\\pypy-4.0.1-win32"'
+      RUN: "%APPVEYOR_BUILD_FOLDER%\\pypy-4.0.1-win32\\pypy"
+      PIP: "%RUN% -m pip"
+      PYPY: 'powershell.exe %APPVEYOR_BUILD_FOLDER%\\installpypy2.ps1'
       
     - PYTHON: ""
       PYTHON_VERSION: "pypy3"
       PYTHON_ARCH: "32"
-      RUN: "pypy"
-      PIP: "pypy -m pip"
-      PYPY: "powershell.exe %HOME%\\installpypy3.ps1"
+      RUN: "%APPVEYOR_BUILD_FOLDER%\\pypy3-2.4.0-win32\\pypy"
+      PIP: "%RUN% -m pip"
+      PYPY: "powershell.exe %APPVEYOR_BUILD_FOLDER%\\installpypy3.ps1"
       
     - PYTHON: "C:\\Python26"
       PYTHON_VERSION: "2.6.x"
