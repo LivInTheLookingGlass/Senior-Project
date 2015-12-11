@@ -21,16 +21,16 @@ matrix:
   allow_failures:
     - env: Cov='true' UPnP='true' coverage="coverage" pipinstall="pip install"
     - env: Cov='true' UPnP='false' coverage="coverage" pipinstall="pip install"
-    - language: generic-covered
+#    - language: generic-covered
   include:
-    - language: generic
-      python: 2.6
-      os: osx
-      env: Cov='false' UPnP='true' TOXENV=py26 coverage="python -m coverage" pipinstall="sudo pip install"
-    - language: generic
-      python: 2.6
-      os: osx
-      env: Cov='false' UPnP='false' TOXENV=py26 coverage="python -m coverage" pipinstall="sudo pip install"
+#    - language: generic
+#      python: 2.6
+#      os: osx
+#      env: Cov='false' UPnP='true' TOXENV=py26 coverage="python -m coverage" pipinstall="sudo pip install"
+#    - language: generic
+#      python: 2.6
+#      os: osx
+#      env: Cov='false' UPnP='false' TOXENV=py26 coverage="python -m coverage" pipinstall="sudo pip install"
     - language: generic-covered
       python: 2.6
       os: osx
@@ -39,14 +39,14 @@ matrix:
       python: 2.6
       os: osx
       env: Cov='true' UPnP='false' TOXENV=py26 coverage="python -m coverage" pipinstall="sudo pip install"
-    - language: generic
-      python: 2.7
-      os: osx
-      env: Cov='false' UPnP='true' TOXENV=py27 coverage="python -m coverage" pipinstall="sudo pip install"
-    - language: generic
-      python: 2.7
-      os: osx
-      env: Cov='false' UPnP='false' TOXENV=py27 coverage="python -m coverage" pipinstall="sudo pip install"
+#    - language: generic
+#      python: 2.7
+#      os: osx
+#      env: Cov='false' UPnP='true' TOXENV=py27 coverage="python -m coverage" pipinstall="sudo pip install"
+#    - language: generic
+#      python: 2.7
+#      os: osx
+#      env: Cov='false' UPnP='false' TOXENV=py27 coverage="python -m coverage" pipinstall="sudo pip install"
     - language: generic-covered
       python: 2.7
       os: osx
@@ -55,14 +55,14 @@ matrix:
       python: 2.7
       os: osx
       env: Cov='true' UPnP='false' TOXENV=py27 coverage="python -m coverage" pipinstall="sudo pip install"
-    - language: generic
-      python: 3.3
-      os: osx
-      env: Cov='false' UPnP='true' TOXENV=py33 coverage="python -m coverage" pipinstall="sudo pip install"
-    - language: generic
-      python: 3.3
-      os: osx
-      env: Cov='false' UPnP='false' TOXENV=py33 coverage="python -m coverage" pipinstall="sudo pip install"
+#    - language: generic
+#      python: 3.3
+#      os: osx
+#      env: Cov='false' UPnP='true' TOXENV=py33 coverage="python -m coverage" pipinstall="sudo pip install"
+#    - language: generic
+#      python: 3.3
+#      os: osx
+#      env: Cov='false' UPnP='false' TOXENV=py33 coverage="python -m coverage" pipinstall="sudo pip install"
     - language: generic-covered
       python: 3.3
       os: osx
@@ -71,14 +71,14 @@ matrix:
       python: 3.3
       os: osx
       env: Cov='true' UPnP='false' TOXENV=py33 coverage="python -m coverage" pipinstall="sudo pip install"
-    - language: generic
-      python: 3.4
-      os: osx
-      env: Cov='false' UPnP='true' TOXENV=py34 coverage="python -m coverage" pipinstall="sudo pip install"
-    - language: generic
-      python: 3.4
-      os: osx
-      env: Cov='false' UPnP='false' TOXENV=py34 coverage="python -m coverage" pipinstall="sudo pip install"
+#    - language: generic
+#      python: 3.4
+#      os: osx
+#      env: Cov='false' UPnP='true' TOXENV=py34 coverage="python -m coverage" pipinstall="sudo pip install"
+#    - language: generic
+#      python: 3.4
+#      os: osx
+#      env: Cov='false' UPnP='false' TOXENV=py34 coverage="python -m coverage" pipinstall="sudo pip install"
     - language: generic-covered
       python: 3.4
       os: osx
@@ -87,14 +87,14 @@ matrix:
       python: 3.4
       os: osx
       env: Cov='true' UPnP='false' TOXENV=py34 coverage="python -m coverage" pipinstall="sudo pip install"
-    - language: generic
-      python: 3.5
-      os: osx
-      env: Cov='false' UPnP='true' TOXENV=py35 coverage="python -m coverage" pipinstall="sudo pip install"
-    - language: generic
-      python: 3.5
-      os: osx
-      env: Cov='false' UPnP='false' TOXENV=py35 coverage="python -m coverage" pipinstall="sudo pip install"
+#    - language: generic
+#      python: 3.5
+#      os: osx
+#      env: Cov='false' UPnP='true' TOXENV=py35 coverage="python -m coverage" pipinstall="sudo pip install"
+#    - language: generic
+#      python: 3.5
+#      os: osx
+#      env: Cov='false' UPnP='false' TOXENV=py35 coverage="python -m coverage" pipinstall="sudo pip install"
     - language: generic-covered
       python: 3.5
       os: osx
@@ -103,14 +103,14 @@ matrix:
       python: 3.5
       os: osx
       env: Cov='true' UPnP='false' TOXENV=py35 coverage="python -m coverage" pipinstall="sudo pip install"
-    - language: generic
-      python: pypy
-      os: osx
-      env: Cov='false' UPnP='true' TOXENV=pypy coverage="python -m coverage" pipinstall="sudo pip install"
-    - language: generic
-      python: pypy
-      os: osx
-      env: Cov='false' UPnP='false' TOXENV=pypy coverage="python -m coverage" pipinstall="sudo pip install"
+#    - language: generic
+#      python: pypy
+#      os: osx
+#      env: Cov='false' UPnP='true' TOXENV=pypy coverage="python -m coverage" pipinstall="sudo pip install"
+#    - language: generic
+#      python: pypy
+#      os: osx
+#      env: Cov='false' UPnP='false' TOXENV=pypy coverage="python -m coverage" pipinstall="sudo pip install"
     - language: generic-covered
       python: pypy
       os: osx
@@ -119,14 +119,14 @@ matrix:
       python: pypy
       os: osx
       env: Cov='true' UPnP='false' TOXENV=pypy coverage="python -m coverage" pipinstall="sudo pip install"
-    - language: generic
-      python: pypy3
-      os: osx
-      env: Cov='false' UPnP='true' TOXENV=pypy3 coverage="python -m coverage" pipinstall="sudo pip install"
-    - language: generic
-      python: pypy3
-      os: osx
-      env: Cov='false' UPnP='false' TOXENV=pypy3 coverage="python -m coverage" pipinstall="sudo pip install"
+#    - language: generic
+#      python: pypy3
+#      os: osx
+#      env: Cov='false' UPnP='true' TOXENV=pypy3 coverage="python -m coverage" pipinstall="sudo pip install"
+#    - language: generic
+#      python: pypy3
+#      os: osx
+#      env: Cov='false' UPnP='false' TOXENV=pypy3 coverage="python -m coverage" pipinstall="sudo pip install"
     - language: generic-covered
       python: pypy3
       os: osx
