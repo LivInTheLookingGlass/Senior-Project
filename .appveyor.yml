@@ -81,7 +81,7 @@ init:
 install:
 #  - "powershell appveyor\\install.ps1"
   - "set HOME=%APPVEYOR_BUILD_FOLDER%"
-  - %PYPY%
+  - "%PYPY%"
   - "%PIP% install coverage==3.7.1 codecov"
   - "cd %HOME%"
   - "%PIP% install -r requirements.txt"
