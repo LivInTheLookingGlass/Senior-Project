@@ -52,9 +52,7 @@ class Bounty(object):
             if self.data.get('reqs') and self.data.get('reqs') != {} and type(self.data.get('reqs')) == type({}):
                 output = output + ", reqs=" + str(sorted(self.data.get('reqs').items(), key=lambda x: x[0]))
             if self.data.get('perms') and self.data.get('perms') != {} and type(self.data.get('perms')) == type({}):
-                output = output + ", perms=" + str(sorted(self.data.get('perms').items(), key=lambda x: x[0]))         
-            if self.data.get('perms') and self.data.get('perms') != {}:
-                output = output + ", perms=" + str(self.data.get('perms'))
+                output = output + ", perms=" + str(sorted(self.data.get('perms').items(), key=lambda x: x[0]))
         return output + ">"
 
     def __eq__(self, other):
