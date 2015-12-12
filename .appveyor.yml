@@ -1,7 +1,7 @@
 environment:
   fast_finish: true
   matrix:
-    - PYTHON: ""
+    - PYTHON: "C:\\Python27"
       PYTHON_VERSION: "pypy2"
       PYTHON_ARCH: "32"
       RUN: "%APPVEYOR_BUILD_FOLDER%\\pypy-4.0.1-win32\\pypy"
@@ -9,7 +9,7 @@ environment:
       PYPY: 'powershell.exe %APPVEYOR_BUILD_FOLDER%\\installpypy2.ps1'
       COV: "%RUN% -m coverage"
       
-    - PYTHON: ""
+    - PYTHON: "C:\\Python27"
       PYTHON_VERSION: "pypy3"
       PYTHON_ARCH: "32"
       RUN: "%APPVEYOR_BUILD_FOLDER%\\pypy3-2.4.0-win32\\pypy"
@@ -94,6 +94,7 @@ install:
 #  - "powershell appveyor\\install.ps1"
   - "set HOME=%APPVEYOR_BUILD_FOLDER%"
   - "%PYPY%"
+  - "%PYTHON%\\Scripts\\pip install codecov"
   - "%PIP% install codecov"
   - "cd %HOME%"
   - "%PIP% install -r requirements.txt"
@@ -109,10 +110,10 @@ build_script:
   
 on_success:
   - "dir"
-  - "%COV% combine"
-#  - "%COV% xml"
+  - "%PYTHON%\\Scripts\\coverage combine"
+  - "%PYTHON%\\Scripts\\coverage xml"
   - "dir"
-  - "%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
+  - "%PYTHON%\\python -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
 
 on_failure:
   - "type output.txt"
