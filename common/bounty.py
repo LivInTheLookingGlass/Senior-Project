@@ -298,9 +298,30 @@ def addBounty(bounty):
     safeprint("Internal verify")
     second = bounty.isValid()
     if first and second:
-        with bountyLock:
-            bountyList.append(bounty)
+        addValidBounty(bounty)
     return (first and second)
+
+def addValidBounty(bounty):
+    """This adds a bounty to the list under the assumption that it's already been validated. Must be of type common.bounty.Bounty"""
+    with bountyLock:
+        bountyList.append(bounty)
+
+def internalVerify(bounty):
+    """Proxy for the Bounty.isValid() method, for use with multiprocessing.Pool"""
+    return bounty.isValid()
+
+def addBounties(bounties):
+    """Add a list of bounties in parallel using multiprocessing.Pool for verification"""
+    from multiprocessing import Pool
+    pool = Pool()
+    async = pool.map_async(verify,bounties)  #defer this for possible efficiency boost
+    internal = pool.map(internalVerify,bounties)
+    external = async.get()
+    for i in range(len(bounties)):
+        if internal[i] and external[i]:
+            addValidBounty(bounties[i])
+    return [internal[i] and external[i] for i in range(len(bounties)]
+    #return the two result lists anded together
 
 def getBounty(charity, factor):
     """Retrieve the next best bounty from the list"""
