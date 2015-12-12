@@ -8,7 +8,8 @@ environment:
       PIP: "%RUN% -m pip"
       PYPY: 'powershell.exe %APPVEYOR_BUILD_FOLDER%\\installpypy2.ps1'
       COV: "%RUN% -m coverage"
-      UPLOAD: "%COV% xml\r\n%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
+      XML: "%COV% xml"
+      UPLOAD: "%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
       
     - PYTHON: "C:\\Python27"
       PYTHON_VERSION: "pypy3"
@@ -24,7 +25,8 @@ environment:
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
       COV: "%PYTHON%\\Scripts\\coverage"
-      UPLOAD: "%COV% xml\r\n%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
+      XML: "%COV% xml"
+      UPLOAD: "%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
       
     - PYTHON: "C:\\Python35"
       PYTHON_VERSION: "3.5.0"
@@ -32,7 +34,8 @@ environment:
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
       COV: "%PYTHON%\\Scripts\\coverage"
-      UPLOAD: "%COV% xml\r\n%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
+      XML: "%COV% xml"
+      UPLOAD: "%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
  
     - PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7.8"
@@ -40,7 +43,8 @@ environment:
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
       COV: "%PYTHON%\\Scripts\\coverage"
-      UPLOAD: "%COV% xml\r\n%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
+      XML: "%COV% xml"
+      UPLOAD: "%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
 
     - PYTHON: "C:\\Python35-x64"
       PYTHON_VERSION: "3.5.0"
@@ -48,7 +52,8 @@ environment:
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
       COV: "%PYTHON%\\Scripts\\coverage"
-      UPLOAD: "%COV% xml\r\n%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
+      XML: "%COV% xml"
+      UPLOAD: "%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
       
     - PYTHON: "C:\\Python26"
       PYTHON_VERSION: "2.6.x"
@@ -56,7 +61,8 @@ environment:
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
       COV: "%PYTHON%\\Scripts\\coverage"
-      UPLOAD: "%COV% xml\r\n%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
+      XML: "%COV% xml"
+      UPLOAD: "%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
  
     - PYTHON: "C:\\Python33"
       PYTHON_VERSION: "3.3.5"
@@ -64,7 +70,8 @@ environment:
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
       COV: "%PYTHON%\\Scripts\\coverage"
-      UPLOAD: "%COV% xml\r\n%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
+      XML: "%COV% xml"
+      UPLOAD: "%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
  
     - PYTHON: "C:\\Python34"
       PYTHON_VERSION: "3.4.1"
@@ -72,7 +79,8 @@ environment:
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
       COV: "%PYTHON%\\Scripts\\coverage"
-      UPLOAD: "%COV% xml\r\n%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
+      XML: "%COV% xml"
+      UPLOAD: "%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
       
     - PYTHON: "C:\\Python26-x64"
       PYTHON_VERSION: "2.6.x"
@@ -80,7 +88,8 @@ environment:
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
       COV: "%PYTHON%\\Scripts\\coverage"
-      UPLOAD: "%COV% xml\r\n%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
+      XML: "%COV% xml"
+      UPLOAD: "%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
  
     - PYTHON: "C:\\Python33-x64"
       PYTHON_VERSION: "3.3.5"
@@ -88,7 +97,8 @@ environment:
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
       COV: "%PYTHON%\\Scripts\\coverage"
-      UPLOAD: "%COV% xml\r\n%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
+      XML: "%COV% xml"
+      UPLOAD: "%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
  
     - PYTHON: "C:\\Python34-x64"
       PYTHON_VERSION: "3.4.1"
@@ -96,7 +106,8 @@ environment:
       RUN: "%PYTHON%\\python"
       PIP: "%PYTHON%\\Scripts\\pip"
       COV: "%PYTHON%\\Scripts\\coverage"
-      UPLOAD: "%COV% xml\r\n%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
+      XML: "%COV% xml"
+      UPLOAD: "%RUN% -c \"import codecov; codecov.main(token='0482d032-e24c-461b-a116-f0e3dbc88734')\""
  
 init:
   - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH% %APPVEYOR_BUILD_FOLDER%"
@@ -122,6 +133,7 @@ build_script:
 on_success:
   - "dir"
   - "%PYTHON%\\Scripts\\coverage combine"
+  - "%XML%"
   - "%UPLOAD%"
   - "dir"
 
