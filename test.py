@@ -67,3 +67,9 @@ if __name__ == "__main__": #pragma: no cover
         a = Process(target=waitForty,args=(v,q))
         a.start()
         listen(44566,False,q,v,False)
+    from call import call
+    safeprint(call("random","random"))
+    safeprint(call("sys","platform",index=0))
+    safeprint(bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290) <= bounty.getBounty())
+    safeprint(bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290) >= bounty.getBounty())
+    safeprint(bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290) != bounty.getBounty())
