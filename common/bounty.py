@@ -305,6 +305,7 @@ def addValidBounty(bounty):
     """This adds a bounty to the list under the assumption that it's already been validated. Must be of type common.bounty.Bounty"""
     with bountyLock:
         bountyList.append(bounty)
+        bountyList = list(set(bountyList))  #trim it in the simples way possible. Doesn't protect against malleability
 
 def internalVerify(bounty):
     """Proxy for the Bounty.isValid() method, for use with multiprocessing.Pool"""
