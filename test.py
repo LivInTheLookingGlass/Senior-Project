@@ -5,7 +5,12 @@ from common.safeprint import safeprint #pragma: no cover
 from multiprocessing import Queue, Process, Value #pragma: no cover
 from time import sleep, time #pragma: no cover
 import pickle, sys #pragma: no cover
-from main import * #pragma: no cover
+
+def testBounty(ip, btc, rwd, desc, data=None):  #pragma: no cover
+    safeprint(desc)
+    test = bounty.Bounty(ip,btc,rwd,dataDict=data)
+    dumped = pickle.dumps(test,1)
+    safeprint(bounty.addBounty(dumped))
 
 def waitForty(v,q): #pragma: no cover
     stamp = time()
