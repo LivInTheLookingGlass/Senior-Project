@@ -73,6 +73,6 @@ if __name__ == "__main__": #pragma: no cover
     from common.call import call
     safeprint(call("random","random"))
     safeprint(call("sys","platform",index=0))
-    safeprint(bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290) <= bounty.getBounty())
-    safeprint(bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290) >= bounty.getBounty())
-    safeprint(bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290) != bounty.getBounty())
+    safeprint(bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290) <= bounty.getBounty(False,2))
+    safeprint(bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290) >= bounty.getBounty(False,2))
+    safeprint(bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290) != bounty.getBounty(False,2))
