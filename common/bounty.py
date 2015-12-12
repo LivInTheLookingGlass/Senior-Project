@@ -98,6 +98,15 @@ class Bounty(object):
             return boolean
         else:
             return self.__eq__(other)
+    
+    def __hash__(self):
+        h = [self.__repr__()]
+        if self.key is not None:
+            h.append(str(self.key))
+        if self.sig is not None:
+            h.append(str(self.sig))
+        return hash(tuple(h))
+        
       
     def __init__(self, ipAddress, btcAddress, rewardAmount, timeout=None, ident=None, dataDict={}, keypair=None):
         """Initialize a Bounty; constructor"""
