@@ -32,9 +32,9 @@ class Bounty(object):
                    ("sys.platform":"win32")
         perms  -- Dict containing the minimum required security policies
                    (if empty, most restrictive assumed)
-        key    -- An RSA object (via Pycrypto) which contains the public key for this Bounty
+        key    -- A tuple which contains the RSA n and e values for this Bounty
                    (required only when reward is 0)
-        sig    -- A tuple of the Bounty's print output signed by the above key
+        sig    -- A Bytes object of the Bounty's print output signed by the above key
                    (required only when reward is 0)
         TDL    -- More to be defined in later versions
     """
@@ -304,6 +304,7 @@ def addBounty(bounty):
 def addValidBounty(bounty):
     """This adds a bounty to the list under the assumption that it's already been validated. Must be of type common.bounty.Bounty"""
     with bountyLock:
+        global bountyList
         bountyList.append(bounty)
         bountyList = list(set(bountyList))  #trim it in the simples way possible. Doesn't protect against malleability
 
