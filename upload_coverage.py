@@ -1,4 +1,4 @@
-import platform
+import platform, sys
 
 if platform.python_implementation() != "PyPy" or sys.version_info[0] != 3:
   import subprocess
