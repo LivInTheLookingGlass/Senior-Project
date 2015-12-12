@@ -320,7 +320,7 @@ def addBounties(bounties):
     for i in range(len(bounties)):
         if internal[i] and external[i]:
             addValidBounty(bounties[i])
-    return [internal[i] and external[i] for i in range(len(bounties)]
+    return [internal[i] and external[i] for i in range(len(bounties))]
     #return the two result lists anded together
 
 def getBounty(charity, factor):
