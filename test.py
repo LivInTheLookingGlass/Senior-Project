@@ -26,6 +26,7 @@ def waitForty(v,q): #pragma: no cover
         sleep(4)
         requestBounties("localhost:44566")
         sleep(4)
+        safeprint(bounty.bountyList)
     #TODO move test incoming_bounty here
     #TODO move test incoming_bounty here
     safeprint("Sending term signal")
