@@ -95,4 +95,5 @@ if __name__ == "__main__": #pragma: no cover
     safeprint(bounty.verify(pickle.dumps(testSig,0)))
     safeprint("Testing addBounties")
     bounty.addValidBounty(testSig)
+    testSig.sign(3) #Test sign failure
     safeprint(bounty.addBounties([bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290),bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",0)]))
