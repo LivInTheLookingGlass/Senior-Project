@@ -54,7 +54,7 @@ if __name__ == "__main__": #pragma: no cover
     testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1440,"Malformed bounty 9 (requirements failure)", data={'reqs':{("sys","platform","index=2","end=3"):"win33"}})
     testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1440,"Malformed bounty 10 (requirements failure)", data={'reqs':{("__builtins__","pow",2,2):4,("sys","platform"):"win33"}})
     safeprint("Malformed bounty 11 (timeout error)")
-    addBounty(bounty.Bounty('8.8.8.8:8888',"1LhPsd4ng3AXmVPzrLWprWFx351pW4HJm8",10900,timeout=1))
+    addBounty(pickle.dumps(bounty.Bounty('8.8.8.8:8888',"1LhPsd4ng3AXmVPzrLWprWFx351pW4HJm8",10900,timeout=1),0))
     testBounty('8.8.8.8:8888',"1LhPsd4ng3AXmVPzrLWprWFx351pW4HJm8",10900,"Correctly formed bounty 2")
     testBounty('8.8.8.8:8888',"1MWSdYMKEpfWVxC6BGYARxsksaQuyEWzG5",1480,"Correctly formed bounty 3")
     testBounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290,"Correctly formed bounty 4")
