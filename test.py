@@ -95,4 +95,4 @@ if __name__ == "__main__": #pragma: no cover
     safeprint("Test external signature verification when signed and fed from pickle")
     safeprint(bounty.verify(pickle.dumps(testSig,0)))
     safeprint("Testing addBounties")
-    safeprint(bounty.addBounties([bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290),bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",0)])
+    safeprint(bounty.addBounties([bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290),bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",0)]))
