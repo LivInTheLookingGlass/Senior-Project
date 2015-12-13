@@ -120,7 +120,7 @@ class Bounty(object):
                      'reqs':{},
                      'perms':{}}
         if ident is not None:
-            self.ident = None
+            self.ident = ident
         if dataDict is not None:
             self.data.update(dataDict)
         if keypair is not None:
