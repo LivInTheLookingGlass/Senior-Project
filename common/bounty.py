@@ -315,7 +315,7 @@ def addValidBounty(bounty):
         bountyList.append(bounty)
         bountyList = list(set(bountyList))  #trim it in the simples way possible. Doesn't protect against malleability
 
-def internalVerify(bounty):
+def internalVerify(bounty): #pragma: no cover
     """Proxy for the Bounty.isValid() method, for use with multiprocessing.Pool"""
     return bounty.isValid()
 
