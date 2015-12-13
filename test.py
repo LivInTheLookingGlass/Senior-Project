@@ -85,9 +85,8 @@ if __name__ == "__main__": #pragma: no cover
     safeprint(bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290) != bounty.getBounty(False,2))
     import rsa
     pub, priv = rsa.newkeys(1024)
-    testSig = bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",0,ident="ABCDEFGHIJKLMNOP",dataDict={'author':"QRSTUVWXYZ"})
+    testSig = bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",0,keypair=priv,ident="ABCDEFGHIJKLMNOP",dataDict={'author':"QRSTUVWXYZ"})
     bounty.addKey((pub.n,pub.e))
-    testSig.sign(priv)
     safeprint("Test internal signature verification when signed")
     safeprint(testSig.isValid())
     safeprint("Test external signature verification when signed")
@@ -95,4 +94,5 @@ if __name__ == "__main__": #pragma: no cover
     safeprint("Test external signature verification when signed and fed from pickle")
     safeprint(bounty.verify(pickle.dumps(testSig,0)))
     safeprint("Testing addBounties")
+    bounty.addValidBounty(testSig)
     safeprint(bounty.addBounties([bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290),bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",0)]))
