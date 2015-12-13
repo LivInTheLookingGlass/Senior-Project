@@ -100,9 +100,9 @@ class Bounty(object):
     def __hash__(self):
         h = [self.__repr__()]
         if self.data.get('key') is not None:
-            h.append(str(self.key))
+            h.append(str(self.data.get('key')))
         if self.data.get('sig') is not None:
-            h.append(str(self.sig))
+            h.append(str(self.data.get('sig')))
         return hash(tuple(h))
         
       
