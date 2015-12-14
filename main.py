@@ -22,19 +22,19 @@ def sync():
     safeprint(items)
     safeprint(items.get('bountyList'))
     safeprint(items.get('keyList'))
-    if items.get('config'):
+    if items.get('config') is not None:
         from common import settings
         settings.config = items.get('config')
-    if items.get('peerList'):
+    if items.get('peerList') is not None:
         global peerList
         peers.peerlist = items.get('peerList')
-    if items.get('bountyList'):
+    if items.get('bountyList') is not None:
         from common import bounty
         bounty.bountyList = items.get('bountyList')
-    if items.get('bountyLock'):
+    if items.get('bountyLock') is not None:
         from common import bounty
         bounty.bountyLock = items.get('bountyLock')
-    if items.get('keyList'):
+    if items.get('keyList') is not None:
         from common import bounty
         boutny.keyList = items.get('keyList')
     return items
