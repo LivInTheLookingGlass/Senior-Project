@@ -323,7 +323,7 @@ def portForward(port):
         safeprint(error)
         return False
 
-class listener(multiprocessing.Process):
+class listener(multiprocessing.Process): #pragma: no cover
     """A class to deal with the listener method"""
     def __init__(self, port, outbound, q, v, serv):
         multiprocessing.Process.__init__(self)
