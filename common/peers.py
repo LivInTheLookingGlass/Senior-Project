@@ -334,6 +334,7 @@ class listener(multiprocessing.Process):
         self.serv = serv
     def run(self):
         safeprint("listener started")
+        self.sync(self.items)
         listen(self.port,self.outbound,self.q,self.v,self.serv)
     def sync(self,items):
         if items == {}:
