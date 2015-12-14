@@ -109,7 +109,7 @@ def requestPeerlist(address):
             bounty = bounty.encode('utf-8')
         safeprint(bounty)
         con.send(bounty)
-        time.sleep(0.1)
+        time.sleep(0.5)
         con.send(close_signal)
         time.sleep(0.01)
         con.close()
@@ -143,7 +143,9 @@ def requestBounties(address):
         safeprint(pickle.loads(received))
         try:
             bounties = pickle.loads(received)
-            addBounties(bounties)
+            for bounty in bounties:
+                addBounty(pickle.dumps(bounty,0))
+                safeprint("Bounty added")
         except Exception as error:
             safeprint("Could not add bounties. This is likely because you do not have the optional dependency PyCrypto")
             safeprint(type(error))
@@ -179,7 +181,7 @@ def initializePeerConnections(newPort,newip,newport):
 
 def trimPeers():
     """Trim the peerlist to a single set, and remove any that were marked as erroneous before"""
-    temp = list(set(peerlist))
+    temp = list(set(peerlist[:]))
     for peer in remove:
         try:
             del temp[temp.index(peer)]
@@ -238,8 +240,8 @@ def listen(port, outbound, q, v, serv):
 def handlePeerRequest(conn, exchange):
     """Given a socket, send the proper messages to complete a peer request"""
     if ext_port != -1:
-        send = pickle.dumps(peerlist + [ext_ip+":"+str(ext_port)],0)
-    send = pickle.dumps(peerlist,0)
+        send = pickle.dumps(peerlist[:] + [ext_ip+":"+str(ext_port)],0)
+    send = pickle.dumps(peerlist[:],0)
     if type(send) != type("a".encode("utf-8")):
         safeprint("Test here")
         send = send.encode("utf-8")
@@ -281,7 +283,7 @@ def handleIncomingBounty(conn):
 
 def handleBountyRequest(conn):
     """Given a socket, send the proper messages to handle a bounty request"""
-    send = pickle.dumps(bountyList,0)
+    send = pickle.dumps(bountyList[:],0)
     if type(send) != type("a".encode("utf-8")):
         send = send.encode("utf-8")
     conn.send(send)
@@ -330,6 +332,24 @@ class listener(multiprocessing.Process):
         self.q = q
         self.v = v
         self.serv = serv
-    def run(self):#pragma: no cover
+    def run(self):
         safeprint("listener started")
         listen(self.port,self.outbound,self.q,self.v,self.serv)
+    def sync(self,items):
+        if items == {}:
+            return
+        if items.get('config'):
+            from common import settings
+            settings.config = items.get('config')
+        if items.get('peerList'):
+            global peerlist
+            peerList = items.get('peerList')
+        if items.get('bountyList'):
+            from common import bounty
+            bounty.bountyList = items.get('bountyList')
+        if items.get('bountyLock'):
+            from common import bounty
+            bounty.bountyLock = items.get('bountyLock')
+        if items.get('keyList'):
+            from common import bounty
+            boutny.keyList = items.get('keyList')
