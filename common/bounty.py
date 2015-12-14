@@ -32,9 +32,9 @@ class Bounty(object):
                    ("sys.platform":"win32")
         perms  -- Dict containing the minimum required security policies
                    (if empty, most restrictive assumed)
-        key    -- An RSA object (via Pycrypto) which contains the public key for this Bounty
+        key    -- A tuple which contains the RSA n and e values for this Bounty
                    (required only when reward is 0)
-        sig    -- A tuple of the Bounty's print output signed by the above key
+        sig    -- A Bytes object of the Bounty's print output signed by the above key
                    (required only when reward is 0)
         TDL    -- More to be defined in later versions
     """
@@ -52,9 +52,7 @@ class Bounty(object):
             if self.data.get('reqs') and self.data.get('reqs') != {} and type(self.data.get('reqs')) == type({}):
                 output = output + ", reqs=" + str(sorted(self.data.get('reqs').items(), key=lambda x: x[0]))
             if self.data.get('perms') and self.data.get('perms') != {} and type(self.data.get('perms')) == type({}):
-                output = output + ", perms=" + str(sorted(self.data.get('perms').items(), key=lambda x: x[0]))         
-            if self.data.get('perms') and self.data.get('perms') != {}:
-                output = output + ", perms=" + str(self.data.get('perms'))
+                output = output + ", perms=" + str(sorted(self.data.get('perms').items(), key=lambda x: x[0]))
         return output + ">"
 
     def __eq__(self, other):
@@ -98,6 +96,15 @@ class Bounty(object):
             return boolean
         else:
             return self.__eq__(other)
+    
+    def __hash__(self):
+        h = [self.__repr__()]
+        if self.data.get('key') is not None:
+            h.append(str(self.data.get('key')))
+        if self.data.get('sig') is not None:
+            h.append(str(self.data.get('sig')))
+        return hash(tuple(h))
+        
       
     def __init__(self, ipAddress, btcAddress, rewardAmount, timeout=None, ident=None, dataDict={}, keypair=None):
         """Initialize a Bounty; constructor"""
@@ -113,7 +120,7 @@ class Bounty(object):
                      'reqs':{},
                      'perms':{}}
         if ident is not None:
-            self.ident = None
+            self.ident = ident
         if dataDict is not None:
             self.data.update(dataDict)
         if keypair is not None:
@@ -298,9 +305,32 @@ def addBounty(bounty):
     safeprint("Internal verify")
     second = bounty.isValid()
     if first and second:
-        with bountyLock:
-            bountyList.append(bounty)
+        addValidBounty(bounty)
     return (first and second)
+
+def addValidBounty(bounty):
+    """This adds a bounty to the list under the assumption that it's already been validated. Must be of type common.bounty.Bounty"""
+    with bountyLock:
+        global bountyList
+        bountyList.append(bounty)
+        bountyList = list(set(bountyList))  #trim it in the simples way possible. Doesn't protect against malleability
+
+def internalVerify(bounty): #pragma: no cover
+    """Proxy for the Bounty.isValid() method, for use with multiprocessing.Pool"""
+    return bounty.isValid()
+
+def addBounties(bounties):
+    """Add a list of bounties in parallel using multiprocessing.Pool for verification"""
+    from multiprocessing import Pool
+    pool = Pool()
+    async = pool.map_async(verify,bounties)  #defer this for possible efficiency boost
+    internal = pool.map(internalVerify,bounties)
+    external = async.get()
+    for i in range(len(bounties)):
+        if internal[i] and external[i]:
+            addValidBounty(bounties[i])
+    return [internal[i] and external[i] for i in range(len(bounties))]
+    #return the two result lists anded together
 
 def getBounty(charity, factor):
     """Retrieve the next best bounty from the list"""

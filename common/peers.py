@@ -143,9 +143,7 @@ def requestBounties(address):
         safeprint(pickle.loads(received))
         try:
             bounties = pickle.loads(received)
-            for bounty in bounties:
-                addBounty(pickle.dumps(bounty,0))
-                safeprint("Bounty added")
+            addBounties(bounties)
         except Exception as error:
             safeprint("Could not add bounties. This is likely because you do not have the optional dependency PyCrypto")
             safeprint(type(error))
