@@ -12,13 +12,16 @@ def sync():
     man = Manager()
     items = {'config':man.dict(),
              'peerList':man.list(),
-             'bountyLock':bounty.bountyLock}
-    items.update({'bountyList':man.list()})
-    items.update({'keyList':man.list()})
+             'bountyList':man.list(),
+             'bountyLock':bounty.bountyLock,
+             'keyList':man.list()}
     items['config'].update(settings.config)
     items['peerList'].extend(peers.peerlist)
     items['bountyList'].extend(bounty.bountyList)
     items['keyList'].extend(bounty.keyList)
+    safeprint(items)
+    safeprint(items.get('bountyList'))
+    safeprint(items.get('keyList'))
     if items.get('config'):
         from common import settings
         settings.config = items.get('config')
