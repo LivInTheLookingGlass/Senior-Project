@@ -12,9 +12,9 @@ def sync():
     man = Manager()
     items = {'config':man.dict(),
              'peerList':man.list(),
-             'bountyList':man.list(),
-             'bountyLock':bounty.bountyLock,
-             'keyList':man.list()}
+             'bountyLock':bounty.bountyLock}
+    items.update({'bountyList':man.list()})
+    items.update({'keyList':man.list()})
     items['config'].update(settings.config)
     items['peerList'].extend(peers.peerlist)
     items['bountyList'].extend(bounty.bountyList)
@@ -35,12 +35,6 @@ def sync():
         from common import bounty
         boutny.keyList = items.get('keyList')
     return items
-
-def testBounty(ip, btc, rwd, desc, data=None):
-    safeprint(desc)
-    test = bounty.Bounty(ip,btc,rwd,dataDict=data)
-    dumped = pickle.dumps(test,1)
-    safeprint(bounty.addBounty(dumped))
 
 def main():
     settings.setup()
