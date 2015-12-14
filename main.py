@@ -55,7 +55,7 @@ def main():
     live = Value('b',True)
     ear = listener(settings.config['port'],settings.config['outbound'],queue,live,settings.config['server'])
     ear.daemon = True
-    ear.sync(sync())
+    ear.items = sync()
     ear.start()
     feedback = []
     stamp = time()
