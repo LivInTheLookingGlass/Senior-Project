@@ -36,7 +36,7 @@ def sync():
         bounty.bountyLock = items.get('bountyLock')
     if items.get('keyList') is not None:
         from common import bounty
-        boutny.keyList = items.get('keyList')
+        bounty.keyList = items.get('keyList')
     return items
 
 def main():
