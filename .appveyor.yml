@@ -88,6 +88,9 @@ environment:
 
 matrix:
   fast_finish: true
+  allowed_failures:
+    - PYTHON_VERSION: "pypy2"
+    - PYTHON_VERSION: "pypy3"
  
 init:
   - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH% %APPVEYOR_BUILD_FOLDER%"
