@@ -88,7 +88,7 @@ environment:
 
 matrix:
   fast_finish: true
-  allowed_failures:
+  allow_failures:
     - PYTHON_VERSION: "pypy2"
     - PYTHON_VERSION: "pypy3"
  
