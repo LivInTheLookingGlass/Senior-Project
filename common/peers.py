@@ -117,16 +117,13 @@ def requestPeerlist(address):
         con.settimeout(5)
         con.connect((address.split(":")[0],int(address.split(":")[1])))
         con.send(incoming_bounty)
-        time.sleep(0.01)
         bounty = Bounty(get_lan_ip() + ":44565","1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1440)
         bounty = pickle.dumps(bounty,0)
         if type(bounty) == type("a"):
             bounty = bounty.encode('utf-8')
         safeprint(bounty)
         con.send(pad(bounty))
-        time.sleep(0.5)
         con.send(close_signal)
-        time.sleep(0.01)
         con.close()
         #end test section
         return pickle.loads(received)
@@ -244,7 +241,6 @@ def listen(port, outbound, q, v, serv):
             elif packet == incoming_bounty:
                 handleIncomingBounty(conn)
             conn.send(close_signal)
-            time.sleep(0.01)
             conn.close()
             server.settimeout(5)
             safeprint("connection closed")
@@ -261,7 +257,6 @@ def handlePeerRequest(conn, exchange):
         safeprint("Test here")
         send = send.encode("utf-8")
     conn.send(pad(send))
-    time.sleep(0.01 + 0.001 * len(send))
     if exchange:
         conn.send(peer_request)
         connected = True
@@ -302,7 +297,6 @@ def handleBountyRequest(conn):
     if type(send) != type("a".encode("utf-8")):
         send = send.encode("utf-8")
     conn.send(pad(send))
-    time.sleep(0.01 + 0.001 * len(send))
 
 def portForward(port):
     """Attempt to forward a port on your router to the specified local port. Prints lots of debug info."""
