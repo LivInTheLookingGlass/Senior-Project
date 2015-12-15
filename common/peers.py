@@ -17,12 +17,24 @@ bounties = []
 
 #constants
 peers_file      = "data" + os.sep + "peerlist.pickle"
-close_signal    = "Close Signal.......".encode("utf-8")
-peer_request    = "Requesting Peers...".encode("utf-8")
+close_signal    = "Close Signal".encode("utf-8")
+peer_request    = "Requesting Peers".encode("utf-8")
 bounty_request  = "Requesting Bounties".encode("utf-8")
-incoming_bounty = "Incoming Bounty....".encode("utf-8")
-valid_signal    = "Bounty was valid...".encode("utf-8")
-invalid_signal  = "Bounty was invalid.".encode("utf-8")
+incoming_bounty = "Incoming Bounty".encode("utf-8")
+valid_signal    = "Bounty was valid".encode("utf-8")
+invalid_signal  = "Bounty was invalid".encode("utf-8")
+
+sig_length = len(max(close_signal,peer_request,bounty_request,incoming_bounty,valid_signal,invalid_signal,key=len))
+
+def pad(string):
+    return string + " " * (sig_length - (((len(string) - 1) % sig_length) + 1))
+
+close_signal    = pad(close_signal)
+peer_request    = pad(peer_request)
+bounty_request  = pad(bounty_request)
+incoming_bounty = pad(incoming_bounty)
+valid_signal    = pad(valid_signal)
+invalid_signal  = pad(invalid_signal)
 
 if os.name != "nt":
     import fcntl
@@ -86,7 +98,7 @@ def requestPeerlist(address):
         connected = True
         received = "".encode('utf-8')
         while connected:
-            packet = con.recv(len(close_signal))
+            packet = con.recv(sig_length)
             safeprint(packet.decode())
             if packet == close_signal:
                 con.close()
@@ -108,7 +120,7 @@ def requestPeerlist(address):
         if type(bounty) == type("a"):
             bounty = bounty.encode('utf-8')
         safeprint(bounty)
-        con.send(bounty)
+        con.send(pad(bounty))
         time.sleep(0.5)
         con.send(close_signal)
         time.sleep(0.01)
@@ -133,7 +145,7 @@ def requestBounties(address):
         connected = True
         received = "".encode('utf-8')
         while connected:
-            packet = con.recv(64)
+            packet = con.recv(sig_length)
             safeprint(packet)
             if packet == close_signal:
                 con.close()
@@ -220,7 +232,7 @@ def listen(port, outbound, q, v, serv):
             server.setblocking(True)
             conn.setblocking(True)
             safeprint("connection accepted")
-            packet = conn.recv(len(peer_request))
+            packet = conn.recv(sig_length)
             safeprint("Received: " + packet.decode())
             if packet == peer_request:
                 handlePeerRequest(conn,True)
@@ -245,14 +257,14 @@ def handlePeerRequest(conn, exchange):
     if type(send) != type("a".encode("utf-8")):
         safeprint("Test here")
         send = send.encode("utf-8")
-    conn.send(send)
+    conn.send(pad(send))
     time.sleep(0.01 + 0.001 * len(send))
     if exchange:
         conn.send(peer_request)
         connected = True
         received = "".encode('utf-8')
         while connected:
-            packet = conn.recv(len(close_signal))
+            packet = conn.recv(sig_length)
             safeprint(packet)
             if packet == close_signal:
                 connected = False
@@ -266,7 +278,7 @@ def handleIncomingBounty(conn):
     connected = True
     received = "".encode('utf-8')
     while connected:
-        packet = conn.recv(len(close_signal))
+        packet = conn.recv(sig_length)
         safeprint(packet)
         if not packet == close_signal:
             received += packet
@@ -286,7 +298,7 @@ def handleBountyRequest(conn):
     send = pickle.dumps(bountyList[:],0)
     if type(send) != type("a".encode("utf-8")):
         send = send.encode("utf-8")
-    conn.send(send)
+    conn.send(pad(send))
     time.sleep(0.01 + 0.001 * len(send))
 
 def portForward(port):
