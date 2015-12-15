@@ -27,10 +27,7 @@ invalid_signal  = "Bounty was invalid".encode("utf-8")
 sig_length = len(max(close_signal,peer_request,bounty_request,incoming_bounty,valid_signal,invalid_signal,key=len))
 
 def pad(string):
-    if type(string) == type("a".encode('utf-8')):
-        return string + " ".encode('utf-8') * (sig_length - (((len(string) - 1) % sig_length) + 1))
-    else:
-        return string + " " * (sig_length - (((len(string) - 1) % sig_length) + 1))
+    return string + " ".encode('utf-8') * (sig_length - (((len(string) - 1) % sig_length) + 1))
 
 close_signal    = pad(close_signal)
 peer_request    = pad(peer_request)
