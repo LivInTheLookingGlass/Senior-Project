@@ -311,9 +311,11 @@ def handleIncomingBountyP(conn):
         bounty = pickle.loads(received)
         if bounty.isValid():
             from multiprocessing.pool import ThreadPool
-            ThreadPool.map(propagate,[(bounty,x) for x in peerlist[:]])
-    except:
-        safeprint("bounty propagation failed")
+            ThreadPool().map(propagate,[(bounty,x) for x in peerlist[:]])
+    except Exception as error:
+        safeprint("bounty propagation failed: " + str(type(error)))
+        safeprint(error)
+        return False
 
 def propagate(tup):
     conn = socket.socket()
