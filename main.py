@@ -54,6 +54,10 @@ def main():
     ear.daemon = True
     ear.items = sync()
     ear.start()
+    mouth = propagator(settings.config['port'] + 1, live)
+    mouth.daemon = True
+    mouth.items = ear.items
+    mouth.start()
     feedback = []
     stamp = time()
     while queue.empty():
