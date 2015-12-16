@@ -318,13 +318,16 @@ def handleIncomingBountyP(conn):
         return False
 
 def propagate(tup):
-    conn = socket.socket()
-    address = tup[1]
-    conn.connect((address.split(":")[0],int(address.split(":")[1])))
-    conn.send(incoming_bounty)
-    conn.send(pad(pickle.dumps(tup[0],0)))
-    conn.recv(sig_length)
-    conn.close()
+    try:
+        conn = socket.socket()
+        address = tup[1]
+        conn.connect((address.split(":")[0],int(address.split(":")[1])))
+        conn.send(incoming_bounty)
+        conn.send(pad(pickle.dumps(tup[0],0)))
+        conn.recv(sig_length)
+        conn.close()
+    except socket.error as Error:
+        safeprint("Connection to " + str(address) + " failed; cannot propagate")
 
 def portForward(port):
     """Attempt to forward a port on your router to the specified local port. Prints lots of debug info."""
