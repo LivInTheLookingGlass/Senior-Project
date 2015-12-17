@@ -6,7 +6,8 @@ config = {'accept_latency':2000,
           'outbound':False,
           'port':44565,
           'propagate_factor':2,
-          'server':False}
+          'server':False,
+          'verbose':0}
 settings_file = "data" + os.sep + "settings.conf"
 
 def saveSettings():
@@ -62,6 +63,11 @@ def setup():
                       default=None,
                       action="store_true",
                       help='Sets whether you operate as a server or client (Default: client)')
+    parser.add_option('-v',
+                      dest='verbose',
+                      default=None,
+                      action="count",
+                      help='Increments the level of verbosity (up to 3, default 1)')
     (options, args) = parser.parse_args()
 
     safeprint("options parsed")
