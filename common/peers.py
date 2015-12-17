@@ -283,17 +283,51 @@ def handleIncomingBounty(conn):
     try:
         if addBounty(received):
             conn.send(valid_signal)
+            mouth = socket.socket()
+            import settings
+            mouth.connect(("localhost",settings.config['port'] + 1))
+            mouth.send(incoming_bounty)
+            mouth.send(pad(received))
+            mouth.send(close_signal)
+            mouth.close()
         else:
             conn.send(invalid_signal)
     except:
         safeprint("They closed too early")
 
-def handleBountyRequest(conn):
-    """Given a socket, send the proper messages to handle a bounty request"""
-    send = pickle.dumps(bountyList[:],0)
-    if type(send) != type("a".encode("utf-8")):
-        send = send.encode("utf-8")
-    conn.send(pad(send))
+def handleIncomingBountyP(conn):
+    """Given a socket, store an incoming bounty, and report it valid or invalid"""
+    connected = True
+    received = "".encode('utf-8')
+    while connected:
+        packet = conn.recv(sig_length)
+        safeprint(packet)
+        if not packet == close_signal:
+            received += packet
+        else:
+            connected = False
+    safeprint("Adding bounty: " + received.decode())
+    try:
+        bounty = pickle.loads(received)
+        if bounty.isValid():
+            from multiprocessing.pool import ThreadPool
+            ThreadPool().map(propagate,[(bounty,x) for x in peerlist[:]])
+    except Exception as error:
+        safeprint("bounty propagation failed: " + str(type(error)))
+        safeprint(error)
+        return False
+
+def propagate(tup):
+    try:
+        conn = socket.socket()
+        address = tup[1]
+        conn.connect((address.split(":")[0],int(address.split(":")[1])))
+        conn.send(incoming_bounty)
+        conn.send(pad(pickle.dumps(tup[0],0)))
+        conn.recv(sig_length)
+        conn.close()
+    except socket.error as Error:
+        safeprint("Connection to " + str(address) + " failed; cannot propagate")
 
 def portForward(port):
     """Attempt to forward a port on your router to the specified local port. Prints lots of debug info."""
@@ -329,6 +363,33 @@ def portForward(port):
         safeprint(error)
         return False
 
+def listenp(port, v):
+    """BLOCKING function which should only be run in a daemon thread. Listens and responds to other nodes"""
+    server = socket.socket()
+    server.bind(("0.0.0.0",port))
+    server.listen(10)
+    server.settimeout(5)
+    if sys.version_info[0] < 3 and sys.platform == "win32":
+        server.setblocking(True)
+    while v.value:    #is True is implicit
+        safeprint("listenp-ing on localhost:" + str(port))
+        try:
+            conn, addr = server.accept()
+            server.setblocking(True)
+            conn.setblocking(True)
+            safeprint("connection accepted")
+            packet = conn.recv(sig_length)
+            safeprint("Received: " + packet.decode())
+            if packet == incoming_bounty:
+               handleIncomingBountyP(conn)
+            conn.send(close_signal)
+            conn.close()
+            server.settimeout(5)
+            safeprint("connection closed")
+        except Exception as error:
+            safeprint("Failed: " + str(type(error)))
+            safeprint(error)
+
 class listener(multiprocessing.Process): #pragma: no cover
     """A class to deal with the listener method"""
     def __init__(self, port, outbound, q, v, serv):
@@ -342,6 +403,37 @@ class listener(multiprocessing.Process): #pragma: no cover
         safeprint("listener started")
         self.sync(self.items)
         listen(self.port,self.outbound,self.q,self.v,self.serv)
+        safeprint("listener stopped")
+    def sync(self,items):
+        if items == {}:
+            return
+        if items.get('config'):
+            from common import settings
+            settings.config = items.get('config')
+        if items.get('peerList'):
+            global peerlist
+            peerList = items.get('peerList')
+        if items.get('bountyList'):
+            from common import bounty
+            bounty.bountyList = items.get('bountyList')
+        if items.get('bountyLock'):
+            from common import bounty
+            bounty.bountyLock = items.get('bountyLock')
+        if items.get('keyList'):
+            from common import bounty
+            boutny.keyList = items.get('keyList')
+
+class propagator(multiprocessing.Process): #pragma: no cover
+    """A class to deal with the listener method"""
+    def __init__(self, port, v):
+        multiprocessing.Process.__init__(self)
+        self.port = port
+        self.v = v
+    def run(self):
+        safeprint("propagator started")
+        self.sync(self.items)
+        listenp(self.port, self.v)
+        safeprint("propagator stopped")
     def sync(self,items):
         if items == {}:
             return
