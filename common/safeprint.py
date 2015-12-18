@@ -8,5 +8,5 @@ def safeprint(content, verbosity=0):
     with print_lock:
         with open("output.txt","a") as log:
             log.write(string)
-        if settings.config.get('verbose') <= verbosity:
+        if settings.config.get('verbose') >= verbosity:
             sys.stdout.write(string)
