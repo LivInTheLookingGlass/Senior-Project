@@ -1,5 +1,4 @@
 import optparse, os, pickle
-from common.safeprint import safeprint
 
 config = {'accept_latency':2000,
           'charity':False,
@@ -18,6 +17,7 @@ def saveSettings():
 
 def loadSettings():
     """Load settings from a file"""
+    from common.safeprint import safeprint
     if os.path.exists(settings_file):
         try:
             config.update(pickle.load(open(settings_file,"rb")))
@@ -26,6 +26,7 @@ def loadSettings():
 
 def setup():
     """Parses and stores the command line arguments given, and override default and saved settings"""
+    from common.safeprint import safeprint
     parser = optparse.OptionParser()
     parser.add_option('-c',
                       '--charity',
