@@ -49,6 +49,14 @@ def findKey(addr):
     return None
 
 def send(msg, conn, key):
+    if key is None:
+        conn.send(key_request)
+        a = conn.recv(1024)
+        safeprint("Receive: " + str(a))
+        key = pickle.loads(a)
+        safeprint(key)
+        key = rsa.PublicKey(key[0],key[1])
+    safeprint(key)
     if len(msg) <= 117:
         conn.sendall(rsa.encrypt(msg,key))
     else:
@@ -60,14 +68,16 @@ def send(msg, conn, key):
     conn.sendall(rsa.encrypt(end_of_message,key))
 
 def recv(conn):
+    safeprint(myPriv)
     connected = True
     received = ""
     while connected:
         a = conn.recv(128)
         if a == key_request:
-            safeprint("I had my key requested")
-            a = pickle.dumps((myPriv.n,myPriv.e),0)
-            conn.sendall(a + " " * (1024 - len(a)))
+            safeprint("I had my key requested on receive")
+            a = pickle.dumps((myPriv.n,myPriv.e))
+            safeprint("Sending: " + str(a))
+            conn.sendall(a)
             continue
         a = rsa.decrypt(a,myPriv)
         if a != end_of_message:
@@ -130,33 +140,28 @@ def getFromSeeds():
 
 def requestPeerlist(address):
     """Request the peerlist of another node. Currently has additional test commands"""
-    con = socket.socket()
-    con.settimeout(5)
+    conn = socket.socket()
+    conn.settimeout(5)
     safeprint(address)
     try:
-        con.connect(address[0])
+        conn.connect(address[0])
         key = findKey(address[0])
-        if key is None:
-            con.send(key_request)
-            key = pickle.loads(con.recv(1024))
-            safeprint(key)
-            key = rsa.PublicKey(key[0],key[1])
-        send(peer_request,con,key)
-        received = recv(con)
+        send(peer_request,conn,key)
+        received = recv(conn)
         safeprint(pickle.loads(received))
         #test section
-        con = socket.socket()
-        con.settimeout(5)
-        con.connect(address[0])
-        send(incoming_bounty,con,key)
+        conn = socket.socket()
+        conn.settimeout(5)
+        conn.connect(address[0])
+        send(incoming_bounty,conn,key)
         bounty = Bounty(get_lan_ip() + ":44565","1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1440)
         bounty = pickle.dumps(bounty,0)
         if type(bounty) == type("a"):
             bounty = bounty.encode('utf-8')
         safeprint(bounty)
-        send(bounty,con,key)
-        send(close_signal,con,key)
-        con.close()
+        send(bounty,conn,key)
+        send(close_signal,conn,key)
+        conn.close()
         #end test section
         return pickle.loads(received)
     except Exception as error:
@@ -167,24 +172,18 @@ def requestPeerlist(address):
 
 def requestBounties(address):
     """Request the bountylist of another node"""
-    con = socket.socket()
-    con.settimeout(5)
+    conn = socket.socket()
+    conn.settimeout(5)
     safeprint(address)
     try:
-        con.connect(address[0])
-        con.send(bounty_request)
-        connected = True
-        received = "".encode('utf-8')
-        while connected:
-            packet = con.recv(sig_length)
-            safeprint(packet)
-            if packet == close_signal:
-                con.close()
-                connected = False
-            else:
-                received += packet
-        safeprint(pickle.loads(received))
+        conn.connect(address[0])
+        key = findKey(address[0])
+        send(bounty_request,conn,key)
+        received = recv(conn)
+        send(close_signal,conn,key)
+        conn.close()
         try:
+            safeprint(pickle.loads(received))
             bounties = pickle.loads(received)
             for bounty in bounties:
                 addBounty(pickle.dumps(bounty,0))
@@ -271,7 +270,7 @@ def listen(port, outbound, q, v, serv):
                 handleBountyRequest(conn)
             elif packet == incoming_bounty:
                 handleIncomingBounty(conn)
-            conn.send(close_signal)
+            send(close_signal,conn,key)
             conn.close()
             server.settimeout(5)
             safeprint("connection closed")
@@ -288,11 +287,7 @@ def handlePeerRequest(conn, exchange):
         safeprint("Test here")
         toSend = toSend.encode("utf-8")
     key = findKey(conn.getsockname())
-    if key is None:
-        conn.send(key_request)
-        key = pickle.loads(conn.recv(1024))
-        safeprint(key)
-        key = rsa.PublicKey(key[0],key[1])
+    safeprint("Sending")
     send(toSend,conn,key)
     if exchange:
         send(peer_request,conn,key)
@@ -303,11 +298,6 @@ def handlePeerRequest(conn, exchange):
 def handleIncomingBounty(conn):
     """Given a socket, store an incoming bounty, and report it valid or invalid"""
     key = findKey(conn.getsockname())
-    if key is None:
-        conn.send(key_request)
-        key = pickle.loads(conn.recv(1024))
-        safeprint(key)
-        key = rsa.PublicKey(key[0],key[1])
     received = recv(conn)
     safeprint("Adding bounty: " + received.decode())
     try:
@@ -352,9 +342,15 @@ def propagate(tup):
         conn = socket.socket()
         address = tup[1]
         conn.connect(address[0])
-        conn.send(incoming_bounty)
-        conn.send(pad(pickle.dumps(tup[0],0)))
-        conn.recv(sig_length)
+        key = findKey(conn.getsockname())
+        if key is None:
+            conn.send(key_request)
+            key = pickle.loads(conn.recv(1024))
+            safeprint(key)
+            key = rsa.PublicKey(key[0],key[1])
+        send(incoming_bounty,conn,key)
+        send(pad(pickle.dumps(tup[0],0)),conn,key)
+        recv(conn)
         conn.close()
     except socket.error as Error:
         safeprint("Connection to " + str(address) + " failed; cannot propagate")
