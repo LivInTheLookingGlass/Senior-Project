@@ -23,6 +23,7 @@ bounty_request  = "Requesting Bounties".encode("utf-8")
 incoming_bounty = "Incoming Bounty".encode("utf-8")
 valid_signal    = "Bounty was valid".encode("utf-8")
 invalid_signal  = "Bounty was invalid".encode("utf-8")
+end_of_message  = "End of message".encode("utf-8")
 
 sig_length = len(max(close_signal,peer_request,bounty_request,incoming_bounty,valid_signal,invalid_signal,key=len))
 
@@ -35,6 +36,36 @@ bounty_request  = pad(bounty_request)
 incoming_bounty = pad(incoming_bounty)
 valid_signal    = pad(valid_signal)
 invalid_signal  = pad(invalid_signal)
+end_of_message  = pad(end_of_message)
+
+def findKey(addr):
+    for i in peerList[:]:
+        if addr == i[0]:
+            return rsa.PublicKey(i[1],i[2])
+    return None
+
+def send(msg, conn, key):
+    if len(msg) <= 117:
+        conn.sendall(rsa.encrypt(msg,key))
+    else:
+        x = 0
+        while x < len(msg) - 117:
+            conn.sendall(rsa.encrypt(msg[x:x+117],key))
+            x += 117
+        conn.sendall(rsa.encrypt(msg[x:],key))
+
+def recv(conn):
+    connected = True
+    received = ""
+    while connected:
+        a = rsa.decrypt(conn.recv(128),myPriv)
+        if a != end_of_message:
+            received += a
+        else:
+            connected = False
+        if received in [close_signal,peer_request,bounty_request,incoming_bounty,valid_signal,invalid_signal]:
+            return received
+    return received
 
 if os.name != "nt":
     import fcntl
