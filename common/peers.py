@@ -10,8 +10,8 @@ ext_port = -1
 ext_ip = ""
 port = 44565
 
-seedlist = ["127.0.0.1:44565", "localhost:44565", "10.132.80.128:44565"]
-peerlist = ["24.10.111.111:44565"]
+seedlist = [(("127.0.0.1",44565),), (("localhost",44565),), (("10.132.80.128",44565),)]
+peerlist = [(("24.10.111.111",44565),)]
 remove   = []
 bounties = []
 
@@ -92,8 +92,7 @@ def requestPeerlist(address):
     con.settimeout(5)
     safeprint(address)
     try:
-        safeprint(address.split(":")[0] + ":" + address.split(":")[1])
-        con.connect((address.split(":")[0],int(address.split(":")[1])))
+        con.connect(address[0])
         con.send(peer_request)
         connected = True
         received = "".encode('utf-8')
@@ -112,7 +111,7 @@ def requestPeerlist(address):
         #test section
         con = socket.socket()
         con.settimeout(5)
-        con.connect((address.split(":")[0],int(address.split(":")[1])))
+        con.connect(address[0])
         con.send(incoming_bounty)
         bounty = Bounty(get_lan_ip() + ":44565","1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1440)
         bounty = pickle.dumps(bounty,0)
@@ -136,8 +135,7 @@ def requestBounties(address):
     con.settimeout(5)
     safeprint(address)
     try:
-        safeprint(address.split(":")[0] + ":" + address.split(":")[1])
-        con.connect((address.split(":")[0],int(address.split(":")[1])))
+        con.connect(address[0])
         con.send(bounty_request)
         connected = True
         received = "".encode('utf-8')
@@ -248,7 +246,7 @@ def listen(port, outbound, q, v, serv):
 def handlePeerRequest(conn, exchange):
     """Given a socket, send the proper messages to complete a peer request"""
     if ext_port != -1:
-        send = pickle.dumps(peerlist[:] + [ext_ip+":"+str(ext_port)],0)
+        send = pickle.dumps(peerlist[:] + [((ext_ip,ext_port),)],0)
     send = pickle.dumps(peerlist[:],0)
     if type(send) != type("a".encode("utf-8")):
         safeprint("Test here")
@@ -321,7 +319,7 @@ def propagate(tup):
     try:
         conn = socket.socket()
         address = tup[1]
-        conn.connect((address.split(":")[0],int(address.split(":")[1])))
+        conn.connect(address[0])
         conn.send(incoming_bounty)
         conn.send(pad(pickle.dumps(tup[0],0)))
         conn.recv(sig_length)
