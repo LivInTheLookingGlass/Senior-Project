@@ -75,7 +75,7 @@ def recv(conn):
         a = conn.recv(128)
         if a == key_request:
             safeprint("I had my key requested on receive")
-            a = pickle.dumps((myPriv.n,myPriv.e))
+            a = pickle.dumps((myPriv.n,myPriv.e),0)
             safeprint("Sending: " + str(a))
             conn.sendall(a)
             continue
