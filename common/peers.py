@@ -1,5 +1,5 @@
 from multiprocessing import Queue
-import multiprocessing, os, pickle, select, socket, sys, time, rsa, traceback
+import multiprocessing, os, pickle, select, socket, sys, time, rsa, traceback, jsonpickle as json
 from common.safeprint import safeprint
 from common.bounty import *
 
@@ -56,11 +56,13 @@ def send(msg, conn, key):
         conn.send(key_request)
         try:
             time.sleep(0.01)
-            a = conn.recv(1024)
-            key = pickle.loads(a.encode('utf-8'))
+            key = pickle.loads(conn.recv(1024))
             key = rsa.PublicKey(key[0],key[1])
+            safeprint("Key received")
         except EOFError:
             continue
+    if type(msg) != type("a".encode('utf-8')):
+        msg = msg.encode('utf-8')
     if len(msg) <= 117:
         conn.sendall(rsa.encrypt(msg,key))
     else:
@@ -74,13 +76,12 @@ def send(msg, conn, key):
     return key
 
 def recv(conn):
-    received = ""
+    received = "".encode('utf-8')
     while True:
         a = conn.recv(128)
         if a == key_request:
             safeprint("Key requested. Sending key")
-            a = pickle.dumps((myPriv.n,myPriv.e),0)
-            conn.sendall(a)
+            conn.sendall(pickle.dumps((myPriv.n,myPriv.e),0))
             continue
         a = rsa.decrypt(a,myPriv)
         if a in signals:
@@ -311,7 +312,7 @@ def handleIncomingBounty(conn):
         if addBounty(received):
             send(valid_signal,conn,None)
             mouth = socket.socket()
-            import settings
+            from common import settings
             mouth.connect(("localhost",settings.config['port'] + 1))
             mouth.send(incoming_bounty)
             mouth.send(pad(received))
