@@ -57,7 +57,7 @@ def send(msg, conn, key):
         try:
             time.sleep(0.01)
             a = conn.recv(1024)
-            key = pickle.loads(a)
+            key = pickle.loads(a.encode('utf-8'))
             key = rsa.PublicKey(key[0],key[1])
         except EOFError:
             continue
