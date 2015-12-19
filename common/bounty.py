@@ -135,31 +135,31 @@ class Bounty(object):
         timeout -- Must be greater than the current time
         """
         try:
-            safeprint("Testing IP address")
+            safeprint("Testing IP address",verbosity=1)
             boolean = int(self.ip.split(":")[1]) in range(1024,49152)
             for sect in self.ip.split(":")[0].split("."):
                 boolean = int(sect) in range(0,256) and boolean
             if not boolean:
                 return False
-            safeprint("Testing Bitcoin address")
+            safeprint("Testing Bitcoin address",verbosity=1)
             address = str(self.btc)
             #The following is a soft check
             #A deeper check will need to be done in order to assure this is correct
             if not checkAddressValid(address):
                 return False
-            safeprint("Testing reward")
+            safeprint("Testing reward",verbosity=1)
             reward = int(self.reward)
             boolean = reward >= 1440 and reward <= 100000000
             if reward == 0 or reward is None:
-                safeprint("Testing signature validity")
+                safeprint("Testing signature validity",verbosity=1)
                 boolean = self.checkSign()
             if boolean is False:
                 return False
-            safeprint("Testing timeout")
+            safeprint("Testing timeout",verbosity=1)
             if self.timeout < getUTC(): #check against current UTC
                 return False
             from common.call import parse
-            safeprint("Testing bounty requirements")
+            safeprint("Testing bounty requirements",verbosity=1)
             return parse(self.data.get('reqs'))
         except:
             return False
@@ -228,31 +228,31 @@ def verify(string):
         except:
             return False
     try:
-        safeprint("Testing IP address")
+        safeprint("Testing IP address",verbosity=1)
         boolean = int(test.ip.split(":")[1]) in range(1024,49152)
         for sect in test.ip.split(":")[0].split("."):
             boolean = int(sect) in range(0,256) and boolean
         if not boolean:
             return False
-        safeprint("Testing Bitcoin address")
+        safeprint("Testing Bitcoin address",verbosity=1)
         address = str(test.btc)
         #The following is a soft check
         #A deeper check will need to be done in order to assure this is correct
         if not checkAddressValid(address):
             return False
-        safeprint("Testing reward")
+        safeprint("Testing reward",verbosity=1)
         reward = int(test.reward)
         boolean = reward >= 1440 and reward <= 100000000
         if reward == 0 or reward is None:
-            safeprint("Testing signature validity")
+            safeprint("Testing signature validity",verbosity=1)
             boolean = test.checkSign()
         if boolean is False:
             return False
-        safeprint("Testing timeout")
+        safeprint("Testing timeout",verbosity=1)
         if test.timeout < getUTC(): #check against current UTC
             return False
         from common.call import parse
-        safeprint("Testing bounty requirements")
+        safeprint("Testing bounty requirements",verbosity=1)
         return parse(test.data.get('reqs'))
     except:
         return False
@@ -296,7 +296,7 @@ def addBounty(bounty):
         safeprint("Fed as string; encoding utf-8")
         bounty = bounty.encode('utf-8')
     safeprint(pickle.loads(bounty))
-    safeprint("External verify")
+    safeprint("External verify",verbosity=1)
     try:
         bounty = pickle.loads(bounty)
     except:
@@ -335,7 +335,7 @@ def addBounties(bounties):
 def getBounty(charity, factor):
     """Retrieve the next best bounty from the list"""
     temp = getBountyList()
-    safeprint("bountyList = " + str(temp))
+    safeprint("bountyList = " + str(temp),verbosity=3)
     if temp == []:
         return None
     elif charity:

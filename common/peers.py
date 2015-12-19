@@ -36,6 +36,7 @@ incoming_bounty = pad(incoming_bounty)
 valid_signal    = pad(valid_signal)
 invalid_signal  = pad(invalid_signal)
 
+#The following is taken from Stack Overflow. Find the original at http://stackoverflow.com/a/1947766/4748474
 if os.name != "nt":
     import fcntl
     import struct
@@ -47,7 +48,7 @@ if os.name != "nt":
 
 def get_lan_ip():
     """Retrieves the LAN ip. Unfortunately uses an external connection in Python 3."""
-    if sys.version_info[0] < 3:
+    if sys.version_info[0] < 3: #This line was not in Stack Overflow code
         ip = socket.gethostbyname(socket.gethostname())
         if ip.startswith("127.") and os.name != "nt":
             interfaces = ["eth0","eth1","eth2","wlan0","wlan1","wifi0","ath0","ath1","ppp0",]
@@ -58,6 +59,7 @@ def get_lan_ip():
                 except IOError:
                     pass
         return ip
+#End Stack Overflow code
     else:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(('8.8.8.8', 0))
@@ -82,7 +84,7 @@ def saveToFile():
 def getFromSeeds():
     """Make peer requests to each address on the seedlist"""
     for seed in seedlist:
-        safeprint(seed)
+        safeprint(seed,verbosity=1)
         peerlist.extend(requestPeerlist(seed))
         time.sleep(1)
 
@@ -90,7 +92,7 @@ def requestPeerlist(address):
     """Request the peerlist of another node. Currently has additional test commands"""
     con = socket.socket()
     con.settimeout(5)
-    safeprint(address)
+    safeprint(address,verbosity=1)
     try:
         safeprint(address.split(":")[0] + ":" + address.split(":")[1])
         con.connect((address.split(":")[0],int(address.split(":")[1])))
@@ -99,7 +101,7 @@ def requestPeerlist(address):
         received = "".encode('utf-8')
         while connected:
             packet = con.recv(sig_length)
-            safeprint(packet.decode())
+            safeprint(packet.decode(),verbosity=3)
             if packet == close_signal:
                 con.close()
                 connected = False
@@ -108,7 +110,7 @@ def requestPeerlist(address):
                 con.send(close_signal)
             else:
                 received += packet
-        safeprint(pickle.loads(received))
+        safeprint(pickle.loads(received),verbosity=2)
         #test section
         con = socket.socket()
         con.settimeout(5)
@@ -118,7 +120,7 @@ def requestPeerlist(address):
         bounty = pickle.dumps(bounty,0)
         if type(bounty) == type("a"):
             bounty = bounty.encode('utf-8')
-        safeprint(bounty)
+        safeprint(bounty,verbosity=3)
         con.send(pad(bounty))
         con.send(close_signal)
         con.close()
@@ -134,7 +136,7 @@ def requestBounties(address):
     """Request the bountylist of another node"""
     con = socket.socket()
     con.settimeout(5)
-    safeprint(address)
+    safeprint(address,verbosity=1)
     try:
         safeprint(address.split(":")[0] + ":" + address.split(":")[1])
         con.connect((address.split(":")[0],int(address.split(":")[1])))
@@ -143,13 +145,13 @@ def requestBounties(address):
         received = "".encode('utf-8')
         while connected:
             packet = con.recv(sig_length)
-            safeprint(packet)
+            safeprint(packet,verbosity=3)
             if packet == close_signal:
                 con.close()
                 connected = False
             else:
                 received += packet
-        safeprint(pickle.loads(received))
+        safeprint(pickle.loads(received),verbosity=2)
         try:
             bounties = pickle.loads(received)
             for bounty in bounties:
@@ -171,9 +173,9 @@ def initializePeerConnections(newPort,newip,newport):
     ext_port = newport    #Does this affect the global variable?
     safeprint([ext_ip, ext_port])
     getFromFile()
-    safeprint("peers fetched from file")
+    safeprint("peers fetched from file",verbosity=1)
     getFromSeeds()
-    safeprint("peers fetched from seedlist")
+    safeprint("peers fetched from seedlist",verbosity=1)
     trimPeers()
     if len(peerlist) < 12:
         safeprint(len(peerlist))
@@ -182,9 +184,9 @@ def initializePeerConnections(newPort,newip,newport):
             newlist.extend(requestPeerlist(peer))
         peerlist.extend(newlist)
     trimPeers()
-    safeprint("peer network extended")
+    safeprint("peer network extended",verbosity=1)
     saveToFile()
-    safeprint("peer network saved to file")
+    safeprint("peer network saved to file",verbosity=1)
     safeprint(peerlist)
     safeprint([ext_ip, ext_port])
 
@@ -221,16 +223,16 @@ def listen(port, outbound, q, v, serv):
     safeprint([outbound,ext_ip, ext_port])
     q.put([outbound,ext_ip,ext_port])
     while v.value:    #is True is implicit
-        safeprint("listening on " + str(get_lan_ip()) + ":" + str(port))
+        safeprint("listening on " + str(get_lan_ip()) + ":" + str(port),verbosity=3)
         if not outbound:
-            safeprint("forwarded from " + ext_ip + ":" + str(ext_port))
+            safeprint("forwarded from " + ext_ip + ":" + str(ext_port),verbosity=3)
         try:
             conn, addr = server.accept()
             server.setblocking(True)
             conn.setblocking(True)
             safeprint("connection accepted")
             packet = conn.recv(sig_length)
-            safeprint("Received: " + packet.decode())
+            safeprint("Received: " + packet.decode(),verbosity=3)
             if packet == peer_request:
                 handlePeerRequest(conn,True)
             elif packet == bounty_request:
@@ -260,7 +262,7 @@ def handlePeerRequest(conn, exchange):
         received = "".encode('utf-8')
         while connected:
             packet = conn.recv(sig_length)
-            safeprint(packet)
+            safeprint(packet,verbosity=3)
             if packet == close_signal:
                 connected = False
             else:
@@ -274,7 +276,7 @@ def handleIncomingBounty(conn):
     received = "".encode('utf-8')
     while connected:
         packet = conn.recv(sig_length)
-        safeprint(packet)
+        safeprint(packet,verbosity=3)
         if not packet == close_signal:
             received += packet
         else:
@@ -301,12 +303,12 @@ def handleIncomingBountyP(conn):
     received = "".encode('utf-8')
     while connected:
         packet = conn.recv(sig_length)
-        safeprint(packet)
+        safeprint(packet,verbosity=3)
         if not packet == close_signal:
             received += packet
         else:
             connected = False
-    safeprint("Adding bounty: " + received.decode())
+    safeprint("Adding bounty: " + received.decode(),verbosity=2)
     try:
         bounty = pickle.loads(received)
         if bounty.isValid():
@@ -349,7 +351,7 @@ def portForward(port):
         safeprint("external ip is: " + str(ext_ip))
         for i in range(0,20):
             try:
-                safeprint("Port forward try: " + str(i))
+                safeprint("Port forward try: " + str(i),verbosity=1)
                 if u.addportmapping(port+i, 'TCP', get_lan_ip(), port, 'Bounty Net', ''):
                     global ext_port
                     ext_port = port + i
@@ -372,14 +374,14 @@ def listenp(port, v):
     if sys.version_info[0] < 3 and sys.platform == "win32":
         server.setblocking(True)
     while v.value:    #is True is implicit
-        safeprint("listenp-ing on localhost:" + str(port))
+        safeprint("listenp-ing on localhost:" + str(port),verbosity=3)
         try:
             conn, addr = server.accept()
             server.setblocking(True)
             conn.setblocking(True)
             safeprint("connection accepted")
             packet = conn.recv(sig_length)
-            safeprint("Received: " + packet.decode())
+            safeprint("Received: " + packet.decode(),verbosity=3)
             if packet == incoming_bounty:
                handleIncomingBountyP(conn)
             conn.send(close_signal)

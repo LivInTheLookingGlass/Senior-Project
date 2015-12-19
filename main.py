@@ -1,7 +1,6 @@
 from common import bounty
 from common.peers import *
 from common import settings
-from common.safeprint import safeprint
 from multiprocessing import Queue, Value
 from time import sleep, time
 import pickle
@@ -9,6 +8,7 @@ import pickle
 def sync():
     from multiprocessing import Manager
     from common import bounty, settings, peers
+    from common.safeprint import safeprint
     man = Manager()
     items = {'config':man.dict(),
              'peerList':man.list(),
@@ -41,6 +41,7 @@ def sync():
 
 def main():
     settings.setup()
+    from common.safeprint import safeprint
     try:
         import miniupnpc
     except:
