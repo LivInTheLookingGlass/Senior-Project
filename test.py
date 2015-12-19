@@ -22,14 +22,14 @@ def waitForty(v,q): #pragma: no cover
     except: #pragma: no cover
         safeprint("No feedback received from listener")
     safeprint("YOUR IP IS " + get_lan_ip() + ":44566")
-    requestPeerlist(get_lan_ip() + ":44566")
+    requestPeerlist((get_lan_ip(),44566))
     sleep(4)
-    requestPeerlist("localhost:44566")
+    requestPeerlist(("localhost",44566))
     sleep(4)
     if sys.version_info[0] == 3:
-        requestBounties(get_lan_ip() + ":44566")
+        requestBounties((get_lan_ip(),44566))
         sleep(4)
-        requestBounties("localhost:44566")
+        requestBounties(("localhost",44566))
         sleep(4)
         safeprint(bounty.getBountyList())
     #TODO move test incoming_bounty here
@@ -37,7 +37,7 @@ def waitForty(v,q): #pragma: no cover
     safeprint("Sending term signal")
     v.value = False
     try:
-        requestPeerlist("localhost:44566")
+        requestPeerlist(("localhost",44566))
     except:
         safeprint("This was supposed to fail. Good job")
 
