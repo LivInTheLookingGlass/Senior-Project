@@ -13,8 +13,8 @@ ext_ip = ""
 port = 44565
 myPub, myPriv = rsa.newkeys(1024)
 
-seedlist = [(("127.0.0.1",44565),myPub.n,myPub.e), (("localhost",44565),myPub.n,myPub.e), (("10.132.80.128",44565),myPub.n,myPub.e)]
-peerlist = [(("24.10.111.111",44565),)]
+seedlist = [("127.0.0.1",44565), ("localhost",44565), ("10.132.80.128",44565)]
+peerlist = [("24.10.111.111",44565)]
 remove   = []
 bounties = []
 
@@ -43,12 +43,6 @@ invalid_signal  = pad(invalid_signal)
 end_of_message  = pad(end_of_message)
 
 signals = [close_signal, peer_request, bounty_request, incoming_bounty, valid_signal, invalid_signal]
-
-def findKey(addr):
-    for i in peerlist[:]:
-        if addr == i[0]:
-            return rsa.PublicKey(i[1],i[2])
-    return None
 
 def send(msg, conn, key):
     while key is None:
@@ -147,9 +141,8 @@ def requestPeerlist(address):
     conn.settimeout(5)
     safeprint(address)
     try:
-        conn.connect(address[0])
-        key = findKey(address[0])
-        key = send(peer_request,conn,key)
+        conn.connect(address)
+        key = send(peer_request,conn,None)
         received = recv(conn)
         safeprint(pickle.loads(received))
         if recv(conn) == peer_request:
@@ -183,9 +176,8 @@ def requestBounties(address):
     conn.settimeout(5)
     safeprint(address)
     try:
-        conn.connect(address[0])
-        key = findKey(address[0])
-        key = send(bounty_request,conn,key)
+        conn.connect(address)
+        key = send(bounty_request,conn,None)
         received = recv(conn)
         send(close_signal,conn,key)
         conn.close()
@@ -352,7 +344,7 @@ def propagate(tup):
     try:
         conn = socket.socket()
         address = tup[1]
-        conn.connect(address[0])
+        conn.connect(address)
         key = send(incoming_bounty,conn,None)
         send(pickle.dumps(tup[0],0),conn,key)
         recv(conn)
