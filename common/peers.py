@@ -286,9 +286,8 @@ def handlePeerRequest(conn, exchange):
     if type(toSend) != type("a".encode("utf-8")):
         safeprint("Test here")
         toSend = toSend.encode("utf-8")
-    key = findKey(conn.getsockname())
     safeprint("Sending")
-    key = send(toSend,conn,key)
+    key = send(toSend,conn,None)
     if exchange:
         send(peer_request,conn,key)
         received = recv(conn)
