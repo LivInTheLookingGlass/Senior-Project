@@ -1,5 +1,5 @@
 from multiprocessing import Queue
-import multiprocessing, os, pickle, select, socket, sys, time, rsa, traceback, jsonpickle as json
+import multiprocessing, os, pickle, select, socket, sys, time, rsa, traceback
 from common.safeprint import safeprint
 from common.bounty import *
 
