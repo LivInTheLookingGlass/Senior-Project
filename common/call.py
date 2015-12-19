@@ -67,7 +67,7 @@ def parse(d):
         return True
     if len(d) == 1:
         return process(list(d.items())[0])
-    from multiprocessing import Pool
+    from multiprocessing.pool import ThreadPool
     p = list(d.items())
-    r = Pool().map(process,p)
+    r = ThreadPool().map(process,p)
     return not (False in r)
