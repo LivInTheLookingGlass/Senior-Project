@@ -408,7 +408,7 @@ def listenp(port, v):
             conn, addr = server.accept()
             server.setblocking(True)
             conn.setblocking(True)
-            safeprint("connection accepted")
+            safeprint("connection accepted on propagator")
             packet = conn.recv(sig_length)
             safeprint("Received: " + packet.decode())
             if packet == incoming_bounty:
