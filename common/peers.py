@@ -445,14 +445,6 @@ class listener(multiprocessing.Process): #pragma: no cover
         if items.get('keyList'):
             from common import bounty
             bounty.keyList = items.get('keyList')
-        if items.get('myPub') is not None:
-            from common import peers
-            from rsa import PublicKey
-            peers.myPub = PublicKey(*items.get('myPub'))
-        if items.get('myPriv') is not None:
-            from common import peers
-            from rsa import PrivateKey
-            peers.myPriv = PrivateKey(*items.get('myPriv'))
 
 class propagator(multiprocessing.Process): #pragma: no cover
     """A class to deal with the listener method"""
@@ -483,11 +475,3 @@ class propagator(multiprocessing.Process): #pragma: no cover
         if items.get('keyList'):
             from common import bounty
             bounty.keyList = items.get('keyList')
-        if items.get('myPub') is not None:
-            from common import peers
-            from rsa import PublicKey
-            peers.myPub = PublicKey(*items.get('myPub'))
-        if items.get('myPriv') is not None:
-            from common import peers
-            from rsa import PrivateKey
-            peers.myPriv = PrivateKey(*items.get('myPriv'))

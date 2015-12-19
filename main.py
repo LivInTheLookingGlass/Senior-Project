@@ -14,9 +14,7 @@ def sync():
              'peerList':man.list(),
              'bountyList':man.list(),
              'bountyLock':bounty.bountyLock,
-             'keyList':man.list(),
-             'myPub':(peers.myPriv.n,peers.myPriv.e),
-             'myPriv':(peers.myPriv.n,peers.myPriv.e,peers.myPriv.d,peers.myPriv.p,peers.myPriv.q)}
+             'keyList':man.list()}
     items['config'].update(settings.config)
     items['peerList'].extend(peers.peerlist)
     items['bountyList'].extend(bounty.bountyList)
@@ -39,14 +37,6 @@ def sync():
     if items.get('keyList') is not None:
         from common import bounty
         bounty.keyList = items.get('keyList')
-    if items.get('myPub') is not None:
-        from common import peers
-        from rsa import PublicKey
-        peers.myPub = PublicKey(*items.get('myPub'))
-    if items.get('myPriv') is not None:
-        from common import peers
-        from rsa import PrivateKey
-        peers.myPriv = PrivateKey(*items.get('myPriv'))
     return items
 
 def main():
