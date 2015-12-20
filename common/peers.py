@@ -146,7 +146,7 @@ def requestPeerlist(address):
         received = recv(conn)
         safeprint(pickle.loads(received))
         if recv(conn) == peer_request:
-            handlePeerRequest(conn,False)
+            handlePeerRequest(conn,False,key=key)
         recv(conn)
         #test section
         conn = socket.socket()
@@ -263,13 +263,14 @@ def listen(port, outbound, q, v, serv):
             safeprint("connection accepted")
             packet = recv(conn)
             safeprint("Received: " + packet.decode())
+            key = None
             if packet == peer_request:
-                handlePeerRequest(conn,True)
+                key = handlePeerRequest(conn,True,key=key)
             elif packet == bounty_request:
-                handleBountyRequest(conn)
+                key = handleBountyRequest(conn,key=key)
             elif packet == incoming_bounty:
-                handleIncomingBounty(conn)
-            send(close_signal,conn,None)
+                key = handleIncomingBounty(conn,key=key)
+            send(close_signal,conn,key)
             conn.close()
             server.settimeout(5)
             safeprint("connection closed")
@@ -278,7 +279,7 @@ def listen(port, outbound, q, v, serv):
             safeprint(error)
             traceback.print_exc()
 
-def handlePeerRequest(conn, exchange):
+def handlePeerRequest(conn, exchange, key=None):
     """Given a socket, send the proper messages to complete a peer request"""
     if ext_port != -1:
         toSend = pickle.dumps(peerlist[:] + [((ext_ip,ext_port),myPub.n,myPub.e)],0)
@@ -287,21 +288,22 @@ def handlePeerRequest(conn, exchange):
         safeprint("Test here")
         toSend = toSend.encode("utf-8")
     safeprint("Sending")
-    key = send(toSend,conn,None)
+    key = send(toSend,conn,key)
     if exchange:
         send(peer_request,conn,key)
         received = recv(conn)
         safeprint("Received exchange")
         peerlist.extend(pickle.loads(received))
         trimPeers()
+    return key
 
-def handleIncomingBounty(conn):
+def handleIncomingBounty(conn, key=None):
     """Given a socket, store an incoming bounty, and report it valid or invalid"""
     received = recv(conn)
     safeprint("Adding bounty: " + received.decode())
     try:
         if addBounty(received):
-            send(valid_signal,conn,None)
+            send(valid_signal,conn,key)
             mouth = socket.socket()
             from common import settings
             mouth.connect(("localhost",settings.config['port'] + 1))
@@ -310,11 +312,12 @@ def handleIncomingBounty(conn):
             mouth.send(close_signal)
             mouth.close()
         else:
-            send(invalid_signal,conn,None)
+            send(invalid_signal,conn,key)
     except Exception as error:
         safeprint("Incoming failed: " + str(type(error)))
         safeprint(error)
         traceback.print_exc()
+    return key
 
 def handleIncomingBountyP(conn):
     """Given a socket, store an incoming bounty, and report it valid or invalid"""
