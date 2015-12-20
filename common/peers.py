@@ -1,28 +1,33 @@
 from multiprocessing import Queue
-import multiprocessing, os, pickle, select, socket, sys, time
+import multiprocessing, os, pickle, select, socket, sys, time, rsa, traceback
 from common.safeprint import safeprint
 from common.bounty import *
 
 global ext_port
 global ext_ip
 global port
+global myPriv
+global myPub
 ext_port = -1
 ext_ip = ""
 port = 44565
+myPub, myPriv = rsa.newkeys(1024)
 
-seedlist = ["127.0.0.1:44565", "localhost:44565", "10.132.80.128:44565"]
-peerlist = ["24.10.111.111:44565"]
+seedlist = [("127.0.0.1",44565), ("localhost",44565), ("10.132.80.128",44565)]
+peerlist = [("24.10.111.111",44565)]
 remove   = []
 bounties = []
 
 #constants
 peers_file      = "data" + os.sep + "peerlist.pickle"
+key_request     = "Key Request".encode('utf-8')
 close_signal    = "Close Signal".encode("utf-8")
 peer_request    = "Requesting Peers".encode("utf-8")
 bounty_request  = "Requesting Bounties".encode("utf-8")
 incoming_bounty = "Incoming Bounty".encode("utf-8")
 valid_signal    = "Bounty was valid".encode("utf-8")
 invalid_signal  = "Bounty was invalid".encode("utf-8")
+end_of_message  = "End of message".encode("utf-8")
 
 sig_length = len(max(close_signal,peer_request,bounty_request,incoming_bounty,valid_signal,invalid_signal,key=len))
 
@@ -35,6 +40,50 @@ bounty_request  = pad(bounty_request)
 incoming_bounty = pad(incoming_bounty)
 valid_signal    = pad(valid_signal)
 invalid_signal  = pad(invalid_signal)
+end_of_message  = pad(end_of_message)
+
+signals = [close_signal, peer_request, bounty_request, incoming_bounty, valid_signal, invalid_signal]
+
+def send(msg, conn, key):
+    while key is None:
+        safeprint("Key not found. Requesting key")
+        conn.send(key_request)
+        try:
+            time.sleep(0.01)
+            key = pickle.loads(conn.recv(1024))
+            key = rsa.PublicKey(key[0],key[1])
+            safeprint("Key received")
+        except EOFError:
+            continue
+    if type(msg) != type("a".encode('utf-8')):
+        msg = msg.encode('utf-8')
+    if len(msg) <= 117:
+        conn.sendall(rsa.encrypt(msg,key))
+    else:
+        x = 0
+        while x < len(msg) - 117:
+            conn.sendall(rsa.encrypt(msg[x:x+117],key))
+            x += 117
+        conn.sendall(rsa.encrypt(msg[x:],key))
+    if msg not in signals:
+        conn.sendall(rsa.encrypt(end_of_message,key))
+    return key
+
+def recv(conn):
+    received = "".encode('utf-8')
+    while True:
+        a = conn.recv(128)
+        if a == key_request:
+            safeprint("Key requested. Sending key")
+            conn.sendall(pickle.dumps((myPriv.n,myPriv.e),0))
+            continue
+        a = rsa.decrypt(a,myPriv)
+        if a in signals:
+            return a
+        elif a == end_of_message:
+            return received
+        else:
+            received += a
 
 #The following is taken from Stack Overflow. Find the original at http://stackoverflow.com/a/1947766/4748474
 if os.name != "nt":
@@ -90,40 +139,31 @@ def getFromSeeds():
 
 def requestPeerlist(address):
     """Request the peerlist of another node. Currently has additional test commands"""
-    con = socket.socket()
-    con.settimeout(5)
+    conn = socket.socket()
+    conn.settimeout(5)
     safeprint(address,verbosity=1)
     try:
-        safeprint(address.split(":")[0] + ":" + address.split(":")[1])
-        con.connect((address.split(":")[0],int(address.split(":")[1])))
-        con.send(peer_request)
-        connected = True
-        received = "".encode('utf-8')
-        while connected:
-            packet = con.recv(sig_length)
-            safeprint(packet.decode(),verbosity=3)
-            if packet == close_signal:
-                con.close()
-                connected = False
-            elif packet == peer_request:
-                handlePeerRequest(con,False)
-                con.send(close_signal)
-            else:
-                received += packet
+        conn.connect(address)
+        key = send(peer_request,conn,None)
+        received = recv(conn)
         safeprint(pickle.loads(received),verbosity=2)
+        if recv(conn) == peer_request:
+            handlePeerRequest(conn,False,key=key)
+        recv(conn)
         #test section
-        con = socket.socket()
-        con.settimeout(5)
-        con.connect((address.split(":")[0],int(address.split(":")[1])))
-        con.send(incoming_bounty)
+        conn = socket.socket()
+        conn.settimeout(5)
+        conn.connect(address)
+        send(incoming_bounty,conn,key)
         bounty = Bounty(get_lan_ip() + ":44565","1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1440)
         bounty = pickle.dumps(bounty,0)
         if type(bounty) == type("a"):
             bounty = bounty.encode('utf-8')
         safeprint(bounty,verbosity=3)
-        con.send(pad(bounty))
-        con.send(close_signal)
-        con.close()
+        send(bounty,conn,key)
+        recv(conn)
+        recv(conn)
+        conn.close()
         #end test section
         return pickle.loads(received)
     except Exception as error:
@@ -134,25 +174,17 @@ def requestPeerlist(address):
 
 def requestBounties(address):
     """Request the bountylist of another node"""
-    con = socket.socket()
-    con.settimeout(5)
+    conn = socket.socket()
+    conn.settimeout(5)
     safeprint(address,verbosity=1)
     try:
-        safeprint(address.split(":")[0] + ":" + address.split(":")[1])
-        con.connect((address.split(":")[0],int(address.split(":")[1])))
-        con.send(bounty_request)
-        connected = True
-        received = "".encode('utf-8')
-        while connected:
-            packet = con.recv(sig_length)
-            safeprint(packet,verbosity=3)
-            if packet == close_signal:
-                con.close()
-                connected = False
-            else:
-                received += packet
-        safeprint(pickle.loads(received),verbosity=2)
+        conn.connect(address)
+        key = send(bounty_request,conn,None)
+        received = recv(conn)
+        send(close_signal,conn,key)
+        conn.close()
         try:
+            safeprint(pickle.loads(received),verbosity=2)
             bounties = pickle.loads(received)
             for bounty in bounties:
                 addBounty(pickle.dumps(bounty,0))
@@ -231,71 +263,63 @@ def listen(port, outbound, q, v, serv):
             server.setblocking(True)
             conn.setblocking(True)
             safeprint("connection accepted")
-            packet = conn.recv(sig_length)
+            packet = recv(conn)
             safeprint("Received: " + packet.decode(),verbosity=3)
+            key = None
             if packet == peer_request:
-                handlePeerRequest(conn,True)
+                key = handlePeerRequest(conn,True,key=key)
             elif packet == bounty_request:
-                handleBountyRequest(conn)
+                key = handleBountyRequest(conn,key=key)
             elif packet == incoming_bounty:
-                handleIncomingBounty(conn)
-            conn.send(close_signal)
+                key = handleIncomingBounty(conn,key=key)
+            send(close_signal,conn,key)
             conn.close()
             server.settimeout(5)
             safeprint("connection closed")
         except Exception as error:
             safeprint("Failed: " + str(type(error)))
             safeprint(error)
+            traceback.print_exc()
 
-def handlePeerRequest(conn, exchange):
+def handlePeerRequest(conn, exchange, key=None):
     """Given a socket, send the proper messages to complete a peer request"""
     if ext_port != -1:
-        send = pickle.dumps(peerlist[:] + [ext_ip+":"+str(ext_port)],0)
-    send = pickle.dumps(peerlist[:],0)
-    if type(send) != type("a".encode("utf-8")):
+        toSend = pickle.dumps(peerlist[:] + [((ext_ip,ext_port),myPub.n,myPub.e)],0)
+    toSend = pickle.dumps(peerlist[:],0)
+    if type(toSend) != type("a".encode("utf-8")):
         safeprint("Test here")
-        send = send.encode("utf-8")
-    conn.send(pad(send))
+        toSend = toSend.encode("utf-8")
+    safeprint("Sending")
+    key = send(toSend,conn,key)
     if exchange:
-        conn.send(peer_request)
-        connected = True
-        received = "".encode('utf-8')
-        while connected:
-            packet = conn.recv(sig_length)
-            safeprint(packet,verbosity=3)
-            if packet == close_signal:
-                connected = False
-            else:
-                received += packet
+        send(peer_request,conn,key)
+        received = recv(conn)
+        safeprint("Received exchange")
         peerlist.extend(pickle.loads(received))
         trimPeers()
+    return key
 
-def handleIncomingBounty(conn):
+def handleIncomingBounty(conn, key=None):
     """Given a socket, store an incoming bounty, and report it valid or invalid"""
-    connected = True
-    received = "".encode('utf-8')
-    while connected:
-        packet = conn.recv(sig_length)
-        safeprint(packet,verbosity=3)
-        if not packet == close_signal:
-            received += packet
-        else:
-            connected = False
+    received = recv(conn)
     safeprint("Adding bounty: " + received.decode())
     try:
         if addBounty(received):
-            conn.send(valid_signal)
+            send(valid_signal,conn,key)
             mouth = socket.socket()
-            import settings
+            from common import settings
             mouth.connect(("localhost",settings.config['port'] + 1))
             mouth.send(incoming_bounty)
             mouth.send(pad(received))
             mouth.send(close_signal)
             mouth.close()
         else:
-            conn.send(invalid_signal)
-    except:
-        safeprint("They closed too early")
+            send(invalid_signal,conn,key)
+    except Exception as error:
+        safeprint("Incoming failed: " + str(type(error)))
+        safeprint(error)
+        traceback.print_exc()
+    return key
 
 def handleIncomingBountyP(conn):
     """Given a socket, store an incoming bounty, and report it valid or invalid"""
@@ -317,16 +341,17 @@ def handleIncomingBountyP(conn):
     except Exception as error:
         safeprint("bounty propagation failed: " + str(type(error)))
         safeprint(error)
+        traceback.print_exc()
         return False
 
 def propagate(tup):
     try:
         conn = socket.socket()
         address = tup[1]
-        conn.connect((address.split(":")[0],int(address.split(":")[1])))
-        conn.send(incoming_bounty)
-        conn.send(pad(pickle.dumps(tup[0],0)))
-        conn.recv(sig_length)
+        conn.connect(address)
+        key = send(incoming_bounty,conn,None)
+        send(pickle.dumps(tup[0],0),conn,key)
+        recv(conn)
         conn.close()
     except socket.error as Error:
         safeprint("Connection to " + str(address) + " failed; cannot propagate")
@@ -379,7 +404,7 @@ def listenp(port, v):
             conn, addr = server.accept()
             server.setblocking(True)
             conn.setblocking(True)
-            safeprint("connection accepted")
+            safeprint("connection accepted on propagator")
             packet = conn.recv(sig_length)
             safeprint("Received: " + packet.decode(),verbosity=3)
             if packet == incoming_bounty:
@@ -423,7 +448,7 @@ class listener(multiprocessing.Process): #pragma: no cover
             bounty.bountyLock = items.get('bountyLock')
         if items.get('keyList'):
             from common import bounty
-            boutny.keyList = items.get('keyList')
+            bounty.keyList = items.get('keyList')
 
 class propagator(multiprocessing.Process): #pragma: no cover
     """A class to deal with the listener method"""
@@ -453,4 +478,4 @@ class propagator(multiprocessing.Process): #pragma: no cover
             bounty.bountyLock = items.get('bountyLock')
         if items.get('keyList'):
             from common import bounty
-            boutny.keyList = items.get('keyList')
+            bounty.keyList = items.get('keyList')
