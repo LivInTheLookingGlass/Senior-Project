@@ -304,16 +304,24 @@ def addBounty(bounty):
     first = verify(bounty)
     safeprint("Internal verify")
     second = bounty.isValid()
-    if first and second:
+    if not second:
+        rval = -3
+    elif not first:
+        rval = -2
+    elif bounty in getBountyList():
+        rval = -1
+    else:
+        rval = 1
+    if rval == 1:
         addValidBounty(bounty)
-    return (first and second)
+    return rval
 
 def addValidBounty(bounty):
     """This adds a bounty to the list under the assumption that it's already been validated. Must be of type common.bounty.Bounty"""
     with bountyLock:
         global bountyList
         bountyList.append(bounty)
-        bountyList = list(set(bountyList))  #trim it in the simples way possible. Doesn't protect against malleability
+        bountyList = list(set(bountyList))  #trim it in the simplest way possible. Doesn't protect against malleability
 
 def internalVerify(bounty): #pragma: no cover
     """Proxy for the Bounty.isValid() method, for use with multiprocessing.Pool"""
@@ -326,11 +334,19 @@ def addBounties(bounties):
     async = pool.map_async(verify,bounties)  #defer this for possible efficiency boost
     internal = pool.map(internalVerify,bounties)
     external = async.get()
+    rvals = []
     for i in range(len(bounties)):
-        if internal[i] and external[i]:
+        if not internal[i]:
+            rvals.append(-3)
+        elif not external[i]:
+            rvals.append(-2)
+        elif bounties[i] in getBountyList():
+            rvals.append(-1)
+        else:
+            rvals.append(1)
+        if rvals[i] == 1:
             addValidBounty(bounties[i])
-    return [internal[i] and external[i] for i in range(len(bounties))]
-    #return the two result lists anded together
+    return rvals
 
 def getBounty(charity, factor):
     """Retrieve the next best bounty from the list"""

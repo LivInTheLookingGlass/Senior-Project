@@ -304,15 +304,17 @@ def handleIncomingBounty(conn, key=None):
     received = recv(conn)
     safeprint("Adding bounty: " + received.decode())
     try:
-        if addBounty(received):
+        valid = addBounty(received)
+        if valid >= -1: #If it's valid, even if it's a duplicate, send valid signal
             send(valid_signal,conn,key)
-            mouth = socket.socket()
-            from common import settings
-            mouth.connect(("localhost",settings.config['port'] + 1))
-            mouth.send(incoming_bounty)
-            mouth.send(pad(received))
-            mouth.send(close_signal)
-            mouth.close()
+            if valid >= 0:  #If it's valid and not already received, propagate
+                mouth = socket.socket()
+                from common import settings
+                mouth.connect(("localhost",settings.config['port'] + 1))
+                mouth.send(incoming_bounty)
+                mouth.send(pad(received))
+                mouth.send(close_signal)
+                mouth.close()
         else:
             send(invalid_signal,conn,key)
     except Exception as error:
