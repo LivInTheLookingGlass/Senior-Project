@@ -160,7 +160,10 @@ class Bounty(object):
                 return False
             from common.call import parse
             safeprint("Testing bounty requirements",verbosity=1)
-            return parse(self.data.get('reqs'))
+            if parse(self.data.get('reqs')):
+                return 1
+            else:
+                return -1
         except:
             return False
 
@@ -253,7 +256,10 @@ def verify(string):
             return False
         from common.call import parse
         safeprint("Testing bounty requirements",verbosity=1)
-        return parse(test.data.get('reqs'))
+        if parse(test.data.get('reqs')):
+            return 1
+        else:
+            return -1
     except:
         return False
 
@@ -310,6 +316,8 @@ def addBounty(bounty):
         rval = -2
     elif bounty in getBountyList():
         rval = -1
+    elif second == -1:
+        rval = 0
     else:
         rval = 1
     if rval == 1:
@@ -342,6 +350,8 @@ def addBounties(bounties):
             rvals.append(-2)
         elif bounties[i] in getBountyList():
             rvals.append(-1)
+        elif internal[i] == -1:
+            rvals.append(0)
         else:
             rvals.append(1)
         if rvals[i] == 1:
