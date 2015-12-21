@@ -194,7 +194,8 @@ def requestBounties(address):
                 if valids[i] >= 0:  #If the bounty is valid and not a duplicate, add it to propagation list
                     toSend.append(bounties[i])
             mouth = socket.socket()
-            mouth.connect(("localhost":settings.config.get('port') + 1))
+            from common import settings
+            mouth.connect(("localhost",settings.config.get('port') + 1))
             mouth.send(incoming_bounties)
             mouth.send(pad(pickle.dumps(toSend,0)))
             mouth.send(close_signal)
