@@ -265,7 +265,7 @@ def listen(port, outbound, q, v, serv):
             if packet == peer_request:
                 key = handlePeerRequest(conn,True,key=key)
             elif packet == bounty_request:
-                key = handleBountyRequest(conn,key=key)
+                key = handleBountyRequest(conn,True,key=key)
             elif packet == incoming_bounty:
                 key = handleIncomingBounty(conn,key=key)
             send(close_signal,conn,key)
