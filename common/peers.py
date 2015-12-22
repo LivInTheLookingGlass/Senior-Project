@@ -184,6 +184,7 @@ def requestBounties(address):
         key = send(bounty_request,conn,None)
         received = recv(conn)
         handleBountyRequest(conn,False,key=key)
+        recv(conn)
         send(close_signal,conn,key)
         conn.close()
     except Exception as error:
