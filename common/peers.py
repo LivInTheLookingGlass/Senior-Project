@@ -328,6 +328,7 @@ def handleBountyRequest(conn, exchange, key=None):
         except Exception as error:
             safeprint("Could not add bounties")
             safeprint(type(error))
+            traceback.print_exc()
             #later add function to request without charity bounties
     return key
 
