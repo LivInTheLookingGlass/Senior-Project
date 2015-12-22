@@ -337,8 +337,8 @@ def internalVerify(bounty): #pragma: no cover
 
 def addBounties(bounties):
     """Add a list of bounties in parallel using multiprocessing.Pool for verification"""
-    from multiprocessing import Pool
-    pool = Pool()
+    from multiprocessing.pool import ThreadPool
+    pool = ThreadPool()
     async = pool.map_async(verify,bounties)  #defer this for possible efficiency boost
     internal = pool.map(internalVerify,bounties)
     external = async.get()
