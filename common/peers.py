@@ -227,7 +227,8 @@ def initializePeerConnections(newPort,newip,newport):
             newlist.extend(requestPeerlist(peer))
         peerlist.extend(newlist)
     trimPeers()
-    for peer in peerlist:
+    safeprint("getting bounties from peers and seeds",verbosity=1)
+    for peer in peerlist[:] + seedlist[:]:
         requestBounties(peer)
     safeprint("peer network extended",verbosity=1)
     saveToFile()
