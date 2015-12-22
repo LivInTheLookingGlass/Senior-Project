@@ -309,27 +309,25 @@ def handleBountyRequest(conn, exchange, key=None):
         send(peer_request,conn,key)
         received = recv(conn)
         safeprint("Received exchange")
-        peerlist.extend(pickle.loads(received))
-        trimPeers()
-    try:
-        safeprint(pickle.loads(received),verbosity=2)
-        bounties = pickle.loads(received)
-        valids = addBounties(bounties)
-        toSend = []
-        for i in range(len(bounties)):
-            if valids[i] >= 0:  #If the bounty is valid and not a duplicate, add it to propagation list
-                toSend.append(bounties[i])
-        mouth = socket.socket()
-        from common import settings
-        mouth.connect(("localhost",settings.config.get('port') + 1))
-        mouth.send(incoming_bounties)
-        mouth.send(pad(pickle.dumps(toSend,0)))
-        mouth.send(close_signal)
-        mouth.close()
-    except Exception as error:
-        safeprint("Could not add bounties")
-        safeprint(type(error))
-        #later add function to request without charity bounties
+        try:
+            safeprint(pickle.loads(received),verbosity=2)
+            bounties = pickle.loads(received)
+            valids = addBounties(bounties)
+            toSend = []
+            for i in range(len(bounties)):
+                if valids[i] >= 0:  #If the bounty is valid and not a duplicate, add it to propagation list
+                    toSend.append(bounties[i])
+            mouth = socket.socket()
+            from common import settings
+            mouth.connect(("localhost",settings.config.get('port') + 1))
+            mouth.send(incoming_bounties)
+            mouth.send(pad(pickle.dumps(toSend,0)))
+            mouth.send(close_signal)
+            mouth.close()
+        except Exception as error:
+            safeprint("Could not add bounties")
+            safeprint(type(error))
+            #later add function to request without charity bounties
     return key
 
 def handleIncomingBounty(conn, key=None):
