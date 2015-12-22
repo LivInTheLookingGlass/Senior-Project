@@ -244,8 +244,8 @@ def listen(port, outbound, q, v, serv):
     server.settimeout(5)
     if sys.version_info[0] < 3 and sys.platform == "win32":
         server.setblocking(True)
-    ext_ip = ""
-    ext_port = -1
+    global ext_ip
+    global ext_port
     if outbound is True:
         safeprint("UPnP mode is disabled")
     else:
