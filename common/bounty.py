@@ -137,6 +137,8 @@ class Bounty(object):
         try:
             safeprint("Testing IP address",verbosity=1)
             boolean = int(self.ip.split(":")[1]) in range(1024,49152)
+            if len(self.ip.split(":")[0].split(".")) != 4:
+                return False
             for sect in self.ip.split(":")[0].split("."):
                 boolean = int(sect) in range(0,256) and boolean
             if not boolean:
@@ -233,6 +235,8 @@ def verify(string):
     try:
         safeprint("Testing IP address",verbosity=1)
         boolean = int(test.ip.split(":")[1]) in range(1024,49152)
+        if len(test.ip.split(":")[0].split(".")) != 4:
+            return False
         for sect in test.ip.split(":")[0].split("."):
             boolean = int(sect) in range(0,256) and boolean
         if not boolean:
