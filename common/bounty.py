@@ -310,6 +310,7 @@ def addBounty(bounty):
     first = verify(bounty)
     safeprint("Internal verify")
     second = bounty.isValid()
+    safeprint(second)
     if not second:
         rval = -3
     elif not first:
