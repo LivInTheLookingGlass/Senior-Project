@@ -19,28 +19,30 @@ remove   = []
 bounties = []
 
 #constants
-peers_file      = "data" + os.sep + "peerlist.pickle"
-key_request     = "Key Request".encode('utf-8')
-close_signal    = "Close Signal".encode("utf-8")
-peer_request    = "Requesting Peers".encode("utf-8")
-bounty_request  = "Requesting Bounties".encode("utf-8")
-incoming_bounty = "Incoming Bounty".encode("utf-8")
-valid_signal    = "Bounty was valid".encode("utf-8")
-invalid_signal  = "Bounty was invalid".encode("utf-8")
-end_of_message  = "End of message".encode("utf-8")
+peers_file          = "data" + os.sep + "peerlist.pickle"
+key_request         = "Key Request".encode('utf-8')
+close_signal        = "Close Signal".encode("utf-8")
+peer_request        = "Requesting Peers".encode("utf-8")
+bounty_request      = "Requesting Bounties".encode("utf-8")
+incoming_bounties   = "Incoming Bounties".encode("utf-8")
+incoming_bounty     = "Incoming Bounty".encode("utf-8")
+valid_signal        = "Bounty was valid".encode("utf-8")
+invalid_signal      = "Bounty was invalid".encode("utf-8")
+end_of_message      = "End of message".encode("utf-8")
 
-sig_length = len(max(close_signal,peer_request,bounty_request,incoming_bounty,valid_signal,invalid_signal,key=len))
+sig_length = len(max(close_signal,peer_request,bounty_request,incoming_bounties,incoming_bounty,valid_signal,invalid_signal,key=len))
 
 def pad(string):
     return string + " ".encode('utf-8') * (sig_length - (((len(string) - 1) % sig_length) + 1))
 
-close_signal    = pad(close_signal)
-peer_request    = pad(peer_request)
-bounty_request  = pad(bounty_request)
-incoming_bounty = pad(incoming_bounty)
-valid_signal    = pad(valid_signal)
-invalid_signal  = pad(invalid_signal)
-end_of_message  = pad(end_of_message)
+close_signal        = pad(close_signal)
+peer_request        = pad(peer_request)
+bounty_request      = pad(bounty_request)
+incoming_bounties   = pad(incoming_bounties)
+incoming_bounty     = pad(incoming_bounty)
+valid_signal        = pad(valid_signal)
+invalid_signal      = pad(invalid_signal)
+end_of_message      = pad(end_of_message)
 
 signals = [close_signal, peer_request, bounty_request, incoming_bounty, valid_signal, invalid_signal]
 
@@ -181,18 +183,10 @@ def requestBounties(address):
         conn.connect(address)
         key = send(bounty_request,conn,None)
         received = recv(conn)
+        handleBountyRequest(conn,False,key=key)
+        recv(conn)
         send(close_signal,conn,key)
         conn.close()
-        try:
-            safeprint(pickle.loads(received),verbosity=2)
-            bounties = pickle.loads(received)
-            for bounty in bounties:
-                addBounty(pickle.dumps(bounty,0))
-                safeprint("Bounty added")
-        except Exception as error:
-            safeprint("Could not add bounties. This is likely because you do not have the optional dependency PyCrypto")
-            safeprint(type(error))
-            #later add function to request without charity bounties
     except Exception as error:
         safeprint("Failed:" + str(type(error)))
         safeprint(error)
@@ -216,6 +210,9 @@ def initializePeerConnections(newPort,newip,newport):
             newlist.extend(requestPeerlist(peer))
         peerlist.extend(newlist)
     trimPeers()
+    safeprint("getting bounties from peers and seeds",verbosity=1)
+    for peer in peerlist[:] + seedlist[:]:
+        requestBounties(peer)
     safeprint("peer network extended",verbosity=1)
     saveToFile()
     safeprint("peer network saved to file",verbosity=1)
@@ -269,7 +266,7 @@ def listen(port, outbound, q, v, serv):
             if packet == peer_request:
                 key = handlePeerRequest(conn,True,key=key)
             elif packet == bounty_request:
-                key = handleBountyRequest(conn,key=key)
+                key = handleBountyRequest(conn,True,key=key)
             elif packet == incoming_bounty:
                 key = handleIncomingBounty(conn,key=key)
             send(close_signal,conn,key)
@@ -298,21 +295,59 @@ def handlePeerRequest(conn, exchange, key=None):
         peerlist.extend(pickle.loads(received))
         trimPeers()
     return key
+    
+def handleBountyRequest(conn, exchange, key=None):
+    """Given a socket, send the proper messages to complete a bounty request"""
+    if ext_port != -1:
+        toSend = pickle.dumps(getBountyList(),0)
+    toSend = pickle.dumps(peerlist[:],0)
+    if type(toSend) != type("a".encode("utf-8")):
+        safeprint("Test here")
+        toSend = toSend.encode("utf-8")
+    safeprint("Sending")
+    key = send(toSend,conn,key)
+    if exchange:
+        send(peer_request,conn,key)
+        received = recv(conn)
+        safeprint("Received exchange")
+        try:
+            safeprint(pickle.loads(received),verbosity=2)
+            bounties = pickle.loads(received)
+            valids = addBounties(bounties)
+            toSend = []
+            for i in range(len(bounties)):
+                if valids[i] >= 0:  #If the bounty is valid and not a duplicate, add it to propagation list
+                    toSend.append(bounties[i])
+            mouth = socket.socket()
+            from common import settings
+            mouth.connect(("localhost",settings.config.get('port') + 1))
+            mouth.send(incoming_bounties)
+            mouth.send(pad(pickle.dumps(toSend,0)))
+            mouth.send(close_signal)
+            mouth.close()
+        except Exception as error:
+            safeprint("Could not add bounties")
+            safeprint(type(error))
+            traceback.print_exc()
+            #later add function to request without charity bounties
+    return key
 
 def handleIncomingBounty(conn, key=None):
     """Given a socket, store an incoming bounty, and report it valid or invalid"""
     received = recv(conn)
     safeprint("Adding bounty: " + received.decode())
     try:
-        if addBounty(received):
+        valid = addBounty(received)
+        if valid >= -1: #If it's valid, even if it's a duplicate, send valid signal
             send(valid_signal,conn,key)
-            mouth = socket.socket()
-            from common import settings
-            mouth.connect(("localhost",settings.config['port'] + 1))
-            mouth.send(incoming_bounty)
-            mouth.send(pad(received))
-            mouth.send(close_signal)
-            mouth.close()
+            if valid >= 0:  #If it's valid and not already received, propagate
+                mouth = socket.socket()
+                from common import settings
+                mouth.connect(("localhost",settings.config['port'] + 1))
+                mouth.send(incoming_bounty)
+                mouth.send(pad(received))
+                mouth.send(close_signal)
+                mouth.close()
         else:
             send(invalid_signal,conn,key)
     except Exception as error:
@@ -338,6 +373,30 @@ def handleIncomingBountyP(conn):
         if bounty.isValid():
             from multiprocessing.pool import ThreadPool
             ThreadPool().map(propagate,[(bounty,x) for x in peerlist[:]])
+    except Exception as error:
+        safeprint("bounty propagation failed: " + str(type(error)))
+        safeprint(error)
+        traceback.print_exc()
+        return False
+
+def handleIncomingBountiesP(conn):
+    """Given a socket, store an incoming bounty, and report it valid or invalid"""
+    connected = True
+    received = "".encode('utf-8')
+    while connected:
+        packet = conn.recv(sig_length)
+        safeprint(packet,verbosity=3)
+        if not packet == close_signal:
+            received += packet
+        else:
+            connected = False
+    safeprint("Adding bounties: " + received.decode(),verbosity=2)
+    try:
+        bounties = pickle.loads(received)
+        for bounty in bounties:
+            if bounty.isValid():
+                from multiprocessing.pool import ThreadPool
+                ThreadPool().map(propagate,[(bounty,x) for x in peerlist[:]])
     except Exception as error:
         safeprint("bounty propagation failed: " + str(type(error)))
         safeprint(error)
