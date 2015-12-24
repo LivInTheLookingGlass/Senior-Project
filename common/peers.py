@@ -92,7 +92,7 @@ def recv(conn):
     except rsa.pkcs1.DecryptionError as error:
         safeprint("Decryption error")
         safeprint("Content: " + str(a))
-        return ""
+        return "".encode('utf-8')
 
 #The following is taken from Stack Overflow. Find the original at http://stackoverflow.com/a/1947766/4748474
 if os.name != "nt":
