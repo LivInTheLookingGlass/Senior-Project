@@ -156,7 +156,7 @@ def requestPeerlist(address):
         safeprint(pickle.loads(received),verbosity=2)
         if recv(conn) == peer_request:
             handlePeerRequest(conn,False,key=key)
-        recv(conn)
+            recv(conn)
         #test section
         conn = socket.socket()
         conn.settimeout(5)
@@ -188,8 +188,9 @@ def requestBounties(address):
         conn.connect(address)
         key = send(bounty_request,conn,None)
         received = recv(conn)
-        handleBountyRequest(conn,False,key=key)
-        recv(conn)
+        if recv(conn) == bounty_request:
+            handleBountyRequest(conn,False,key=key)
+            recv(conn)
         send(close_signal,conn,key)
         conn.close()
     except Exception as error:
