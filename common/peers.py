@@ -73,6 +73,7 @@ def send(msg, conn, key):
 
 def recv(conn):
     received = "".encode('utf-8')
+    a = ""
     try:
         while True:
             a = conn.recv(128)
@@ -90,7 +91,7 @@ def recv(conn):
                 received += a
     except rsa.pkcs1.DecryptionError as error:
         safeprint("Decryption error")
-        safeprint("Content: " + str(received))
+        safeprint("Content: " + str(a))
 
 #The following is taken from Stack Overflow. Find the original at http://stackoverflow.com/a/1947766/4748474
 if os.name != "nt":
