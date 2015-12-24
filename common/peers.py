@@ -298,9 +298,7 @@ def handlePeerRequest(conn, exchange, key=None):
     
 def handleBountyRequest(conn, exchange, key=None):
     """Given a socket, send the proper messages to complete a bounty request"""
-    if ext_port != -1:
-        toSend = pickle.dumps(getBountyList(),0)
-    toSend = pickle.dumps(peerlist[:],0)
+    toSend = pickle.dumps(getBountyList(),0)
     if type(toSend) != type("a".encode("utf-8")):
         safeprint("Test here")
         toSend = toSend.encode("utf-8")
