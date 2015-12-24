@@ -81,7 +81,7 @@ def recv(conn):
                 conn.sendall(pickle.dumps((myPriv.n,myPriv.e),0))
                 continue
             a = rsa.decrypt(a,myPriv)
-            safeprint(a,verbosity=3)
+            safeprint("Packet = " + str(a),verbosity=3)
             if a in signals:
                 return a
             elif a == end_of_message:
