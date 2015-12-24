@@ -43,6 +43,7 @@ def waitForty(v,q): #pragma: no cover
 
 if __name__ == "__main__": #pragma: no cover
     settings.setup()
+    settings.config['port'] = 44566
     testBounty('8.8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1440,"Correctly formed bounty")
     testBounty('8.8.8.8',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1440,"Malformed bounty 1 (ip failure)")
     testBounty('8.8.8:8888',"1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9",1440,"Malformed bounty 2 (ip failure)")
