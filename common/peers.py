@@ -307,7 +307,7 @@ def handleBountyRequest(conn, exchange, key=None):
     safeprint("Sending")
     key = send(toSend,conn,key)
     if exchange:
-        send(peer_request,conn,key)
+        send(bounty_request,conn,key)
         received = recv(conn)
         safeprint("Received exchange")
         try:
