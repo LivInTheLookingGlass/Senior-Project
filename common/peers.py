@@ -73,19 +73,24 @@ def send(msg, conn, key):
 
 def recv(conn):
     received = "".encode('utf-8')
-    while True:
-        a = conn.recv(128)
-        if a == key_request:
-            safeprint("Key requested. Sending key")
-            conn.sendall(pickle.dumps((myPriv.n,myPriv.e),0))
-            continue
-        a = rsa.decrypt(a,myPriv)
-        if a in signals:
-            return a
-        elif a == end_of_message:
-            return received
-        else:
-            received += a
+    try:
+        while True:
+            a = conn.recv(128)
+            if a == key_request:
+                safeprint("Key requested. Sending key")
+                conn.sendall(pickle.dumps((myPriv.n,myPriv.e),0))
+                continue
+            a = rsa.decrypt(a,myPriv)
+            safeprint(a,verbosity=3)
+            if a in signals:
+                return a
+            elif a == end_of_message:
+                return received
+            else:
+                received += a
+    except rsa.pkcs1.DecryptionError as error:
+        safeprint("Decryption error")
+        safeprint("Content: " + str(received))
 
 #The following is taken from Stack Overflow. Find the original at http://stackoverflow.com/a/1947766/4748474
 if os.name != "nt":
