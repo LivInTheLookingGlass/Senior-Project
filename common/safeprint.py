@@ -9,6 +9,6 @@ def safeprint(content, verbosity=0):
         with open("output.txt","a") as log:
             log.write(string)
         sys.stdout.write(settings.config.get('verbose'))
-        sys.st
+        sys.stdout.write("\r\n")
         if settings.config.get('verbose') >= verbosity:
             sys.stdout.write(string)
