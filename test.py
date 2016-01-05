@@ -101,3 +101,4 @@ if __name__ == "__main__": #pragma: no cover
     testSig.data['key'] = (1,1)
     testSig.checkSign()
     safeprint(bounty.addBounties([bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290),bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",0)]))
+    exit(0)
