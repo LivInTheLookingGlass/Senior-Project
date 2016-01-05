@@ -346,9 +346,12 @@ def addBounties(bounties):
     """Add a list of bounties in parallel using multiprocessing.Pool for verification"""
     from multiprocessing.pool import ThreadPool
     pool = ThreadPool()
+    safeprint("Mapping verifications",verbosity=3)
     async = pool.map_async(verify,bounties)  #defer this for possible efficiency boost
     internal = pool.map(internalVerify,bounties)
+    safeprint("Waiting for verifications",verbosity=3)
     external = async.get()
+    safeprint("Received verifications",verbosity=3)
     rvals = []
     for i in range(len(bounties)):
         if not internal[i]:
