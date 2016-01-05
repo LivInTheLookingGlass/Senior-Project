@@ -40,6 +40,7 @@ def sync():
     return items
 
 def main():
+    #Begin Init
     settings.setup()
     from common.safeprint import safeprint
     try:
@@ -76,7 +77,23 @@ def main():
             ext_ip = feedback[1]
             ext_port = feedback[2]
     initializePeerConnections(settings.config['port'], ext_ip, ext_port)
+    #End Init
+    
+    #Begin main loop
+    if settings.config.get('seed'):
+        safeprint("Seed mode activated")
+    elif settings.config.get('server'):
+        safeprint("Server mode activated")
+    else:
+        safeprint("Client mode activated")
+    #End main loop
+    
+    #Begin shutdown
     live.value = False
+    settings.saveSettings()
+    saveToFile()
+    bounty.saveToFile()
+    #End shutdown
 
 if __name__ == "__main__":
     main()
