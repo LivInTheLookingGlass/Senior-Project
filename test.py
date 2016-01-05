@@ -61,7 +61,7 @@ if __name__ == "__main__": #pragma: no cover
     testBounty('8.8.8.8:8888',"1MWSdYMKEpfWVxC6BGYARxsksaQuyEWzG5",1480,"Correctly formed bounty 3")
     testBounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290,"Correctly formed bounty 4")
     safeprint(bounty.getBountyList())
-    bounty.saveToFile(bounty.getBountyList())
+    bounty.saveToFile()
     bounty.loadFromFile()
     safeprint(bounty.getBountyList())
     safeprint("3 bounties should follow")
