@@ -288,7 +288,7 @@ def loadFromFile():
             try:
                 safeprint("Loading bounty list from file",verbosity=2)
                 templist = pickle.load(open(bounty_path,"rb"))
-                addBounties(templist)
+                safeprint(addBounties(templist),verbosity=3)
                 safeprint("Bounty list loaded and added",verbosity=2)
             except:
                 return False
@@ -366,6 +366,7 @@ def addBounties(bounties):
             rvals.append(1)
         if rvals[i] == 1:
             addValidBounty(bounties[i])
+    safeprint("Verifications parsed",verbosity=3)
     return rvals
 
 def getBounty(charity, factor):
