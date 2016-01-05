@@ -5,6 +5,7 @@ config = {'accept_latency':2000,
           'outbound':False,
           'port':44565,
           'propagate_factor':2,
+          'seed':False,
           'server':False,
           'verbose':0}
 settings_file = "data" + os.sep + "settings.conf"
@@ -58,12 +59,18 @@ def setup():
                       default=None,
                       type="int",
                       help='Port for the program to listen at')
-    parser.add_option('-S',
+    parser.add_option('-s',
                       '--server',
                       dest='server',
                       default=None,
                       action="store_true",
                       help='Sets whether you operate as a server or client (Default: client)')
+    parser.add_option('-S',
+                      '--seed',
+                      dest='seed',
+                      default=None,
+                      action="store_true",
+                      help='Sets whether you operate as a seed server or client (Default: client)')
     parser.add_option('-v',
                       dest='verbose',
                       default=None,
