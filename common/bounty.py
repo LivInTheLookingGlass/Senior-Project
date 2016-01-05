@@ -286,8 +286,10 @@ def loadFromFile():
     if os.path.exists(bounty_path):
         with bountyLock:
             try:
+                safeprint("Loading bounty list from file",verbosity=2)
                 templist = pickle.load(open(bounty_path,"rb"))
                 addBounties(templist)
+                safeprint("Bounty list loaded and added",verbosity=2)
             except:
                 return False
         return True
