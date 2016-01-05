@@ -274,11 +274,11 @@ def getBountyList():
         temp = bountyList
     return temp
 
-def saveToFile(bountyList):
+def saveToFile():
     """Save the current bounty list to a file"""
     if not os.path.exists(bounty_path.split(os.sep)[0]):
         os.mkdir(bounty_path.split(os.sep)[0])
-    pickle.dump(bountyList[:],open(bounty_path, "wb"),0)
+    pickle.dump(getBountyList(),open(bounty_path, "wb"),0)
     return True
 
 def loadFromFile():
