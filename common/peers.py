@@ -73,19 +73,26 @@ def send(msg, conn, key):
 
 def recv(conn):
     received = "".encode('utf-8')
-    while True:
-        a = conn.recv(128)
-        if a == key_request:
-            safeprint("Key requested. Sending key")
-            conn.sendall(pickle.dumps((myPriv.n,myPriv.e),0))
-            continue
-        a = rsa.decrypt(a,myPriv)
-        if a in signals:
-            return a
-        elif a == end_of_message:
-            return received
-        else:
-            received += a
+    a = ""
+    try:
+        while True:
+            a = conn.recv(128)
+            if a == key_request:
+                safeprint("Key requested. Sending key")
+                conn.sendall(pickle.dumps((myPriv.n,myPriv.e),0))
+                continue
+            a = rsa.decrypt(a,myPriv)
+            safeprint("Packet = " + str(a),verbosity=3)
+            if a in signals:
+                return a
+            elif a == end_of_message:
+                return received
+            else:
+                received += a
+    except rsa.pkcs1.DecryptionError as error:
+        safeprint("Decryption error")
+        safeprint("Content: " + str(a))
+        return "".encode('utf-8')
 
 #The following is taken from Stack Overflow. Find the original at http://stackoverflow.com/a/1947766/4748474
 if os.name != "nt":
@@ -151,7 +158,7 @@ def requestPeerlist(address):
         safeprint(pickle.loads(received),verbosity=2)
         if recv(conn) == peer_request:
             handlePeerRequest(conn,False,key=key)
-        recv(conn)
+            recv(conn)
         #test section
         conn = socket.socket()
         conn.settimeout(5)
@@ -183,8 +190,9 @@ def requestBounties(address):
         conn.connect(address)
         key = send(bounty_request,conn,None)
         received = recv(conn)
-        handleBountyRequest(conn,False,key=key)
-        recv(conn)
+        if recv(conn) == bounty_request:
+            handleBountyRequest(conn,False,key=key)
+            recv(conn)
         send(close_signal,conn,key)
         conn.close()
     except Exception as error:
@@ -298,16 +306,14 @@ def handlePeerRequest(conn, exchange, key=None):
     
 def handleBountyRequest(conn, exchange, key=None):
     """Given a socket, send the proper messages to complete a bounty request"""
-    if ext_port != -1:
-        toSend = pickle.dumps(getBountyList(),0)
-    toSend = pickle.dumps(peerlist[:],0)
+    toSend = pickle.dumps(getBountyList(),0)
     if type(toSend) != type("a".encode("utf-8")):
         safeprint("Test here")
         toSend = toSend.encode("utf-8")
     safeprint("Sending")
     key = send(toSend,conn,key)
     if exchange:
-        send(peer_request,conn,key)
+        send(bounty_request,conn,key)
         received = recv(conn)
         safeprint("Received exchange")
         try:
