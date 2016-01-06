@@ -336,7 +336,7 @@ def addValidBounty(bounty):
     with bountyLock:
         global bountyList
         bountyList.append(bounty)
-        bountyList = list(set(bountyList))  #trim it in the simplest way possible. Doesn't protect against malleability
+        #bountyList = list(set(bountyList))  #trim it in the simplest way possible. Doesn't protect against malleability
 
 def internalVerify(bounty): #pragma: no cover
     """Proxy for the Bounty.isValid() method, for use with multiprocessing.Pool"""
@@ -354,7 +354,7 @@ def addBounties(bounties):
     safeprint("Received verifications",verbosity=3)
     rvals = []
     for i in range(len(bounties)):
-        safeprint("Finishing the processing of bounty " + str(i) + "/" + str(len(bounties)),verbosity=2)
+        safeprint("Finishing the processing of bounty " + str(i+1) + "/" + str(len(bounties)),verbosity=2)
         if not internal[i]:
             rvals.append(-3)
         elif not external[i]:
@@ -365,6 +365,7 @@ def addBounties(bounties):
             rvals.append(0)
         else:
             rvals.append(1)
+        safeprint("Passed first if",verbosity=3)
         if rvals[i] == 1:
             addValidBounty(bounties[i])
     safeprint("Verifications parsed",verbosity=3)
