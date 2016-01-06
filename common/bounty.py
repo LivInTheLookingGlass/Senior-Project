@@ -353,6 +353,8 @@ def addBounties(bounties):
     external = async.get()
     safeprint("Received verifications",verbosity=3)
     rvals = []
+    safeprint(internal)
+    safeprint(external)
     for i in range(len(bounties)):
         safeprint("Finishing the processing of bounty " + str(i+1) + "/" + str(len(bounties)),verbosity=2)
         if not internal[i]:
