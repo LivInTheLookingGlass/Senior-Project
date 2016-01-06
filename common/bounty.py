@@ -336,7 +336,13 @@ def addValidBounty(bounty):
     with bountyLock:
         global bountyList
         bountyList.append(bounty)
-        #bountyList = list(set(bountyList))  #trim it in the simplest way possible. Doesn't protect against malleability
+        if type(bountyList) == type([]):
+            bountyList = list(set(bountyList))  #trim it in the simplest way possible. Doesn't protect against malleability
+        else:   #Or if it's a managed list, pop off each item and replace it with its set
+            temp = list(set(bountyList))
+            for i in range(len(bountyList)):
+                remove = bountyList.pop()
+            bountyList.extend(temp)
 
 def internalVerify(bounty): #pragma: no cover
     """Proxy for the Bounty.isValid() method, for use with multiprocessing.Pool"""
