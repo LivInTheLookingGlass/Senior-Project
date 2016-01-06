@@ -7,6 +7,7 @@ config = {'accept_latency':2000,
           'propagate_factor':2,
           'seed':False,
           'server':False,
+          'test':False,
           'verbose':0}
 settings_file = "data" + os.sep + "settings.conf"
 
@@ -71,6 +72,12 @@ def setup():
                       default=None,
                       action="store_true",
                       help='Sets whether you operate as a seed server or client (Default: client)')
+    parser.add_option('-t',
+                      '--test',
+                      dest='test',
+                      default=None,
+                      action="store_true",
+                      help='Sets whether you operate in test mode, where loops have a determinate length.')
     parser.add_option('-v',
                       dest='verbose',
                       default=None,
