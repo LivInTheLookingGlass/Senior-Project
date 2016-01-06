@@ -146,9 +146,9 @@ install:
   - $pipinstall -r optional.txt
 # command to run tests
 script: 
-  - if [ $Cov == 'true'  ]; then $coverage run -a main.py -vvv; fi
-  - if [ $Cov == 'false' ]; then python main.py -vv; fi
-  - if [ $Cov == 'true'  ]; then $coverage run -a test.py -vvv; fi
-  - if [ $Cov == 'false' ]; then python test.py -vv; fi
+  - if [ $Cov == 'true'  ]; then $coverage run -a main.py -tvvv; fi
+  - if [ $Cov == 'false' ]; then python main.py -tvv; fi
+  - if [ $Cov == 'true'  ]; then $coverage run -a test.py -tvvv; fi
+  - if [ $Cov == 'false' ]; then python test.py -tvv; fi
 after_success:
   - if [ $Cov == 'true'  ]; then $coverage combine; codecov --token=0482d032-e24c-461b-a116-f0e3dbc88734; fi 
