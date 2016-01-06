@@ -355,23 +355,21 @@ def addBounties(bounties):
     rvals = []
     safeprint(internal)
     safeprint(external)
-    with bountyLock:
-        global bountyList
-        for i in range(len(bounties)):
-            safeprint("Finishing the processing of bounty " + str(i+1) + "/" + str(len(bounties)),verbosity=2)
-            if not internal[i]:
-                rvals.append(-3)
-            elif not external[i]:
-                rvals.append(-2)
-            elif bounties[i] in bountyList:
-                rvals.append(-1)
-            elif internal[i] == -1:
-                rvals.append(0)
-            else:
-                rvals.append(1)
-            safeprint("Passed first if",verbosity=3)
-            if rvals[i] == 1:
-                addValidBounty(bounties[i])
+    for i in range(len(bounties)):
+        safeprint("Finishing the processing of bounty " + str(i+1) + "/" + str(len(bounties)),verbosity=2)
+        if not internal[i]:
+            rvals.append(-3)
+        elif not external[i]:
+            rvals.append(-2)
+        elif bounties[i] in bountyList:
+            rvals.append(-1)
+        elif internal[i] == -1:
+            rvals.append(0)
+        else:
+            rvals.append(1)
+        safeprint("Passed first if",verbosity=3)
+        if rvals[i] == 1:
+            addValidBounty(bounties[i])
     safeprint("Verifications parsed",verbosity=3)
     return rvals
 
