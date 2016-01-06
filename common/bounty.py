@@ -354,6 +354,7 @@ def addBounties(bounties):
     safeprint("Received verifications",verbosity=3)
     rvals = []
     for i in range(len(bounties)):
+        safeprint("Finishing the processing of bounty " + str(i) + "/" + str(len(bounties)),verbosity=2)
         if not internal[i]:
             rvals.append(-3)
         elif not external[i]:
