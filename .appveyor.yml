@@ -108,9 +108,9 @@ test: off
  
 build_script:
   - "cd %HOME%"
-  - "%COV% run -a test.py -vvv"
+  - "%COV% run -a test.py -tvvv"
   - sleep 5
-  - "%COV% run -a main.py -vvv"
+  - "%COV% run -a main.py -tvvv"
   - "type output.txt"
   
 on_success:
