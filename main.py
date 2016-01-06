@@ -82,6 +82,11 @@ def main():
     #Begin main loop
     if settings.config.get('seed'):
         safeprint("Seed mode activated")
+        try:
+            while True and not settings.config.get('test'):
+                sleep(0.1)
+        except KeyboardInterrupt:
+            safeprint("Keyboard Interrupt")
     elif settings.config.get('server'):
         safeprint("Server mode activated")
     else:
@@ -89,6 +94,7 @@ def main():
     #End main loop
     
     #Begin shutdown
+    safeprint("Beginning exit process")
     live.value = False
     settings.saveSettings()
     saveToFile()
