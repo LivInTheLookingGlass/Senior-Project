@@ -303,6 +303,7 @@ def handlePeerRequest(conn, exchange, key=None, received=[]):
         send(peer_request,conn,key)
         received = recv(conn)
         safeprint("Received exchange")
+        safeprint(pickle.loads(received))
         peerlist.extend(pickle.loads(received))
         trimPeers()
     return key
