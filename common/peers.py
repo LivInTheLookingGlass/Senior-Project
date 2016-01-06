@@ -293,6 +293,8 @@ def handlePeerRequest(conn, exchange, key=None, received=[]):
         unfiltered = peerlist[:] + [((ext_ip,ext_port),myPub.n,myPub.e)]
     unfiltered = peerlist[:]
     filtered = list(set(unfiltered) - set(received))
+    safeprint("Unfiltered: " + str(unfiltered),verbosity=3)
+    safeprint("Filtered:   " + str(filtered),verbosity=3)
     toSend = pickle.dumps(filtered,0)
     if type(toSend) != type("a".encode("utf-8")):
         safeprint("Test here")
@@ -302,8 +304,8 @@ def handlePeerRequest(conn, exchange, key=None, received=[]):
     if exchange:
         send(peer_request,conn,key)
         received = recv(conn)
-        safeprint("Received exchange")
-        safeprint(pickle.loads(received))
+        safeprint("Received exchange",verbosity=1)
+        safeprint(pickle.loads(received),verbosity=3)
         peerlist.extend(pickle.loads(received))
         trimPeers()
     return key
