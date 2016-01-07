@@ -274,11 +274,11 @@ def getBountyList():
         temp = bountyList
     return temp
 
-def saveToFile(bountyList):
+def saveToFile():
     """Save the current bounty list to a file"""
     if not os.path.exists(bounty_path.split(os.sep)[0]):
         os.mkdir(bounty_path.split(os.sep)[0])
-    pickle.dump(bountyList,open(bounty_path, "wb"),0)
+    pickle.dump(getBountyList(),open(bounty_path, "wb"),0)
     return True
 
 def loadFromFile():
@@ -286,7 +286,10 @@ def loadFromFile():
     if os.path.exists(bounty_path):
         with bountyLock:
             try:
-                bountyList = pickle.load(open(bounty_path,"rb"))
+                safeprint("Loading bounty list from file",verbosity=2)
+                templist = pickle.load(open(bounty_path,"rb"))
+                safeprint(addBounties(templist),verbosity=3)
+                safeprint("Bounty list loaded and added",verbosity=2)
             except:
                 return False
         return True
@@ -333,7 +336,9 @@ def addValidBounty(bounty):
     with bountyLock:
         global bountyList
         bountyList.append(bounty)
-        bountyList = list(set(bountyList))  #trim it in the simplest way possible. Doesn't protect against malleability
+        temp = list(set(bountyList))    #trim it in the simplest way possible. Doesn't protect against malleability
+        del bountyList[:]
+        bountyList.extend(temp)
 
 def internalVerify(bounty): #pragma: no cover
     """Proxy for the Bounty.isValid() method, for use with multiprocessing.Pool"""
@@ -343,23 +348,31 @@ def addBounties(bounties):
     """Add a list of bounties in parallel using multiprocessing.Pool for verification"""
     from multiprocessing.pool import ThreadPool
     pool = ThreadPool()
+    safeprint("Mapping verifications",verbosity=3)
     async = pool.map_async(verify,bounties)  #defer this for possible efficiency boost
     internal = pool.map(internalVerify,bounties)
+    safeprint("Waiting for verifications",verbosity=3)
     external = async.get()
+    safeprint("Received verifications",verbosity=3)
     rvals = []
+    safeprint(internal)
+    safeprint(external)
     for i in range(len(bounties)):
+        safeprint("Finishing the processing of bounty " + str(i+1) + "/" + str(len(bounties)),verbosity=2)
         if not internal[i]:
             rvals.append(-3)
         elif not external[i]:
             rvals.append(-2)
-        elif bounties[i] in getBountyList():
+        elif bounties[i] in bountyList:
             rvals.append(-1)
         elif internal[i] == -1:
             rvals.append(0)
         else:
             rvals.append(1)
+        safeprint("Passed first if",verbosity=3)
         if rvals[i] == 1:
             addValidBounty(bounties[i])
+    safeprint("Verifications parsed",verbosity=3)
     return rvals
 
 def getBounty(charity, factor):

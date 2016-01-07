@@ -5,7 +5,9 @@ config = {'accept_latency':2000,
           'outbound':False,
           'port':44565,
           'propagate_factor':2,
+          'seed':False,
           'server':False,
+          'test':False,
           'verbose':0}
 settings_file = "data" + os.sep + "settings.conf"
 
@@ -13,7 +15,7 @@ def saveSettings():
     """Save settings to a file"""
     if not os.path.exists(settings_file.split(os.sep)[0]):
         os.mkdir(settings_file.split(os.sep)[0])
-    pickle.dump(config,open(settings_file,"wb"),0)
+    pickle.dump(dict(config),open(settings_file,"wb"),0)
 
 def loadSettings():
     """Load settings from a file"""
@@ -58,12 +60,24 @@ def setup():
                       default=None,
                       type="int",
                       help='Port for the program to listen at')
-    parser.add_option('-S',
+    parser.add_option('-s',
                       '--server',
                       dest='server',
                       default=None,
                       action="store_true",
                       help='Sets whether you operate as a server or client (Default: client)')
+    parser.add_option('-S',
+                      '--seed',
+                      dest='seed',
+                      default=None,
+                      action="store_true",
+                      help='Sets whether you operate as a seed server or client (Default: client)')
+    parser.add_option('-t',
+                      '--test',
+                      dest='test',
+                      default=None,
+                      action="store_true",
+                      help='Sets whether you operate in test mode, where loops have a determinate length.')
     parser.add_option('-v',
                       dest='verbose',
                       default=None,
