@@ -157,7 +157,7 @@ def requestPeerlist(address):
         received = recv(conn)
         safeprint(pickle.loads(received),verbosity=2)
         if recv(conn) == peer_request:
-            handlePeerRequest(conn,False,key=key)
+            handlePeerRequest(conn,False,key=key,received=pickle.loads(received))
             recv(conn)
         #test section
         conn = socket.socket()
@@ -191,10 +191,11 @@ def requestBounties(address):
         key = send(bounty_request,conn,None)
         received = recv(conn)
         if recv(conn) == bounty_request:
-            handleBountyRequest(conn,False,key=key)
+            handleBountyRequest(conn,False,key=key,received=pickle.loads(received))
             recv(conn)
         send(close_signal,conn,key)
         conn.close()
+        addBounties(pickle.loads(received))
     except Exception as error:
         safeprint("Failed:" + str(type(error)))
         safeprint(error)
@@ -286,11 +287,15 @@ def listen(port, outbound, q, v, serv):
             safeprint(error)
             traceback.print_exc()
 
-def handlePeerRequest(conn, exchange, key=None):
+def handlePeerRequest(conn, exchange, key=None, received=[]):
     """Given a socket, send the proper messages to complete a peer request"""
     if ext_port != -1:
-        toSend = pickle.dumps(peerlist[:] + [((ext_ip,ext_port),myPub.n,myPub.e)],0)
-    toSend = pickle.dumps(peerlist[:],0)
+        unfiltered = peerlist[:] + [((ext_ip,ext_port),myPub.n,myPub.e)]
+    unfiltered = peerlist[:]
+    filtered = list(set(unfiltered) - set(received))
+    safeprint("Unfiltered: " + str(unfiltered),verbosity=3)
+    safeprint("Filtered:   " + str(filtered),verbosity=3)
+    toSend = pickle.dumps(filtered,0)
     if type(toSend) != type("a".encode("utf-8")):
         safeprint("Test here")
         toSend = toSend.encode("utf-8")
@@ -299,14 +304,17 @@ def handlePeerRequest(conn, exchange, key=None):
     if exchange:
         send(peer_request,conn,key)
         received = recv(conn)
-        safeprint("Received exchange")
+        safeprint("Received exchange",verbosity=1)
+        safeprint(pickle.loads(received),verbosity=3)
         peerlist.extend(pickle.loads(received))
         trimPeers()
     return key
     
-def handleBountyRequest(conn, exchange, key=None):
+def handleBountyRequest(conn, exchange, key=None, received=[]):
     """Given a socket, send the proper messages to complete a bounty request"""
-    toSend = pickle.dumps(getBountyList(),0)
+    unfiltered = getBountyList()
+    filtered = list(set(unfiltered) - set(received))
+    toSend = pickle.dumps(filtered,0)
     if type(toSend) != type("a".encode("utf-8")):
         safeprint("Test here")
         toSend = toSend.encode("utf-8")
