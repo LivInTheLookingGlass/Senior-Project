@@ -88,7 +88,6 @@ if __name__ == "__main__": #pragma: no cover
     import rsa
     pub, priv = rsa.newkeys(1024)
     testSig = bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",0,keypair=priv,ident="ABCDEFGHIJKLMNOP",dataDict={'author':"QRSTUVWXYZ"})
-    bounty.addKey((pub.n,pub.e))
     safeprint("Test internal signature verification when signed")
     safeprint(testSig.isValid())
     safeprint("Test external signature verification when signed")
