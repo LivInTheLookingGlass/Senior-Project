@@ -520,9 +520,6 @@ class listener(multiprocessing.Process): #pragma: no cover
         if items.get('bountyLock'):
             from common import bounty
             bounty.bountyLock = items.get('bountyLock')
-        if items.get('keyList'):
-            from common import bounty
-            bounty.keyList = items.get('keyList')
 
 class propagator(multiprocessing.Process): #pragma: no cover
     """A class to deal with the listener method"""
@@ -550,6 +547,3 @@ class propagator(multiprocessing.Process): #pragma: no cover
         if items.get('bountyLock'):
             from common import bounty
             bounty.bountyLock = items.get('bountyLock')
-        if items.get('keyList'):
-            from common import bounty
-            bounty.keyList = items.get('keyList')
