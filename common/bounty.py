@@ -152,7 +152,7 @@ class Bounty(object):
             safeprint("Testing reward",verbosity=1)
             reward = int(self.reward)
             boolean = reward >= 1440 and reward <= 100000000
-            if reward == 0 or reward is None:
+            if reward == 0 or reward is None or self.data.get('cert'):
                 safeprint("Testing signature validity",verbosity=1)
                 boolean = self.checkSign()
             if boolean is False:
@@ -247,7 +247,7 @@ def verify(string):
         safeprint("Testing reward",verbosity=1)
         reward = int(test.reward)
         boolean = reward >= 1440 and reward <= 100000000
-        if reward == 0 or reward is None:
+        if reward == 0 or reward is None or test.data.get('cert'):
             safeprint("Testing signature validity",verbosity=1)
             boolean = test.checkSign()
         if boolean is False:
