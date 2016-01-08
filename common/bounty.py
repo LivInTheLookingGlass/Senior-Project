@@ -198,10 +198,6 @@ class Bounty(object):
         except:
             return False
 
-def addKey(key):
-    global keyList
-    keyList.append(key)
-
 def checkAddressValid(address):
     """Check to see if a Bitcoin address is within the valid namespace. Will potentially give false positives based on leading 1s"""
     if not re.match(re.compile("^[a-km-zA-HJ-Z1-9]{26,35}$"),address):
