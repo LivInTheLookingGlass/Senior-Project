@@ -103,25 +103,25 @@ class Bounty(object):
             h.append(str(self.data))
         return hash(tuple(h))
     
-    def __init__(self, ipAddress, btcAddress, rewardAmount, timeout=None, ident=None, dataDict={}, keypair=None):
+    def __init__(self, ipAddress, btcAddress, rewardAmount, **kargs):
         """Initialize a Bounty; constructor"""
         self.ip = ipAddress
         self.btc = btcAddress
         self.reward = rewardAmount
         self.ident = None
-        if timeout is not None:
-            self.timeout = timeout
+        if kargs.get('timeout') is not None:
+            self.timeout = kargs.get('timeout')
         else:
             self.timeout = getUTC() + 86400
         self.data = {'author':'',
                      'reqs':{},
                      'perms':{}}
-        if ident is not None:
-            self.ident = ident
-        if dataDict is not None:
-            self.data.update(dataDict)
-        if keypair is not None:
-            self.sign(keypair)
+        if kargs.get('ident') is not None:
+            self.ident = kargs.get('ident')
+        if kargs.get('dataDict') is not None:
+            self.data.update(kargs.get('dataDict'))
+        if kargs.get('keypair') is not None:
+            self.sign(kargs.get('keypair'))
 
     def isValid(self):
         """Internal method which checks the Bounty as valid under the most minimal version
