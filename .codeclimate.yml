@@ -1,5 +1,5 @@
 exclude_paths:
-  - */__init__.py
+  - **/__init__.py
   - .appveyor.yml
   - .codeclimate.yml
   - .gitattributes
