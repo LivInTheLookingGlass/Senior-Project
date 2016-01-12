@@ -194,6 +194,35 @@ class Bounty(object):
                               'sig' : sign(expected, privateKey, 'SHA-256')})
         except:
             return False
+    
+    def transact(self):
+        if not self.isValid():
+            return False
+        import socket
+        #Begin routing
+        conn = socket.socket()
+        conn.connect(self.ip)
+        from common.peers import send, recv, transact_bounty, fetch_test, test_results, fetch_main, main_results, close_signal
+        key = send(conn,transact_bounty,None)
+        send(conn,pickle.dumps(self,0),key)
+        new_ip = pickle.loads(recv(conn))
+        send(conn,close_signal,key)
+        conn.close()
+        #Begin real transaction
+        conn = socket.socket()
+        conn.connect(new_ip)
+        key = send(conn,fetch_test,None)
+        send(conn,pickle.dumps(self,0),key)
+        if recv(conn) != "Bounty received":
+            return False
+        test = recv(conn)
+        file = open("test.jar","wb")
+        file.write(test)
+        file.flush()
+        file.close()
+        #Begin test execution
+        import subprocess
+        return False #This is a convenient stopping point. I'll pick it up again later
 
 def checkAddressValid(address):
     """Check to see if a Bitcoin address is within the valid namespace. Will potentially give false positives based on leading 1s"""
