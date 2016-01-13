@@ -10,6 +10,8 @@ engines:
         enabled: false
       E401:
         enabled: false
+      W391:
+        enabled: false
   duplication:
     enabled: true
     config:
