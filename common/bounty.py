@@ -142,8 +142,8 @@ class Bounty(object):
             if not checkBTCAddressValid(address):
                 return False
             safeprint("Testing reward and/or signiture validity",verbosity=1)
-            with reward as int(self.reward):
-                if reward in range(1440,100000001) or ((reward == 0 or reward is None) and not self.checkSign()):
+            with reward as self.reward:
+                if reward in range(1440,100000001) or (not reward and not self.checkSign()):
                     return False
             safeprint("Testing timeout",verbosity=1)
             if self.timeout < getUTC(): #check against current UTC
@@ -230,8 +230,8 @@ def verify(string):
         if not checkBTCAddressValid(address):
             return False
         safeprint("Testing reward and/or signiture validity",verbosity=1)
-        with reward as int(self.reward):
-            if reward in range(1440,100000001) or not (reward and self.checkSign()):
+        with reward as test.reward:
+            if reward in range(1440,100000001) or not (reward and test.checkSign()):
                 return False
         safeprint("Testing timeout",verbosity=1)
         if test.timeout < getUTC(): #check against current UTC
