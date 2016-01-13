@@ -5,6 +5,9 @@ engines:
     - 61999ed80a77ef3ee187cad0b8594631
   pep8:
     enabled: true
+    checks:
+      E221:
+        enabled: false
   duplication:
     enabled: true
     config:
