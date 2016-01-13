@@ -133,18 +133,13 @@ class Bounty(object):
         """
         try:
             safeprint("Testing IP address",verbosity=1)
-            boolean = int(self.ip.split(":")[1]) in range(1024,49152)
-            if len(self.ip.split(":")[0].split(".")) != 4:
-                return False
-            for sect in self.ip.split(":")[0].split("."):
-                boolean = int(sect) in range(0,256) and boolean
-            if not boolean:
+            if not checkIPAddressValid(self.ip):
                 return False
             safeprint("Testing Bitcoin address",verbosity=1)
             address = str(self.btc)
             #The following is a soft check
             #A deeper check will need to be done in order to assure this is correct
-            if not checkAddressValid(address):
+            if not checkBTCAddressValid(address):
                 return False
             safeprint("Testing reward",verbosity=1)
             reward = int(self.reward)
@@ -195,20 +190,27 @@ class Bounty(object):
         except:
             return False
 
-def checkAddressValid(address):
+def checkBTCAddressValid(address):
     """Check to see if a Bitcoin address is within the valid namespace. Will potentially give false positives based on leading 1s"""
     if not re.match(re.compile("^[a-km-zA-HJ-Z1-9]{26,35}$"),address):
         return False
     decimal = 0
     for char in address:
         decimal = decimal * 58 + '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'.index(char)
+    bcbytes = ""
     if sys.version_info[0] < 3:
         """long does not have a to_bytes() in versions less than 3. This is an equivalent function"""
         bcbytes = (('%%0%dx' % (25 << 1) % decimal).decode('hex')[-25:])
-        return bcbytes[-4:] == sha256(sha256(bcbytes[:-4]).digest()).digest()[:4]
     else:
         bcbytes = decimal.to_bytes(25, 'big')
-        return bcbytes[-4:] == sha256(sha256(bcbytes[:-4]).digest()).digest()[:4]
+    return bcbytes[-4:] == sha256(sha256(bcbytes[:-4]).digest()).digest()[:4]
+
+def checkIPAddressValid(address):
+    try:
+        a = socket.getaddrinfo(*address)
+        return len(address[0].split(":")) == 1 and address[0] in range(1024,49152)    #Make sure it's not ipv6
+    except:
+        return False
 
 def verify(string):
     """External method which checks the Bounty as valid under implementation-specific requirements. This can be defined per user.
@@ -218,28 +220,18 @@ def verify(string):
     reward  -- Must be in valid range
     timeout -- Must be greater than the current time
     """
-    test = None
-    if type(string) == type(Bounty(None,None,None)):
-        test = string
-    else:
-        try:
-            test = pickle.loads(string)
-        except:
-            return False
+    test = string
+    if type(test) == type(""):
+        test = pickle.loads(string)
     try:
         safeprint("Testing IP address",verbosity=1)
-        boolean = int(test.ip.split(":")[1]) in range(1024,49152)
-        if len(test.ip.split(":")[0].split(".")) != 4:
-            return False
-        for sect in test.ip.split(":")[0].split("."):
-            boolean = int(sect) in range(0,256) and boolean
-        if not boolean:
+        if not checkIPAddressValid(test.ip):
             return False
         safeprint("Testing Bitcoin address",verbosity=1)
         address = str(test.btc)
         #The following is a soft check
         #A deeper check will need to be done in order to assure this is correct
-        if not checkAddressValid(address):
+        if not checkBTCAddressValid(address):
             return False
         safeprint("Testing reward",verbosity=1)
         reward = int(test.reward)
