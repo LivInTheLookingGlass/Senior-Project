@@ -486,6 +486,20 @@ def listenp(port, v):
             safeprint("Failed: " + str(type(error)))
             safeprint(error)
 
+def sync(items):
+    if items.get('config'):
+        from common import settings
+        settings.config = items.get('config')
+    if items.get('peerList'):
+        global peerlist
+        peerList = items.get('peerList')
+    if items.get('bountyList'):
+        from common import bounty
+        bounty.bountyList = items.get('bountyList')
+    if items.get('bountyLock'):
+        from common import bounty
+        bounty.bountyLock = items.get('bountyLock')
+
 class listener(multiprocessing.Process): #pragma: no cover
     """A class to deal with the listener method"""
     def __init__(self, port, outbound, q, v, serv):
@@ -497,24 +511,9 @@ class listener(multiprocessing.Process): #pragma: no cover
         self.serv = serv
     def run(self):
         safeprint("listener started")
-        self.sync(self.items)
+        sync(self.items)
         listen(self.port,self.outbound,self.q,self.v,self.serv)
         safeprint("listener stopped")
-    def sync(self,items):
-        if items == {}:
-            return
-        if items.get('config'):
-            from common import settings
-            settings.config = items.get('config')
-        if items.get('peerList'):
-            global peerlist
-            peerList = items.get('peerList')
-        if items.get('bountyList'):
-            from common import bounty
-            bounty.bountyList = items.get('bountyList')
-        if items.get('bountyLock'):
-            from common import bounty
-            bounty.bountyLock = items.get('bountyLock')
 
 class propagator(multiprocessing.Process): #pragma: no cover
     """A class to deal with the listener method"""
@@ -524,21 +523,6 @@ class propagator(multiprocessing.Process): #pragma: no cover
         self.v = v
     def run(self):
         safeprint("propagator started")
-        self.sync(self.items)
+        sync(self.items)
         listenp(self.port, self.v)
         safeprint("propagator stopped")
-    def sync(self,items):
-        if items == {}:
-            return
-        if items.get('config'):
-            from common import settings
-            settings.config = items.get('config')
-        if items.get('peerList'):
-            global peerlist
-            peerList = items.get('peerList')
-        if items.get('bountyList'):
-            from common import bounty
-            bounty.bountyList = items.get('bountyList')
-        if items.get('bountyLock'):
-            from common import bounty
-            bounty.bountyLock = items.get('bountyLock')
