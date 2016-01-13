@@ -1,3 +1,15 @@
+engines:
+  radon:
+    enabled: true
+    exclude_fingerprints:
+    - 61999ed80a77ef3ee187cad0b8594631
+  pep8:
+    enabled: true
+  duplication:
+    enabled: true
+ratings:
+  paths:
+  - "**.py"
 languages:
   Python: true
 exclude_paths:
