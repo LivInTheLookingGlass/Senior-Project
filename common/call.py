@@ -12,12 +12,10 @@ def call(mod, cmd, *args, **kargs):
     """
     m = __import__(mod)
     func = getattr(m, cmd)
-    if args:
-        r = func(*args)
-    elif isinstance(func, type(open)) and isinstance(func, type(call)):
+    if not isinstance(func, type(open)) and not isinstance(func, type(call)):
         r = func
     else:
-        r = func()
+        r = func(*args)
     index = kargs.get('index')
     end = kargs.get('end')
     if end is not None and index is not None:
