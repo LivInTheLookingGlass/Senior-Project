@@ -55,7 +55,7 @@ def main():
         settings.outbound = feedback[0]
         if settings.outbound is not True:
             ext_ip, ext_port = feedback[1:3]
-    initializePeerConnections(settings.config['port'], ext_ip, ext_port)
+    peers.initializePeerConnections(settings.config['port'], ext_ip, ext_port)
     #End Init
     
     #Begin main loop
