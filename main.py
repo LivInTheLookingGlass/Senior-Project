@@ -19,16 +19,7 @@ def sync():
     peers.sync(items)
     return items
 
-def main():
-    #Begin Init
-    settings.setup()
-    try:
-        import miniupnpc
-    except:
-        safeprint("Dependency miniupnpc is not installed. Running in outbound only mode")
-        settings.config['outbound'] = True
-    safeprint("settings are:")
-    safeprint(settings.config)
+def initParallels():
     queue = Queue()
     live = Value('b',True)
     ear = peers.listener(settings.config['port'],settings.config['outbound'],queue,live,settings.config['server'])
@@ -55,6 +46,19 @@ def main():
         settings.outbound = feedback[0]
         if settings.outbound is not True:
             ext_ip, ext_port = feedback[1:3]
+    return live
+
+def main():
+    #Begin Init
+    settings.setup()
+    try:
+        import miniupnpc
+    except:
+        safeprint("Dependency miniupnpc is not installed. Running in outbound only mode")
+        settings.config['outbound'] = True
+    safeprint("settings are:")
+    safeprint(settings.config)
+    live = initParallels()
     peers.initializePeerConnections(settings.config['port'], ext_ip, ext_port)
     #End Init
     
