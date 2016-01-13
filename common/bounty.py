@@ -57,28 +57,40 @@ class Bounty(object):
 
     def __eq__(self, other):
         """Determines whether the bounties are equal"""
-        return (self.reward == other.reward) and (self.ident == other.ident) and (self.data == other.data)
+        try:
+            return (self.reward == other.reward) and (self.ident == other.ident) and (self.data == other.data)
+        except:
+            return False
         
     def __ne__(self, other):
         """Determines whether the bounties are unequal"""
-        return not self.__eq__(other)
+        try:
+            return not self.__eq__(other)
+        except:
+            return False
         
     def __lt__(self, other):
         """Determines whether this bounty has a lower priority"""
-        if self.reward < other.reward:
-            return True
-        elif self.timeout < other.timeout:
-            return True
-        else:
+        try:
+            if self.reward < other.reward:
+                return True
+            elif self.timeout < other.timeout:
+                return True
+            else:
+                return False
+        except:
             return False
         
     def __gt__(self, other):
         """Determines whether this bounty has a higher priority"""
-        if self.reward > other.reward:
-            return True
-        elif self.timeout > other.timeout:
-            return True
-        else:
+        try:
+            if self.reward > other.reward:
+                return True
+            elif self.timeout > other.timeout:
+                return True
+            else:
+                return False
+        except:
             return False
         
     def __le__(self, other):
