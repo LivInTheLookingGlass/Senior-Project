@@ -1,5 +1,6 @@
 import os, pickle, re, sys, rsa
 from common.safeprint import safeprint
+from common.call import parse
 from multiprocessing import Lock
 from hashlib import sha256
 
@@ -158,7 +159,6 @@ class Bounty(object):
             safeprint("Testing timeout",verbosity=1)
             if self.timeout < getUTC(): #check against current UTC
                 return False
-            from common.call import parse
             safeprint("Testing bounty requirements",verbosity=1)
             if parse(self.data.get('reqs')):
                 return 1
@@ -243,7 +243,6 @@ def verify(string):
             safeprint("Testing timeout",verbosity=1)
             if test.timeout < getUTC(): #check against current UTC
                 return False
-            from common.call import parse
             safeprint("Testing bounty requirements",verbosity=1)
             if parse(test.data.get('reqs')):
                 return 1
