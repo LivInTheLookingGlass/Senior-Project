@@ -1,4 +1,4 @@
-def call(mod,cmd,*args,**kargs):
+def call(mod, cmd, *args, **kargs):
     """Calls arbitrary python code
 
     Arguments:
@@ -10,14 +10,11 @@ def call(mod,cmd,*args,**kargs):
     Use case:
         if you don't know what command you need to run at compile time
     """
-    if mod == "__builtins__":
-        m = __import__("__builtin__")
-    else:
-        m = __import__(mod)
-    func = getattr(m,cmd)
+    m = __import__(mod)
+    func = getattr(m, cmd)
     if args:
         r = func(*args)
-    elif type(func) != type(open) and type(func) != type(call):
+    elif isinstance(func,type(open)) and isinstance(func, type(call)):
         r = func
     else:
         r = func()
@@ -30,13 +27,14 @@ def call(mod,cmd,*args,**kargs):
     else:
         return r
 
+
 def process(tup):
     """Convert tuples into a format readable by call.call"""
     args = []
-    ix=None
-    ex=None
+    ix = None
+    ex = None
     for item in tup[0]:
-        if type(item) == type("index="):
+        if isinstance(item,str):
             if item[:6] == "index=":
                 ix = int(item[6:])
             elif item[:4] == "end=":
@@ -46,20 +44,21 @@ def process(tup):
         else:
             args.append(item)
     args = tuple(args)
-    a = call(*args,index=ix,end=ex)
+    a = call(*args, index=ix, end=ex)
     return a == tup[1]
 
+
 def parse(d):
-    """Checks a dict keyed by the related python calls to see if they are the expected value
+    """Checks a dict keyed by the related calls to see if they are the expected value
     Dict format:
         Key:
             tuple:
                 [0]     - module from which the command is called (or "__builtins__")
                 [1]     - command which you are calling
-                [*]     - "index=x", where x is the index you wish
-                [*]     - "end=x", where x is the end of the range you wish returned
-                [*]     - all other arguments in the order the command is supposed to receive it
-                            keyed arguments are not supported
+                [*]     - index=x, where x is the index you wish
+                [*]     - end=x, where x is the end of the range to return
+                [*]     - all other args in the order the command is supposed
+                            to receive it; keyed arguments are not supported
         Value:
             The expected return value
     """
@@ -69,5 +68,5 @@ def parse(d):
         return process(list(d.items())[0])
     from multiprocessing.pool import ThreadPool
     p = list(d.items())
-    r = ThreadPool().map(process,p)
+    r = ThreadPool().map(process, p)
     return not (False in r)
