@@ -14,7 +14,7 @@ def call(mod, cmd, *args, **kargs):
     func = getattr(m, cmd)
     if args:
         r = func(*args)
-    elif isinstance(func,type(open)) and isinstance(func, type(call)):
+    elif isinstance(func, type(open)) and isinstance(func, type(call)):
         r = func
     else:
         r = func()
@@ -34,7 +34,7 @@ def process(tup):
     ix = None
     ex = None
     for item in tup[0]:
-        if isinstance(item,str):
+        if isinstance(item, str):
             if item[:6] == "index=":
                 ix = int(item[6:])
             elif item[:4] == "end=":
@@ -49,11 +49,11 @@ def process(tup):
 
 
 def parse(d):
-    """Checks a dict keyed by the related calls to see if they are the expected value
+    """Check a dict keyed by the related calls against their expected values
     Dict format:
         Key:
             tuple:
-                [0]     - module from which the command is called (or "__builtins__")
+                [0]     - module from which the command is called
                 [1]     - command which you are calling
                 [*]     - index=x, where x is the index you wish
                 [*]     - end=x, where x is the end of the range to return
