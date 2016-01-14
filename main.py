@@ -57,7 +57,7 @@ def main():
     try:
         import miniupnpc
     except:
-        safeprint("Dependency miniupnpc is not installed. Running in outbound only mode")
+        safeprint("Miniupnpc is not installed. Running in outbound only mode")
         settings.config['outbound'] = True
     safeprint("settings are:")
     safeprint(settings.config)
