@@ -223,28 +223,26 @@ def verify(string):
     reward  -- Must be in valid range
     timeout -- Must be greater than the current time
     """
-    test = string
-    if isinstance(test, str):
-        test = pickle.loads(string)
+    test = depickle(string)
     try:
-            safeprint("Testing IP address", verbosity=1)
-            if not checkIPAddressValid(test.ip):
-                return False
-            safeprint("Testing Bitcoin address", verbosity=1)
-            # The following is a soft check
-            # A deeper check will be needed in order to assure this is correct
-            if not checkBTCAddressValid(test.btc):
-                return False
-            safeprint("Testing reward and/or signiture validity", verbosity=1)
-            if test.reward not in range(1440, 100000001) or (not test.reward and test.checkSign()):
-                return False
-            safeprint("Testing timeout", verbosity=1)
-            if test.timeout < getUTC():  # check against current UTC
-                return False
-            safeprint("Testing bounty requirements", verbosity=1)
-            if parse(test.data.get('reqs')):
-                return 1
-            return -1
+        safeprint("Testing IP address", verbosity=1)
+        if not checkIPAddressValid(test.ip):
+            return False
+        safeprint("Testing Bitcoin address", verbosity=1)
+        # The following is a soft check
+        # A deeper check will be needed in order to assure this is correct
+        if not checkBTCAddressValid(test.btc):
+            return False
+        safeprint("Testing reward and/or signiture validity", verbosity=1)
+        if test.reward not in range(1440, 100000001) or (not test.reward and test.checkSign()):
+            return False
+        safeprint("Testing timeout", verbosity=1)
+        if test.timeout < getUTC():  # check against current UTC
+            return False
+        safeprint("Testing bounty requirements", verbosity=1)
+        if parse(test.data.get('reqs')):
+            return 1
+        return -1
     except:
         return False
 
