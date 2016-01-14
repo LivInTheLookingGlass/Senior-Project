@@ -112,7 +112,7 @@ class Bounty(object):
             return self.__eq__(other)
 
     def __hash__(self):
-        return hash((self.__repr__(), self.data))
+        return hash((self.__repr__(), str(self.data)))
 
     def __init__(self, ipAddress, btcAddress, rewardAmount, **kargs):
         """Initialize a Bounty; constructor"""
