@@ -101,20 +101,24 @@ if os.name != "nt":
                                 '256s', ifname[:15]))[20:24])
 
 
+def no_exteral_get_ip():
+    ip = socket.gethostbyname(socket.gethostname())
+    if ip.startswith("127.") and os.name != "nt":
+        interfaces = ["eth0", "eth1", "eth2", "wlan0", "wlan1", "wifi0", "ath0", "ath1", "ppp0"]
+        for ifname in interfaces:
+            try:
+                ip = get_interface_ip(ifname)
+                break
+            except IOError:
+                pass
+    return ip
+# End Stack Overflow code
+
+
 def get_lan_ip():
     """Retrieves the LAN ip. Unfortunately uses an external connection in Python 3."""
-    if sys.version_info[0] < 3:  # This line was not in Stack Overflow code
-        ip = socket.gethostbyname(socket.gethostname())
-        if ip.startswith("127.") and os.name != "nt":
-            interfaces = ["eth0", "eth1", "eth2", "wlan0", "wlan1", "wifi0", "ath0", "ath1", "ppp0"]
-            for ifname in interfaces:
-                try:
-                    ip = get_interface_ip(ifname)
-                    break
-                except IOError:
-                    pass
-        return ip
-# End Stack Overflow code
+    if sys.version_info[0] < 3:
+        return no_exteral_get_ip()
     else:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(('8.8.8.8', 0))
