@@ -30,8 +30,8 @@ valid_signal        = "Bounty was valid".encode("utf-8")
 invalid_signal      = "Bounty was invalid".encode("utf-8")
 end_of_message      = "End of message".encode("utf-8")
 
-sig_length = len(max(close_signal, peer_request, bounty_request, incoming_bounties, incoming_bounty,
-                      valid_signal, invalid_signal, key=len))
+sig_length = len(max(close_signal, peer_request, bounty_request, incoming_bounties,
+                      incoming_bounty, valid_signal, invalid_signal, key=len))
 
 
 def pad(string):
@@ -164,7 +164,7 @@ def requestPeerlist(address):
         if recv(conn) == peer_request:
             handlePeerRequest(conn, False, key=key, received=pickle.loads(received))
             recv(conn)
-        #test section
+        # test section
         conn = socket.socket()
         conn.settimeout(5)
         conn.connect(address)
@@ -178,7 +178,7 @@ def requestPeerlist(address):
         recv(conn)
         recv(conn)
         conn.close()
-        #end test section
+        # end test section
         return pickle.loads(received)
     except Exception as error:
         safeprint("Failed:" + str(type(error)))
@@ -208,7 +208,7 @@ def requestBounties(address):
         remove.extend([address])
 
 
-def initializePeerConnections(newPort,newip,newport):
+def initializePeerConnections(newPort, newip, newport):
     """Populate the peer list from a previous session, seeds, and from the peer list if its size is less than 12. Then save this new list to a file"""
     port = newPort        # Does this affect the global variable?
     ext_ip = newip        # Does this affect the global variable?
@@ -305,7 +305,7 @@ def handlePeerRequest(conn, exchange, key=None, received=[]):
     safeprint("Unfiltered: " + str(unfiltered), verbosity=3)
     safeprint("Filtered:   " + str(filtered), verbosity=3)
     toSend = pickle.dumps(filtered, 0)
-    if type(toSend) != type("a".encode("utf-8")):
+    if isinstance(toSend, type("a".encode("utf-8"))):
         safeprint("Test here")
         toSend = toSend.encode("utf-8")
     safeprint("Sending")
@@ -325,11 +325,11 @@ def handleBountyRequest(conn, exchange, key=None, received=[]):
     unfiltered = getBountyList()
     filtered = list(set(unfiltered) - set(received))
     toSend = pickle.dumps(filtered, 0)
-    if type(toSend) != type("a".encode("utf-8")):
+    if isinstance(toSend, type("a".encode("utf-8"))):
         safeprint("Test here")
         toSend = toSend.encode("utf-8")
     safeprint("Sending")
-    key = send(toSend,conn,key)
+    key = send(toSend, conn, key)
     if exchange:
         send(bounty_request, conn, key)
         received = recv(conn)
@@ -436,7 +436,7 @@ def propagate(tup):
         conn = socket.socket()
         address = tup[1]
         conn.connect(address)
-        key = send(incoming_bounty,conn,None)
+        key = send(incoming_bounty, conn, None)
         send(pickle.dumps(tup[0], 0), conn, key)
         recv(conn)
         conn.close()
@@ -449,7 +449,7 @@ def portForward(port):
     try:
         import miniupnpc
         u = miniupnpc.UPnP(None, None, 200, port)
-        #Begin Debug info
+        # Begin Debug info
         safeprint('inital(default) values :')
         safeprint(' discoverdelay' + str(u.discoverdelay))
         safeprint(' lanaddr' + str(u.lanaddr))
@@ -457,12 +457,12 @@ def portForward(port):
         safeprint(' minissdpdsocket' + str(u.minissdpdsocket))
         safeprint('Discovering... delay=%ums' % u.discoverdelay)
         safeprint(str(u.discover()) + 'device(s) detected')
-        #End Debug info
+        # End Debug info
         u.selectigd()
         global ext_ip
         ext_ip = u.externalipaddress()
         safeprint("external ip is: " + str(ext_ip))
-        for i in range(0,20):
+        for i in range(0, 20):
             try:
                 safeprint("Port forward try: " + str(i), verbosity=1)
                 if u.addportmapping(port+i, 'TCP', get_lan_ip(), port, 'Bounty Net', ''):
@@ -497,7 +497,7 @@ def listenp(port, v):
             packet = conn.recv(sig_length)
             safeprint("Received: " + packet.decode(), verbosity=3)
             if packet == incoming_bounty:
-               handleIncomingBountyP(conn)
+                handleIncomingBountyP(conn)
             conn.send(close_signal)
             conn.close()
             server.settimeout(5)
@@ -531,6 +531,7 @@ class listener(multiprocessing.Process):  # pragma: no cover
         self.q = q
         self.v = v
         self.serv = serv
+        
     def run(self):
         safeprint("listener started")
         sync(self.items)
@@ -544,6 +545,7 @@ class propagator(multiprocessing.Process):  # pragma: no cover
         multiprocessing.Process.__init__(self)
         self.port = port
         self.v = v
+        
     def run(self):
         safeprint("propagator started")
         sync(self.items)
