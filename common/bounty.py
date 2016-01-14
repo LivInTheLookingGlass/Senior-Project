@@ -11,7 +11,7 @@ global masterKey
 bountyList = []
 bountyLock = Lock()
 bounty_path = "data" + os.sep + "bounties.pickle"
-masterKey = rsa.PublicKey(*pickle.load(open(".." + os.sep + "master_public_key.pickle", "rb")))
+masterKey = rsa.PublicKey(*pickle.load(open("master_public_key.pickle", "rb")))
 
 def getUTC():
     from calendar import timegm
