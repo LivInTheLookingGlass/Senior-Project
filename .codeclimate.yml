@@ -4,6 +4,7 @@ engines:
     exclude_fingerprints:
     - 61999ed80a77ef3ee187cad0b8594631
     - 5c59413fd4d7a4a66cfabaeaaa8b1fe8
+    - 5c59413fd4d7a4a66cfabaeaaa8b1fe8
   pep8:
     enabled: true
     checks:
