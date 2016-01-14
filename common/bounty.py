@@ -45,17 +45,13 @@ class Bounty(object):
     def __repr__(self):
         """Gives a string representation of the bounty"""
         output = "<Bounty: ip=" + str(self.ip) + ", btc=" + str(self.btc) + ", reward=" + str(self.reward)
-        if self.ident is not None:
-            output = output + ", id=" + str(self.ident)
-        if self.timeout is not None:
-            output = output + ", timeout=" + str(self.timeout)
-        if self.data and self.data != {'author': '', 'reqs': {}, 'perms': {}}:
-            if self.data.get('author') and self.data.get('author') != '':
-                output = output + ", author=" + str(self.data.get('author'))
-            if self.data.get('reqs') and self.data.get('reqs') != {} and isinstance(self.data.get('reqs'), dict):
-                output = output + ", reqs=" + str(sorted(self.data.get('reqs').items(), key=lambda x: x[0]))
-            if self.data.get('perms') and self.data.get('perms') != {} and isinstance(self.data.get('perms'), dict):
-                output = output + ", perms=" + str(sorted(self.data.get('perms').items(), key=lambda x: x[0]))
+        output = output + ", id=" + str(self.ident) + ", timeout=" + str(self.timeout)
+        if self.data.get('author') != '':
+            output = output + ", author=" + str(self.data.get('author'))
+        if self.data.get('reqs') != {} and isinstance(self.data.get('reqs'), dict):
+            output = output + ", reqs=" + str(sorted(self.data.get('reqs').items(), key=lambda x: x[0]))
+        if self.data.get('perms') != {} and isinstance(self.data.get('perms'), dict):
+            output = output + ", perms=" + str(sorted(self.data.get('perms').items(), key=lambda x: x[0]))
         return output + ">"
 
     def __eq__(self, other):
@@ -120,7 +116,7 @@ class Bounty(object):
         self.ip = ipAddress
         self.btc = btcAddress
         self.reward = rewardAmount
-        self.ident = None
+        self.ident = ''
         if kargs.get('timeout') is not None:
             self.timeout = kargs.get('timeout')
         else:
