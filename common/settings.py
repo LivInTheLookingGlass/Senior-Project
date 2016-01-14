@@ -16,7 +16,7 @@ def saveSettings():
     """Save settings to a file"""
     if not os.path.exists(settings_file.split(os.sep)[0]):
         os.mkdir(settings_file.split(os.sep)[0])
-    pickle.dump(dict(config), open(settings_file, "wb"),0)
+    pickle.dump(dict(config), open(settings_file, "wb"), 0)
 
 
 def loadSettings():
@@ -85,7 +85,7 @@ def setup():
                       dest='verbose',
                       default=None,
                       action="count",
-                      help='Increments the level of verbosity (0-3, default 0)')
+                      help='Increment the level of verbosity (0-3, default 0)')
     (options, args) = parser.parse_args()
 
     safeprint("options parsed")
@@ -93,7 +93,7 @@ def setup():
     loadSettings()
     saveSettings()
     kill = []
-    for key in overrides:               # Remove keys with None, just to be safe
+    for key in overrides:              # Remove keys with None, just to be safe
         if overrides.get(key) is None:
             kill += [key]
     for key in kill:
