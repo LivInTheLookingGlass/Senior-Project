@@ -67,8 +67,7 @@ def send(msg, conn, key):
         conn.sendall(rsa.encrypt(msg[x:x+117], key))
         x += 117
     conn.sendall(rsa.encrypt(msg[x:], key))
-    if msg not in signals:
-        conn.sendall(rsa.encrypt(end_of_message, key))
+    conn.sendall(rsa.encrypt(end_of_message, key))
     return key
 
 
@@ -84,12 +83,9 @@ def recv(conn):
                 continue
             a = rsa.decrypt(a, myPriv)
             safeprint("Packet = " + str(a), verbosity=3)
-            if a in signals:
-                return a
-            elif a == end_of_message:
+            if a == end_of_message:
                 return received
-            else:
-                received += a
+            received += a
     except rsa.pkcs1.DecryptionError as error:
         safeprint("Decryption error---Content: " + str(a))
         return "".encode('utf-8')
