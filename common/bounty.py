@@ -46,8 +46,7 @@ class Bounty(object):
         """Gives a string representation of the bounty"""
         output = "<Bounty: ip=" + str(self.ip) + ", btc=" + str(self.btc) + ", reward=" + str(self.reward)
         output = output + ", id=" + str(self.ident) + ", timeout=" + str(self.timeout)
-        if self.data.get('author') != '':
-            output = output + ", author=" + str(self.data.get('author'))
+        output = output + ", author=" + str(self.data.get('author'))
         if self.data.get('reqs') != {} and isinstance(self.data.get('reqs'), dict):
             output = output + ", reqs=" + str(sorted(self.data.get('reqs').items(), key=lambda x: x[0]))
         if self.data.get('perms') != {} and isinstance(self.data.get('perms'), dict):
