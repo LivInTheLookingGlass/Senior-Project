@@ -17,11 +17,9 @@ def call(mod, cmd, *args, **kargs):
     else:
         r = func(*args)
     index = kargs.get('index')
-    end = kargs.get('end')
+    end = max(index + 1, kargs.get('end'))
     if end is not None and index is not None:
         return r[index:end]
-    elif index is not None:
-        return r[index]
     else:
         return r
 
