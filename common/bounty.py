@@ -359,9 +359,8 @@ def addBounties(bounties):
             rvals.append(0)
         else:
             rvals.append(1)
-        safeprint("Passed first if", verbosity=3)
-        if rvals[i] == 1:
             addValidBounty(bounties[i])
+        safeprint("Passed first if", verbosity=3)
     safeprint("Verifications parsed", verbosity=3)
     return rvals
 
