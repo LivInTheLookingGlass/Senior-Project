@@ -176,10 +176,11 @@ class Bounty(object):
             safeprint(keyList)
             if self.data.get('cert'):  # where key = (PublicKey.n, PublicKey.e)
                 expected = str(self).encode('utf-8')
-                n = self.data.get('key')[0]
-                e = self.data.get('key')[1]
-                if rsa.verify(str((n, e)), self.data.get('cert'), masterKey):
-                    return verify(expected, self.data.get('sig'), PublicKey(n, e))
+                data = self.data
+                n = data.get('key')[0]
+                e = data.get('key')[1]
+                if rsa.verify(str((n, e)), data.get('cert'), masterKey):
+                    return verify(expected, data.get('sig'), PublicKey(n, e))
             return False
         except:
             return False
