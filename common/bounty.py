@@ -280,9 +280,10 @@ def loadFromFile():
     return False
 
 
-def addBounty(bounty):
-    """Verify a bounty, and add it to the list if it is valid"""
-    first = False
+def depickle(string):
+    """Handles the potential errors in unpickling a bounty"""
+    if isinstance(string,Bounty):
+        return string
     safeprint([sys.version_info[0], sys.version_info[1], sys.version_info[2]])
     if sys.version_info[0] == 2 and sys.version_info[1] == 6 and (isinstance(bounty, str) or isinstance(bounty, unicode)):
         safeprint("Fed as string in 2.6; encoding ascii and ignoring errors")
@@ -293,12 +294,16 @@ def addBounty(bounty):
     elif isinstance(bounty, str) and sys.version_info[0] >= 3:
         safeprint("Fed as string; encoding utf-8")
         bounty = bounty.encode('utf-8')
-    safeprint(pickle.loads(bounty))
-    safeprint("External verify", verbosity=1)
     try:
-        bounty = pickle.loads(bounty)
+        return pickle.loads(bounty)
     except:
-        return False
+        return None
+
+
+def addBounty(bounty):
+    """Verify a bounty, and add it to the list if it is valid"""
+    bounty = depickle(bounty)
+    safeprint("External verify", verbosity=1)
     first = verify(bounty)
     safeprint("Internal verify")
     second = bounty.isValid()
