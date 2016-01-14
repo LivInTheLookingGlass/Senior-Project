@@ -68,13 +68,13 @@ def setup():
                       dest='server',
                       default=None,
                       action="store_true",
-                      help='Sets whether you are a server or client (Default: client)')
+                      help='Sets whether you are a server or client')
     parser.add_option('-S',
                       '--seed',
                       dest='seed',
                       default=None,
                       action="store_true",
-                      help='Sets whether you are a seed or client (Default: client)')
+                      help='Sets whether you are a seed or client')
     parser.add_option('-t',
                       '--test',
                       dest='test',
