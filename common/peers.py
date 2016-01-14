@@ -30,8 +30,9 @@ valid_signal        = "Bounty was valid".encode("utf-8")
 invalid_signal      = "Bounty was invalid".encode("utf-8")
 end_of_message      = "End of message".encode("utf-8")
 
-sig_length = len(max(close_signal, peer_request, bounty_request, incoming_bounties,
-                      incoming_bounty, valid_signal, invalid_signal, key=len))
+sig_length = len(max(
+                    close_signal, peer_request, bounty_request, incoming_bounties,
+                    incoming_bounty, valid_signal, invalid_signal, key=len))
 
 
 def pad(string):
@@ -407,7 +408,7 @@ def handleIncomingBountyP(conn):
 
 
 def handleIncomingBountiesP(conn):
-    """Given a socket, store an incoming bounty, and report it valid or invalid"""
+    """Given a socket, store an incoming bounty & report it valid or invalid"""
     connected = True
     received = "".encode('utf-8')
     while connected:
@@ -531,7 +532,7 @@ class listener(multiprocessing.Process):  # pragma: no cover
         self.q = q
         self.v = v
         self.serv = serv
-        
+
     def run(self):
         safeprint("listener started")
         sync(self.items)
@@ -545,7 +546,7 @@ class propagator(multiprocessing.Process):  # pragma: no cover
         multiprocessing.Process.__init__(self)
         self.port = port
         self.v = v
-        
+
     def run(self):
         safeprint("propagator started")
         sync(self.items)
