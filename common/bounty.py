@@ -291,7 +291,7 @@ def addBounty(bounty):
     """Verify a bounty, and add it to the list if it is valid"""
     first = False
     safeprint([sys.version_info[0], sys.version_info[1], sys.version_info[2]])
-    if sys.version_info[0] == 2 and sys.version_info[1] == 6 and (isinstance(bounty, str) or isinstance(bounty, unicode):
+    if sys.version_info[0] == 2 and sys.version_info[1] == 6 and (isinstance(bounty, str) or isinstance(bounty, unicode)):
         safeprint("Fed as string in 2.6; encoding ascii and ignoring errors")
         try:
             bounty = bounty.encode('ascii', 'ignore')
