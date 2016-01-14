@@ -58,14 +58,14 @@ class Bounty(object):
         try:
             return (self.reward == other.reward) and (self.ident == other.ident) and (self.data == other.data)
         except:
-            return False
+            return not other is None
 
     def __ne__(self, other):
         """Determines whether the bounties are unequal"""
         try:
             return not self.__eq__(other)
         except:
-            return False
+            return other is None
 
     def __lt__(self, other):
         """Determines whether this bounty has a lower priority"""
@@ -77,7 +77,7 @@ class Bounty(object):
             else:
                 return False
         except:
-            return False
+            return not other is None
 
     def __gt__(self, other):
         """Determines whether this bounty has a higher priority"""
@@ -89,7 +89,7 @@ class Bounty(object):
             else:
                 return False
         except:
-            return False
+            return other is None
 
     def __le__(self, other):
         """Determines whether this bounty has a lower priority or is equal"""
@@ -368,20 +368,19 @@ def addBounties(bounties):
 
 def getBounty(charity, factor):
     """Retrieve the next best bounty from the list"""
-    temp = getBountyList()
+    global bountyList, bountyLock
+    best = None
+    bountyLock.__enter__()
+    temp = bountyList[:]
     safeprint("bountyList = " + str(temp), verbosity=3)
-    if temp == []:
-        return None
-    elif charity:
-        for bounty in temp:
-            if bounty.isValid():
-                index = temp.index(bounty)
-                return temp.pop(index)
-    else:
-        best = None
-        for bounty in temp:
-            if best is None:
-                best = bounty
-            elif best < bounty and bounty.isValid() and bounty.isPayable(factor):
-                best = bounty
-        return best
+    for bounty in temp:
+        if not verify(bounty):
+            bountyList.remove(bounty)
+            continue
+        elif charity:
+            best = bounty
+            break
+        elif bounty > best:
+            best = bounty
+    bountyLock.__exit__()
+    return best
