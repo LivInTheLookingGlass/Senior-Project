@@ -13,6 +13,7 @@ bountyLock = Lock()
 bounty_path = "data" + os.sep + "bounties.pickle"
 masterKey = rsa.PublicKey(*pickle.load(open("master_public_key.pickle", "rb")))
 
+
 def getUTC():
     from calendar import timegm
     from time import gmtime
@@ -26,7 +27,7 @@ class Bounty(object):
     btc        -- The Bitcoin address of the requesting party
     reward     -- The reward amount in satoshis to be given over 24 hours
                    (x == 0 or 1440 <= x <= 100000000) (1440 is 1 satoshi/min)
-    ident      -- A value set by the issuer to determine which problem/test to send
+    ident      -- A value set by the issuer to help manage its related files
     timeout    -- Unix time at which the bounty expires (defaults to 24 hours)
     data       -- A dictionary containing optional, additional information
         author -- String which represents the group providing the Bounty
