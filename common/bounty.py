@@ -313,7 +313,6 @@ def addBounty(bounty):
         rval = 0
     else:
         rval = 1
-    if rval == 1:
         addValidBounty(bounty)
     return rval
 
