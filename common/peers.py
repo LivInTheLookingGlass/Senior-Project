@@ -13,7 +13,8 @@ ext_ip = ""
 port = 44565
 myPub, myPriv = rsa.newkeys(1024)
 
-seedlist = [("127.0.0.1", 44565), ("localhost", 44565), ("10.132.80.128", 44565)]
+seedlist = [("127.0.0.1", 44565), ("localhost", 44565),
+            ("10.132.80.128", 44565)]
 peerlist = [("24.10.111.111", 44565)]
 remove   = []
 bounties = []
@@ -359,14 +360,14 @@ def handleBountyRequest(conn, exchange, key=None, received=[]):
 
 
 def handleIncomingBounty(conn, key=None):
-    """Given a socket, store an incoming bounty, and report it valid or invalid"""
+    """Given a socket, store an incoming bounty & report it valid or invalid"""
     received = recv(conn)
     safeprint("Adding bounty: " + received.decode())
     try:
         valid = addBounty(received)
-        if valid >= -1:  # If it's valid, even if it's a duplicate, send valid signal
+        if valid >= -1:  # If valid, even if a duplicate, send valid signal
             send(valid_signal, conn, key)
-            if valid >= 0:  # If it's valid and not already received, propagate
+            if valid >= 0:  # If valid and not already received, propagate
                 mouth = socket.socket()
                 from common import settings
                 mouth.connect(("localhost", settings.config['port'] + 1))
