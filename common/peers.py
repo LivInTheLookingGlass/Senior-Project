@@ -61,7 +61,7 @@ def send(msg, conn, key):
             safeprint("Key received")
         except EOFError:
             continue
-    if isinstance(msg, type("a".encode('utf-8'))):
+    if not isinstance(msg, type("a".encode('utf-8'))):
         msg = msg.encode('utf-8')
     x = 0
     while x < len(msg) - 117:
@@ -173,8 +173,6 @@ def requestPeerlist(address):
         send(incoming_bounty, conn, key)
         bounty = Bounty((get_lan_ip(), 44565), "1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9", 1440)
         bounty = pickle.dumps(bounty, 0)
-        if isinstance(bounty, str):
-            bounty = bounty.encode('utf-8')
         safeprint(bounty, verbosity=3)
         send(bounty, conn, key)
         recv(conn)
@@ -307,9 +305,6 @@ def handlePeerRequest(conn, exchange, key=None, received=[]):
     safeprint("Unfiltered: " + str(unfiltered), verbosity=3)
     safeprint("Filtered:   " + str(filtered), verbosity=3)
     toSend = pickle.dumps(filtered, 0)
-    if isinstance(toSend, type("a".encode("utf-8"))):
-        safeprint("Test here")
-        toSend = toSend.encode("utf-8")
     safeprint("Sending")
     key = send(toSend, conn, key)
     if exchange:
@@ -327,9 +322,6 @@ def handleBountyRequest(conn, exchange, key=None, received=[]):
     unfiltered = getBountyList()
     filtered = list(set(unfiltered) - set(received))
     toSend = pickle.dumps(filtered, 0)
-    if isinstance(toSend, type("a".encode("utf-8"))):
-        safeprint("Test here")
-        toSend = toSend.encode("utf-8")
     safeprint("Sending")
     key = send(toSend, conn, key)
     if exchange:
