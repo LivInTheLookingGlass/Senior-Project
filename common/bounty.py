@@ -283,17 +283,17 @@ def depickle(string):
     if isinstance(string,Bounty):
         return string
     safeprint([sys.version_info[0], sys.version_info[1], sys.version_info[2]])
-    if sys.version_info[0] == 2 and sys.version_info[1] == 6 and (isinstance(bounty, str) or isinstance(bounty, unicode)):
+    if sys.version_info[0] == 2 and sys.version_info[1] == 6 and (isinstance(string, str) or isinstance(string, unicode)):
         safeprint("Fed as string in 2.6; encoding ascii and ignoring errors")
         try:
-            bounty = bounty.encode('ascii', 'ignore')
+            string = string.encode('ascii', 'ignore')
         except:
-            bounty = str(bounty)
-    elif isinstance(bounty, str) and sys.version_info[0] >= 3:
+            string = str(string)
+    elif isinstance(string, str) and sys.version_info[0] >= 3:
         safeprint("Fed as string; encoding utf-8")
-        bounty = bounty.encode('utf-8')
+        string = string.encode('utf-8')
     try:
-        return pickle.loads(bounty)
+        return pickle.loads(string)
     except:
         return None
 
