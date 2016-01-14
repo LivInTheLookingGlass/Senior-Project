@@ -11,7 +11,7 @@ def verify(string):
     timeout -- Must be greater than the current time
     """
     from common.bounty import verify
-    verify(string)
+    return verify(string)
 # The following is an identical copy of the common.bounty one. To change specifics, uncomment it.
 #    test = string
 #    if type(test) == type(""):
@@ -50,7 +50,7 @@ def verify(string):
 def addBounty(bounty):
     """Verify a bounty, and add it to the list if it is valid"""
     from common.bounty import addBounty
-    addBounty(bounty)
+    return addBounty(bounty)
 # The following is an identical copy of the common.bounty one. To change specifics, uncomment it.
 #    first = False
 #    safeprint([sys.version_info[0],sys.version_info[1],sys.version_info[2]])
