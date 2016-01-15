@@ -360,6 +360,7 @@ def handleIncomingBounty(conn, key=None):
     try:
         valid = addBounty(received)
         if valid >= -1:  # If valid, even if a duplicate, send valid signal
+            safeprint("Sending valid signal")
             send(valid_signal, conn, key)
             if valid >= 0:  # If valid and not already received, propagate
                 mouth = socket.socket()
