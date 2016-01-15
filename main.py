@@ -18,7 +18,6 @@ def sync():
     items['config'].update(settings.config)
     items['peerList'].extend(peers.peerlist)
     items['bountyList'].extend(bounty.bountyList)
-    items['keyList'].extend(bounty.keyList)
     safeprint(items)
     safeprint(items.get('bountyList'))
     safeprint(items.get('keyList'))
@@ -34,9 +33,6 @@ def sync():
     if items.get('bountyLock') is not None:
         from common import bounty
         bounty.bountyLock = items.get('bountyLock')
-    if items.get('keyList') is not None:
-        from common import bounty
-        bounty.keyList = items.get('keyList')
     return items
 
 def main():
