@@ -370,6 +370,7 @@ def handleIncomingBounty(conn, key=None):
         else:
             send(invalid_signal, conn, key)
     except Exception as error:
+        send(invalid_signal, conn, key)
         safeprint("Incoming failed: " + str(type(error)))
         safeprint(error)
         traceback.print_exc()
