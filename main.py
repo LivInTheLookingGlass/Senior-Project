@@ -34,7 +34,6 @@ def initParallels():
     mouth.start()
     feedback = []
     stamp = time()
-    global ext_ip, ext_port
     while queue.empty():
         if time() - 15 > stamp:
             break
@@ -42,9 +41,11 @@ def initParallels():
         feedback = queue.get(False)
         settings.outbound = feedback[0]
         if settings.outbound is not True:
+            global ext_ip, ext_port
             ext_ip, ext_port = feedback[1:3]
     except:
         safeprint("No feedback received from listener")
+        global ext_ip, ext_port
         ext_ip = ""
         ext_port = -1
     return live
