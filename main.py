@@ -61,6 +61,7 @@ def main():
     safeprint("settings are:")
     safeprint(settings.config)
     live = initParallels()
+    global ext_ip, ext_port
     peers.initializePeerConnections(settings.config['port'], ext_ip, ext_port)
     # End Init
 
