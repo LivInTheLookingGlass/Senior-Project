@@ -35,8 +35,12 @@ def initParallels():
     feedback = []
     stamp = time()
     while queue.empty():
-        if time() - 5 > stamp:
+        if time() - 15 > stamp:
             break  # pragma: no cover
+    try:
+        feedback = queue.get(False)
+    except:  # pragma: no cover
+        safeprint("No feedback received from listener")
     feedback = queue.get(False)
     global ext_ip, ext_port
     ext_ip = ""     # Does this affect peers?
