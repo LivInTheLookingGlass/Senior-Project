@@ -211,7 +211,9 @@ def checkIPAddressValid(address):
     try:
         import socket
         socket.getaddrinfo(*address)
-        return len(address[0].split(":")) == 1  # Make sure it's not ipv6
+        a = len(address[0].split(":")) == 1  # Make sure it's not ipv6
+        b = len(address[0].split(".")) == 4  # Make sure it's not shortened
+        return a and b
     except:
         return False
 
