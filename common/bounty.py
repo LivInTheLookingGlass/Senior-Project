@@ -209,8 +209,9 @@ def checkBTCAddressValid(address):
 
 def checkIPAddressValid(address):
     try:
-        a = socket.getaddrinfo(*address)
-        return len(address[0].split(":")) == 1 and address[0] in range(1024, 49152)  # Make sure it's not ipv6
+        import socket
+        socket.getaddrinfo(*address)
+        return len(address[0].split(":")) == 1  # Make sure it's not ipv6
     except:
         return False
 
