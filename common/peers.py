@@ -51,7 +51,6 @@ def send(msg, conn, key):
         safeprint("Key not found. Requesting key")
         conn.send(key_request)
         try:
-            time.sleep(0.01)
             key = pickle.loads(conn.recv(1024))
             key = rsa.PublicKey(key[0],key[1])
             safeprint("Key received")
@@ -59,14 +58,11 @@ def send(msg, conn, key):
             continue
     if type(msg) != type("a".encode('utf-8')):
         msg = msg.encode('utf-8')
-    if len(msg) <= 117:
-        conn.sendall(rsa.encrypt(msg,key))
-    else:
-        x = 0
-        while x < len(msg) - 117:
-            conn.sendall(rsa.encrypt(msg[x:x+117],key))
-            x += 117
-        conn.sendall(rsa.encrypt(msg[x:],key))
+    x = 0
+    while x < len(msg) - 117:
+        conn.sendall(rsa.encrypt(msg[x:x+117],key))
+        x += 117
+    conn.sendall(rsa.encrypt(msg[x:],key))
     if msg not in signals:
         conn.sendall(rsa.encrypt(end_of_message,key))
     return key
@@ -90,8 +86,7 @@ def recv(conn):
             else:
                 received += a
     except rsa.pkcs1.DecryptionError as error:
-        safeprint("Decryption error")
-        safeprint("Content: " + str(a))
+        safeprint("Decryption error---Content: " + str(a))
         return "".encode('utf-8')
 
 #The following is taken from Stack Overflow. Find the original at http://stackoverflow.com/a/1947766/4748474

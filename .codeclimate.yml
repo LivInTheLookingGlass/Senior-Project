@@ -1,0 +1,20 @@
+languages:
+  Python: true
+exclude_paths:
+- __init__.py
+- .appveyor.yml
+- .codeclimate.yml
+- .gitattributes
+- .travis.yml
+- LICENSE
+- README.md
+- get-pip.py
+- installpypy2.ps1
+- installpypy3.ps1
+- optional.txt
+- requirements.txt
+- "common/__init__.py"
+- "client/__init__.py"
+- "server/__init__.py"
+
+#comment to test
