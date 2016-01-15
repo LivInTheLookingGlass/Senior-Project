@@ -213,7 +213,7 @@ def checkIPAddressValid(address):
         socket.getaddrinfo(*address)
         a = len(address[0].split(":")) == 1  # Make sure it's not ipv6
         b = len(address[0].split(".")) == 4  # Make sure it's not shortened
-        return a and b
+        return a and b and address[1] in range(49152)
     except:
         return False
 
