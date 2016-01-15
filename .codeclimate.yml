@@ -1,3 +1,25 @@
+engines:
+  radon:
+    enabled: true
+    config: 
+      threshold: "B"
+  pep8:
+    enabled: true
+    checks:
+      E221:
+        enabled: false
+      E401:
+        enabled: false
+      W391:
+        enabled: false
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - python
+ratings:
+  paths:
+  - "**.py"
 languages:
   Python: true
 exclude_paths:
@@ -13,8 +35,11 @@ exclude_paths:
 - installpypy3.ps1
 - optional.txt
 - requirements.txt
+- test.py
 - "common/__init__.py"
 - "client/__init__.py"
 - "server/__init__.py"
-
-#comment to test
+- "client/README.md"
+- "common/README.md"
+- "policies/placeholder"
+- "server/README.md"
