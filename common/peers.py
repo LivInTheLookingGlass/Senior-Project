@@ -166,21 +166,7 @@ def requestPeerlist(address):
         if recv(conn) == peer_request:
             handlePeerRequest(conn, False, key=key, received=pickle.loads(received))
             recv(conn)
-        # test section
-        conn = socket.socket()
-        conn.settimeout(5)
-        conn.connect(address)
-        send(incoming_bounty, conn, key)
-        bounty = Bounty((get_lan_ip(), 44565), "1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9", 1440)
-        bounty = pickle.dumps(bounty, 0)
-        safeprint(bounty, verbosity=3)
-        send(bounty, conn, key)
-        safeprint("Receive one")
-        recv(conn)
-        safeprint("Receive two")
-        recv(conn)
         conn.close()
-        # end test section
         return pickle.loads(received)
     except Exception as error:
         safeprint("Failed:" + str(type(error)))
