@@ -58,7 +58,7 @@ class Bounty(object):
         try:
             return (self.reward == other.reward) and (self.ident == other.ident) and (self.data == other.data)
         except:
-            return not other is None
+            return other is not None
 
     def __ne__(self, other):
         """Determines whether the bounties are unequal"""
@@ -77,7 +77,7 @@ class Bounty(object):
             else:
                 return False
         except:
-            return not other is None
+            return other is not None
 
     def __gt__(self, other):
         """Determines whether this bounty has a higher priority"""
@@ -144,7 +144,7 @@ class Bounty(object):
                 return False
             safeprint("Testing Bitcoin address", verbosity=1)
             # The following is a soft check
-            # A deeper check will need to be done in order to assure this is correct
+            # A deeper check will be needed in order to assure this is correct
             if not checkBTCAddressValid(self.btc):
                 return False
             safeprint("Testing reward and/or signiture validity", verbosity=1)
@@ -280,7 +280,7 @@ def loadFromFile():
 
 def depickle(string):
     """Handles the potential errors in unpickling a bounty"""
-    if isinstance(string,Bounty):
+    if isinstance(string, Bounty):
         return string
     safeprint([sys.version_info[0], sys.version_info[1], sys.version_info[2]])
     if sys.version_info[0] == 2 and sys.version_info[1] == 6 and (isinstance(string, str) or isinstance(string, unicode)):
