@@ -34,21 +34,19 @@ def initParallels():
     mouth.start()
     feedback = []
     stamp = time()
+    global ext_ip, ext_port
     while queue.empty():
         if time() - 15 > stamp:
-            break  # pragma: no cover
+            break
     try:
         feedback = queue.get(False)
-    except:  # pragma: no cover
-        safeprint("No feedback received from listener")
-    feedback = queue.get(False)
-    global ext_ip, ext_port
-    ext_ip = ""     # Does this affect peers?
-    ext_port = -1   # Does this affect peers?
-    if feedback != []:
         settings.outbound = feedback[0]
         if settings.outbound is not True:
             ext_ip, ext_port = feedback[1:3]
+    except:
+        safeprint("No feedback received from listener")
+        ext_ip = ""
+        ext_port = -1
     return live
 
 
