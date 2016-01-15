@@ -175,7 +175,9 @@ def requestPeerlist(address):
         bounty = pickle.dumps(bounty, 0)
         safeprint(bounty, verbosity=3)
         send(bounty, conn, key)
+        safeprint("Receive one")
         recv(conn)
+        safeprint("Receive two")
         recv(conn)
         conn.close()
         # end test section
