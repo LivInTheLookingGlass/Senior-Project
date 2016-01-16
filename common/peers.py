@@ -187,7 +187,6 @@ def requestBounties(address):
         if recv(conn) == bounty_request:
             handleBountyRequest(conn, False, key=key, received=pickle.loads(received))
             safeprint(recv(conn))
-        send(close_signal, conn, key)
         conn.close()
         addBounties(pickle.loads(received))
     except Exception as error:
