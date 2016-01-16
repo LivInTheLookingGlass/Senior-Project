@@ -420,8 +420,7 @@ def listenp(port, v):
                     from multiprocessing.pool import ThreadPool
                     ThreadPool().map(propagate, [(bounty, x) for x in peerlist[:]])
             elif packet[0] == incoming_bounties:
-                bounties = pickle.loads(packet[1])
-                for bounty in bounties:
+                for bounty in packet[1]:
                     if bounty.isValid():
                         from multiprocessing.pool import ThreadPool
                         ThreadPool().map(propagate, [(bounty, x) for x in peerlist[:]])
