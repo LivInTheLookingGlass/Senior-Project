@@ -8,10 +8,12 @@ global ext_ip
 global port
 global myPriv
 global myPub
+global propQueue
 ext_port = -1
 ext_ip = ""
 port = 44565
 myPub, myPriv = rsa.newkeys(1024)
+propQueue = multiprocessing.Queue()
 
 seedlist = [("127.0.0.1", 44565), ("localhost", 44565),
             ("10.132.80.128", 44565)]
@@ -187,7 +189,6 @@ def requestBounties(address):
         if recv(conn) == bounty_request:
             handleBountyRequest(conn, False, key=key, received=pickle.loads(received))
             safeprint(recv(conn))
-        send(close_signal, conn, key)
         conn.close()
         addBounties(pickle.loads(received))
     except Exception as error:
@@ -324,13 +325,7 @@ def handleBountyRequest(conn, exchange, key=None, received=[]):
             for i in range(len(bounties)):
                 if valids[i] >= 0:  # If the bounty is valid and not a duplicate, add it to propagation list
                     toSend.append(bounties[i])
-            mouth = socket.socket()
-            from common import settings
-            mouth.connect(("localhost", settings.config.get('port') + 1))
-            mouth.send(incoming_bounties)
-            mouth.send(pad(pickle.dumps(toSend, 0)))
-            mouth.send(close_signal)
-            mouth.close()
+            propQueue.put((incoming_bounties, toSend))
         except Exception as error:
             safeprint("Could not add bounties")
             safeprint(type(error))
@@ -349,13 +344,7 @@ def handleIncomingBounty(conn, key=None):
             safeprint("Sending valid signal")
             send(valid_signal, conn, key)
             if valid >= 0:  # If valid and not already received, propagate
-                mouth = socket.socket()
-                from common import settings
-                mouth.connect(("localhost", settings.config['port'] + 1))
-                mouth.send(incoming_bounty)
-                mouth.send(pad(received))
-                mouth.send(close_signal)
-                mouth.close()
+                propQueue.put((incoming_bounty, received))
         else:
             send(invalid_signal, conn, key)
     except Exception as error:
@@ -364,55 +353,6 @@ def handleIncomingBounty(conn, key=None):
         safeprint(error)
         traceback.print_exc()
     return key
-
-
-def handleIncomingBountyP(conn):
-    """Given a socket, store an incoming bounty, and report it valid or invalid"""
-    connected = True
-    received = "".encode('utf-8')
-    while connected:
-        packet = conn.recv(sig_length)
-        safeprint(packet, verbosity=3)
-        if not packet == close_signal:
-            received += packet
-        else:
-            connected = False
-    safeprint("Adding bounty: " + received.decode(), verbosity=2)
-    try:
-        bounty = pickle.loads(received)
-        if bounty.isValid():
-            from multiprocessing.pool import ThreadPool
-            ThreadPool().map(propagate, [(bounty, x) for x in peerlist[:]])
-    except Exception as error:
-        safeprint("bounty propagation failed: " + str(type(error)))
-        safeprint(error)
-        traceback.print_exc()
-        return False
-
-
-def handleIncomingBountiesP(conn):
-    """Given a socket, store an incoming bounty & report it valid or invalid"""
-    connected = True
-    received = "".encode('utf-8')
-    while connected:
-        packet = conn.recv(sig_length)
-        safeprint(packet, verbosity=3)
-        if not packet == close_signal:
-            received += packet
-        else:
-            connected = False
-    safeprint("Adding bounties: " + received.decode(), verbosity=2)
-    try:
-        bounties = pickle.loads(received)
-        for bounty in bounties:
-            if bounty.isValid():
-                from multiprocessing.pool import ThreadPool
-                ThreadPool().map(propagate, [(bounty, x) for x in peerlist[:]])
-    except Exception as error:
-        safeprint("bounty propagation failed: " + str(type(error)))
-        safeprint(error)
-        traceback.print_exc()
-        return False
 
 
 def propagate(tup):
@@ -465,27 +405,25 @@ def portForward(port):
 
 def listenp(port, v):
     """BLOCKING function which should only be run in a daemon thread. Listens and responds to other nodes"""
-    server = socket.socket()
-    server.bind(("0.0.0.0", port))
-    server.listen(10)
-    server.settimeout(5)
-    if sys.version_info[0] < 3 and sys.platform == "win32":
-        server.setblocking(True)
+    import time
     while v.value:   # is True is implicit
-        safeprint("listenp-ing on localhost:" + str(port), verbosity=3)
+        safeprint("listenp-ing", verbosity=3)
         try:
-            conn, addr = server.accept()
-            server.setblocking(True)
-            conn.setblocking(True)
-            safeprint("connection accepted on propagator")
-            packet = conn.recv(sig_length)
-            safeprint("Received: " + packet.decode(), verbosity=3)
-            if packet == incoming_bounty:
-                handleIncomingBountyP(conn)
-            conn.send(close_signal)
-            conn.close()
-            server.settimeout(5)
-            safeprint("connection closed")
+            while propQueue.empty() and v.value:
+                time.sleep(0.01)
+            packet = propQueue.get()
+            safeprint("Received: " + str(packet), verbosity=3)
+            if packet[0] == incoming_bounty:
+                bounty = pickle.loads(packet[1])
+                if bounty.isValid():
+                    from multiprocessing.pool import ThreadPool
+                    ThreadPool().map(propagate, [(bounty, x) for x in peerlist[:]])
+            elif packet[0] == incoming_bounties:
+                for bounty in packet[1]:
+                    if bounty.isValid():
+                        from multiprocessing.pool import ThreadPool
+                        ThreadPool().map(propagate, [(bounty, x) for x in peerlist[:]])
+            safeprint("Packet processed")
         except Exception as error:
             safeprint("Failed: " + str(type(error)))
             safeprint(error)
@@ -504,6 +442,9 @@ def sync(items):
     if items.get('bountyLock'):
         from common import bounty
         bounty.bountyLock = items.get('bountyLock')
+    if items.get('propQueue'):
+        global propQueue
+        propQueue = items.get('propQueue')
 
 
 class listener(multiprocessing.Process):  # pragma: no cover
