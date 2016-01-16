@@ -195,6 +195,12 @@ class Bounty(object):
         except:
             return False
     
+    def executeTest(self):
+        return True  # Temporary, to be fixed in seperate PR
+    
+    def executeOrder(self):
+        return True  # Temporary, to be fixed in seperate PR
+    
     def transact(self):
         if not self.isValid():
             return False
@@ -202,27 +208,35 @@ class Bounty(object):
         #Begin routing
         conn = socket.socket()
         conn.connect(self.ip)
-        from common.peers import send, recv, transact_bounty, fetch_test, test_results, fetch_main, main_results, close_signal
-        key = send(conn,transact_bounty,None)
-        send(conn,pickle.dumps(self,0),key)
+        from common.peers import send, recv, transact_bounty, fetch_test, test_results, fetch_main, main_results, close_signal, bounty_received
+        key = send(conn, transact_bounty, None)
+        send(conn, pickle.dumps(self, 0), key)
         new_ip = pickle.loads(recv(conn))
-        send(conn,close_signal,key)
+        send(conn, close_signal, key)
         conn.close()
         #Begin real transaction
         conn = socket.socket()
         conn.connect(new_ip)
         key = send(conn,fetch_test,None)
-        send(conn,pickle.dumps(self,0),key)
-        if recv(conn) != "Bounty received":
+        send(conn, pickle.dumps(self, 0), key)
+        if recv(conn) != bounty_received:
             return False
         test = recv(conn)
-        file = open("test.jar","wb")
+        file = open("test.jar", "wb")
         file.write(test)
         file.flush()
         file.close()
-        #Begin test execution
-        import subprocess
-        return False #This is a convenient stopping point. I'll pick it up again later
+        # Begin test execution
+        if not self.executeTest():
+            return False
+        # End test execution
+        send(conn, fetch_main, key)
+        main = recv(conn)
+        file = open("main.jar", "wb")
+        file.write(main)
+        file.flush()
+        file.close()
+        return self.executeMain()
 
 def checkAddressValid(address):
     """Check to see if a Bitcoin address is within the valid namespace. Will potentially give false positives based on leading 1s"""
