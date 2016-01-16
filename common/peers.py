@@ -325,7 +325,7 @@ def handleBountyRequest(conn, exchange, key=None, received=[]):
             for i in range(len(bounties)):
                 if valids[i] >= 0:  # If the bounty is valid and not a duplicate, add it to propagation list
                     toSend.append(bounties[i])
-            propQueue.put((incoming_bounties,toSend))
+            propQueue.put((incoming_bounties, toSend))
         except Exception as error:
             safeprint("Could not add bounties")
             safeprint(type(error))
@@ -344,7 +344,7 @@ def handleIncomingBounty(conn, key=None):
             safeprint("Sending valid signal")
             send(valid_signal, conn, key)
             if valid >= 0:  # If valid and not already received, propagate
-                propQueue.put((incoming_bounty,received))
+                propQueue.put((incoming_bounty, received))
         else:
             send(invalid_signal, conn, key)
     except Exception as error:
