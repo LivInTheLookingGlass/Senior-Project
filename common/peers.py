@@ -467,7 +467,7 @@ def listenp(port, v):
                         ThreadPool().map(propagate, [(bounty, x) for x in peerlist[:]])
             elif packet[0] == start_recipricator:
                 from multiprocessing import Process
-                from server import recipricate
+                from server.client_manager import recipricate
                 r = Process(target=recipricate, args=(packet[1]))
                 r.daemon = True
                 r.start()
