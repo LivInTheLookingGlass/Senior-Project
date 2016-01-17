@@ -198,7 +198,7 @@ class Bounty(object):
     def executeTest(self):
         return True  # Temporary, to be fixed in seperate PR
     
-    def executeOrder(self):
+    def executeMain(self):
         return True  # Temporary, to be fixed in seperate PR
     
     def transact(self):
