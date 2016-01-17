@@ -300,6 +300,20 @@ def listen(port, outbound, q, v, serv):
             safeprint(error)
             traceback.print_exc()
 
+
+def downloadFile(signal, conn, bounty):
+    """Given a socket, a bounty, and a signal, download a file from a server"""
+    key = send(conn,fetch_test,None)
+    send(conn, pickle.dumps(bounty, 0), key)
+    if recv(conn) != bounty_received:
+        return False
+    test = recv(conn)
+    file = open("test.jar", "wb")
+    file.write(test)
+    file.flush()
+    file.close()
+    return True
+
 def handlePeerRequest(conn, exchange, key=None, received=[]):
     """Given a socket, send the proper messages to complete a peer request"""
     if ext_port != -1:
