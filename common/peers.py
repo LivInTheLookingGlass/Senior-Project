@@ -31,11 +31,19 @@ incoming_bounties   = "Incoming Bounties".encode("utf-8")
 incoming_bounty     = "Incoming Bounty".encode("utf-8")
 valid_signal        = "Bounty was valid".encode("utf-8")
 invalid_signal      = "Bounty was invalid".encode("utf-8")
+transact_bounty     = "Trasact bounty".encode("utf-8")
+fetch_test          = "Fetch test".encode("utf-8")
+test_results        = "Test results".encode("utf-8")
+fetch_main          = "Fetch main".encode("utf-8")
+main_results        = "Main results".encode("utf-8")
+bounty_received     = "Bounty received".encode("utf-8")
 end_of_message      = "End of message".encode("utf-8")
 
 sig_length = len(max(
                     close_signal, peer_request, bounty_request, incoming_bounties,
-                    incoming_bounty, valid_signal, invalid_signal, key=len))
+                    incoming_bounty, valid_signal, invalid_signal, transact_bounty,
+                    fetch_test, test_results, fetch_main, main_results,
+                    bounty_received, end_of_message, key=len))
 
 
 def pad(string):
@@ -48,6 +56,12 @@ incoming_bounties   = pad(incoming_bounties)
 incoming_bounty     = pad(incoming_bounty)
 valid_signal        = pad(valid_signal)
 invalid_signal      = pad(invalid_signal)
+transact_bounty     = pad(transact_bounty)
+fetch_test          = pad(fetch_test)
+test_results        = pad(test_results)
+fetch_main          = pad(fetch_main)
+main_results        = pad(main_results)
+bounty_received     = pad(bounty_received)
 end_of_message      = pad(end_of_message)
 
 signals = [close_signal, peer_request, bounty_request, incoming_bounty, valid_signal, invalid_signal]
@@ -283,6 +297,26 @@ def listen(port, outbound, q, v, serv):
             safeprint("Failed: " + str(type(error)))
             safeprint(error)
             traceback.print_exc()
+
+
+def downloadFile(signal, conn, bounty):
+    """Given a socket, a bounty, and a signal, download a file from a server"""
+    key = send(conn, signal, None)
+    send(conn, pickle.dumps(bounty, 0), key)
+    if recv(conn) != bounty_received:
+        return False
+    contents = recv(conn)
+    if signal == fetch_test:
+        name = "test.jar"
+    elif signal == fetch_main:
+        name = "main.jar"
+    else:
+        name = "misc.jar"
+    file = open(name, "wb")
+    file.write(contents)
+    file.flush()
+    file.close()
+    return True
 
 
 def handlePeerRequest(conn, exchange, key=None, received=[]):
