@@ -38,6 +38,7 @@ fetch_main          = "Fetch main".encode("utf-8")
 main_results        = "Main results".encode("utf-8")
 bounty_received     = "Bounty received".encode("utf-8")
 end_of_message      = "End of message".encode("utf-8")
+start_recipricator  = "Start recipricator".encode("utf-8")
 
 sig_length = len(max(
                     close_signal, peer_request, bounty_request, incoming_bounties,
@@ -63,6 +64,7 @@ fetch_main          = pad(fetch_main)
 main_results        = pad(main_results)
 bounty_received     = pad(bounty_received)
 end_of_message      = pad(end_of_message)
+start_recipricator  = pad(start_recipricator)
 
 signals = [close_signal, peer_request, bounty_request, incoming_bounty, valid_signal, invalid_signal]
 
@@ -289,6 +291,12 @@ def listen(port, outbound, q, v, serv):
                 key = handleBountyRequest(conn, True, key=key)
             elif packet == incoming_bounty:
                 key = handleIncomingBounty(conn, key=key)
+            elif packet == transact_bounty:
+                from server.client_manager import port, isMine
+                if isMine(recv(conn)):
+                    p = port()
+                    propQueue.put((start_recipricator, p))
+                    key = send(p, conn, key)
             send(close_signal, conn, key)
             conn.close()
             server.settimeout(5)
@@ -457,6 +465,12 @@ def listenp(port, v):
                     if bounty.isValid():
                         from multiprocessing.pool import ThreadPool
                         ThreadPool().map(propagate, [(bounty, x) for x in peerlist[:]])
+            elif packet[0] == start_recipricator:
+                from multiprocessing import Process
+                from server import recipricate
+                r = Process(target=recipricate, args=(packet[1]))
+                r.daemon = True
+                r.start()
             safeprint("Packet processed")
         except Exception as error:
             safeprint("Failed: " + str(type(error)))
