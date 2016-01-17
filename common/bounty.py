@@ -208,7 +208,7 @@ class Bounty(object):
         #Begin routing
         conn = socket.socket()
         conn.connect(self.ip)
-        from common.peers import send, recv, transact_bounty, fetch_test, test_results, fetch_main, main_results, close_signal, bounty_received
+        from common.peers import send, recv, downloadFile, transact_bounty, fetch_test, fetch_main, bounty_received
         key = send(conn, transact_bounty, None)
         send(conn, pickle.dumps(self, 0), key)
         new_ip = pickle.loads(recv(conn))
@@ -217,25 +217,14 @@ class Bounty(object):
         #Begin real transaction
         conn = socket.socket()
         conn.connect(new_ip)
-        key = send(conn,fetch_test,None)
-        send(conn, pickle.dumps(self, 0), key)
-        if recv(conn) != bounty_received:
+        if not downloadFile(fetch_test, conn, self):
             return False
-        test = recv(conn)
-        file = open("test.jar", "wb")
-        file.write(test)
-        file.flush()
-        file.close()
         # Begin test execution
         if not self.executeTest():
             return False
         # End test execution
-        send(conn, fetch_main, key)
-        main = recv(conn)
-        file = open("main.jar", "wb")
-        file.write(main)
-        file.flush()
-        file.close()
+        if not downloadFile(fetch_main, conn, self):
+            return False
         return self.executeMain()
 
 def checkAddressValid(address):
