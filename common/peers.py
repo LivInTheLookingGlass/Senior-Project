@@ -303,13 +303,19 @@ def listen(port, outbound, q, v, serv):
 
 def downloadFile(signal, conn, bounty):
     """Given a socket, a bounty, and a signal, download a file from a server"""
-    key = send(conn,fetch_test,None)
+    key = send(conn, signal, None)
     send(conn, pickle.dumps(bounty, 0), key)
     if recv(conn) != bounty_received:
         return False
-    test = recv(conn)
-    file = open("test.jar", "wb")
-    file.write(test)
+    contents = recv(conn)
+    if signal == fetch_test:
+        name = "test.jar"
+    elif signal == fetch_main:
+        name = "main.jar"
+    else:
+        name = "misc.jar"
+    file = open(name, "wb")
+    file.write(contents)
     file.flush()
     file.close()
     return True
