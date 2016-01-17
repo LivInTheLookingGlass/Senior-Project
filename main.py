@@ -29,7 +29,6 @@ def initParallels():
     ear.items = sync()
     ear.start()
     mouth = peers.propagator(settings.config['port'] + 1, live)
-    mouth.daemon = True
     mouth.items = ear.items
     mouth.start()
     feedback = []
