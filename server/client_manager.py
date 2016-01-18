@@ -12,7 +12,7 @@ def port():
     return ret
 
 
-isMine(string):
+def isMine(string):
     bounty = pickle.loads(string)
     try:
         myCopy = pickle.load(open("bounty-" + str(bounty.ident) + os.sep + "bounty.pickle", "rb"))
