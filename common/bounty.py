@@ -189,18 +189,18 @@ class Bounty(object):
                               'sig': sign(expected, privateKey, 'SHA-256')})
         except:
             return False
-    
+
     def executeTest(self):
         return True  # Temporary, to be fixed in seperate PR
-    
+
     def executeMain(self):
         return True  # Temporary, to be fixed in seperate PR
-    
+
     def transact(self):
         if not self.isValid():
             return False
         import socket
-        #Begin routing
+        # Begin routing
         conn = socket.socket()
         conn.connect(self.ip)
         from common.peers import send, recv, downloadFile, transact_bounty, fetch_test, fetch_main, bounty_received
@@ -209,7 +209,7 @@ class Bounty(object):
         new_ip = pickle.loads(recv(conn))
         send(conn, close_signal, key)
         conn.close()
-        #Begin real transaction
+        # Begin real transaction
         conn = socket.socket()
         conn.connect(new_ip)
         if not downloadFile(fetch_test, conn, self):
