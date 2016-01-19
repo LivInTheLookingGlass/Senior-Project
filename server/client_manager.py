@@ -3,7 +3,7 @@ from common import settings
 
 nextPort = multiprocessing.Value('i', 44566)
 if settings.config.get('port'):
-  nextPort.value = settings.config.get('port')
+    nextPort.value = settings.config.get('port')
 
 
 def port():
@@ -15,7 +15,9 @@ def port():
 def isMine(string):
     bounty = pickle.loads(string)
     try:
-        myCopy = pickle.load(open("bounty-" + str(bounty.ident) + os.sep + "bounty.pickle", "rb"))
+        import os
+        path = "bounty-" + str(bounty.ident) + os.sep + "bounty.pickle"
+        myCopy = pickle.load(open(path, "rb"))
         return myCopy == bounty and hash(myCopy) == hash(bounty)
     except:
         return False
@@ -34,10 +36,9 @@ def recipricate(port, live):
     """A method to interact with working clients
     Currently no coin control implemented"""
     import os, pickle, socket
-    from common.peers import fetch_test, fetch_main, test_results,
-                            main_results, valid_signal, invalid_signal
+    from common.peers import fetch_test, fetch_main, test_results, main_results, valid_signal, invalid_signal
     ear = socket.socket()
-    ear.bind(("0.0.0.0",port))
+    ear.bind(("0.0.0.0", port))
     ear.listen(1)
     conn, addr = ear.accept()
     key = None
@@ -79,5 +80,5 @@ class recipricator(multiprocessing.Process):
 
     def run(self):
         safeprint("recipricator started")
-        recipricate(self,port, self.live)
+        recipricate(self.port, self.live)
         safeprint("recipricator stopped")
