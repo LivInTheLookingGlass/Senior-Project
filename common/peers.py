@@ -291,12 +291,9 @@ def listen(port, outbound, q, v, serv):
                 key = handleBountyRequest(conn, True, key=key)
             elif packet == incoming_bounty:
                 key = handleIncomingBounty(conn, key=key)
-            elif packet == transact_bounty:
-                from server.client_manager import port, isMine
-                if isMine(recv(conn)):
-                    p = port()
-                    propQueue.put((start_recipricator, p))
-                    key = send(p, conn, key)
+            elif serv:
+                from server.client_manager import handleRequest
+                handleRequest(packet, conn)
             send(close_signal, conn, key)
             conn.close()
             server.settimeout(5)
@@ -309,8 +306,8 @@ def listen(port, outbound, q, v, serv):
 
 def downloadFile(signal, conn, bounty):
     """Given a socket, a bounty, and a signal, download a file from a server"""
-    key = send(conn, signal, None)
-    send(conn, pickle.dumps(bounty, 0), key)
+    key = send(signal, conn, None)
+    send(pickle.dumps(bounty, 0), conn, key)
     if recv(conn) != bounty_received:
         return False
     contents = recv(conn)
