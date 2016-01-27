@@ -174,7 +174,7 @@ class Bounty(object):
                 data = self.data
                 n = data.get('key')[0]
                 e = data.get('key')[1]
-                if rsa.verify(str((n, e)), data.get('cert'), masterKey):
+                if rsa.verify(str((n, e)).encode('utf-8'), data.get('cert'), masterKey):
                     return verify(expected, data.get('sig'), PublicKey(n, e))
             return False
         except:
