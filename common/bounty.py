@@ -376,7 +376,7 @@ def getBounty(charity, factor):
     temp = bountyList[:]
     safeprint("bountyList = " + str(temp), verbosity=3)
     for bounty in temp:
-        if not verify(bounty):
+        if not bounty.timeout < getUTC():
             bountyList.remove(bounty)
             continue
         elif charity:
