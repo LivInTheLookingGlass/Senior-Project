@@ -204,10 +204,10 @@ class Bounty(object):
         conn = socket.socket()
         conn.connect(self.ip)
         from common.peers import send, recv, downloadFile, transact_bounty, fetch_test, fetch_main, bounty_received
-        key = send(conn, transact_bounty, None)
-        send(conn, pickle.dumps(self, 0), key)
+        key = send(transact_bounty, conn, None)
+        send(pickle.dumps(self, 0), conn, key)
         new_ip = pickle.loads(recv(conn))
-        send(conn, close_signal, key)
+        send(close_signal, conn, key)
         conn.close()
         # Begin real transaction
         conn = socket.socket()
