@@ -46,7 +46,7 @@ def initParallels():
             ext_ip, ext_port = feedback[1:3]
     except:
         safeprint("No feedback received from listener")
-    return live
+    return live, mouth
 
 
 def main():
@@ -59,7 +59,7 @@ def main():
         settings.config['outbound'] = True
     safeprint("settings are:")
     safeprint(settings.config)
-    live = initParallels()
+    live, mouth = initParallels()
     global ext_ip, ext_port
     peers.initializePeerConnections(settings.config['port'], ext_ip, ext_port)
     # End Init
@@ -74,6 +74,11 @@ def main():
             safeprint("Keyboard Interrupt")
     elif settings.config.get('server'):
         safeprint("Server mode activated")
+        try:
+            while True and not settings.config.get('test'):
+                sleep(0.1)
+        except KeyboardInterrupt:
+            safeprint("Keyboard Interrupt")
     else:
         safeprint("Client mode activated")
     # End main loop
@@ -84,6 +89,7 @@ def main():
     settings.saveSettings()
     peers.saveToFile()
     bounty.saveToFile()
+    mouth.terminate()
     # End shutdown
 
 if __name__ == "__main__":

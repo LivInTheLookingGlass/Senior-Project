@@ -74,8 +74,8 @@ def send(msg, conn, key):
         safeprint("Key not found. Requesting key")
         conn.send(key_request)
         try:
-            key = pickle.loads(conn.recv(1024))
-            key = rsa.PublicKey(key[0], key[1])
+            key = conn.recv(1024).split(',')
+            key = rsa.PublicKey(int(key[0]), int(key[1]))
             safeprint("Key received")
         except EOFError:
             continue
@@ -98,7 +98,7 @@ def recv(conn):
             a = conn.recv(128)
             if a == key_request:
                 safeprint("Key requested. Sending key")
-                conn.sendall(pickle.dumps((myPriv.n, myPriv.e), 0))
+                conn.sendall(str(myPriv.n) + "," + str(myPriv.e))
                 continue
             a = rsa.decrypt(a, myPriv)
             safeprint("Packet = " + str(a), verbosity=3)

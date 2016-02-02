@@ -24,12 +24,13 @@ def isMine(string):
 
 
 def handleRequest(sig, conn):
-    from common.peers import transact_bounty, start_recipricator, propQueue
-    if sig == transact_bounty:
-        if isMine(recv(conn)):
+    from common import peers
+    if sig == peers.transact_bounty:
+        if isMine(peers.recv(conn)):
             p = port()
-            propQueue.put((start_recipricator, p))
-            key = send(p, conn, key)
+            peers.propQueue.put((peers.start_recipricator, p))
+            ip = pickle.dumps((peers.ext_ip, p), 0)
+            key = peers.send(ip, conn, key)
 
 
 def recipricate(port, live):
