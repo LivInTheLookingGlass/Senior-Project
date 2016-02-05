@@ -212,7 +212,9 @@ class Bounty(object):
         # Begin real transaction
         conn = socket.socket()
         conn.connect(new_ip)
-        if not downloadFile(fetch_test, conn, self):
+        key = send(transact_bounty, conn, None)
+        send(pickle.dumps(self, 0), conn, key)
+        if not downloadFile(fetch_test, conn, self):    # this is not implemented properly on the receiver
             return False
         # Begin test execution
         if not self.executeTest():
