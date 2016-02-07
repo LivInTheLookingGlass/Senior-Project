@@ -15,9 +15,9 @@ def validation():
           "Bounty with invalid ip address (invalid port)")]
     l += [(Bounty(('8.8.8', 8888), "1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9", 1440),
           "Bounty with invalid ip address (incorrect number of bytes)")]
-    l += [(Bounty(('8.8.8.8', 49153), "1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9", 1440),
+    l += [(Bounty(('8.8.8.8', 49153), "1111111111111111111114oLvT2", 1440),
           "Bounty with invalid ip address (invalid port)")]
-    l += [(Bounty(('8.8.256.8', 8), "1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9", 1440),
+    l += [(Bounty(('8.8.256.8', 8), "1111111111111111111114oLvT2", 1440),
           "Bounty with invalid ip address (overflowed byte in address)")]
     l += [(Bounty(('8.8.8.8', 8), "1JTGcHS3GMhBGGww4ZEDmP7u9", 1440),
           "Bounty with invalid bitcoin address")]
@@ -25,7 +25,7 @@ def validation():
           "Bounty with invalid reward amount (outside of valid range)")]
     l += [(Bounty(('8.8.8.8', 8), "1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9", 0),
           "Bounty with invalid reward amount (reward of zero with no sig)")]
-    l += [(Bounty(('8.8.8.8', 8), "1LhPsd4ng3AXmVPzrLWprWFx351pW4HJm8", 1440, timeout=1),
+    l += [(Bounty(('8.8.8.8', 8), "1111111111111111111114oLvT2", 1440, timeout=1),
           "Bounty that has timed out")]
     l += [(Bounty(('8.8.8.8', 8), "1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9", 1440,
                   data={'reqs': {("sys", "platform", "index=2",
@@ -33,7 +33,7 @@ def validation():
           "Bounty with invalid requirements (would not work on any system")]
     l += [(Bounty(('8.8.8.8', 8), "1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9", 1440,
                   data={'reqs': {("__builtin__", "pow", 2, 2): 4,
-                                ("sys", "platform"): "w"}}),
+                                 ("sys", "platform"): "w"}}),
           "Bounty with invalid requirements (including some valid ones)")]
     l += [(Bounty(('8.8.8.8', 8), "1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9", 1440),
           "Correctly formed bounty")]
