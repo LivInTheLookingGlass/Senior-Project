@@ -128,8 +128,8 @@ class Bounty(object):
                      'perms': {}}
         if kargs.get('ident') is not None:
             self.ident = kargs.get('ident')
-        if kargs.get('dataDict') is not None:
-            self.data.update(kargs.get('dataDict'))
+        if kargs.get('data') is not None:
+            self.data.update(kargs.get('data'))
         if kargs.get('keypair') is not None:
             self.sign(kargs.get('keypair'))
 
