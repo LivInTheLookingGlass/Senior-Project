@@ -9,7 +9,7 @@ def validation():
     # 2. Add to the data field the correct sig, key, cert
     l = []
     num_completely_invalid = 8
-    num_invalid = 10
+    num_invalid = num_completely_invalid + 2
     # Begin adding to check-list
     l += [(Bounty(('8.8.8.8', -1), "1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9", 1440),
           "Bounty with invalid ip address (invalid port)")]
@@ -28,12 +28,12 @@ def validation():
     l += [(Bounty(('8.8.8.8', 8), "1LhPsd4ng3AXmVPzrLWprWFx351pW4HJm8", 1440, timeout=1),
           "Bounty that has timed out")]
     l += [(Bounty(('8.8.8.8', 8), "1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9", 1440,
-                 data={'reqs': {("sys", "platform", "index=2",
-                                "end=3"): "win33"}}),
+                  data={'reqs': {("sys", "platform", "index=2",
+                                 "end=3"): "win33"}}),
           "Bounty with invalid requirements (would not work on any system")]
     l += [(Bounty(('8.8.8.8', 8), "1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9", 1440,
-                 data={'reqs': {("__builtin__", "pow", 2, 2): 4,
-                               ("sys", "platform"): "w"}}),
+                  data={'reqs': {("__builtin__", "pow", 2, 2): 4,
+                                ("sys", "platform"): "w"}}),
           "Bounty with invalid requirements (including some valid ones)")]
     l += [(Bounty(('8.8.8.8', 8), "1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9", 1440),
           "Correctly formed bounty")]
@@ -44,7 +44,7 @@ def validation():
     l += [(Bounty(('8.8.8.8', 8), "1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg", 10290),
           "Correctly formed bounty")]
     l += [(Bounty(('8.8.8.8', 8), "1JTGcHS3GMhBGLcFRuHLk6Gww4ZEDmP7u9", 1440,
-                 data={'reqs': {("__builtin__", "pow", 2, 2): 4}}),
+                  data={'reqs': {("__builtin__", "pow", 2, 2): 4}}),
           "Correctly formed bounty with system requirements")]
     # Begin testing list
     for i in range(len(l)):
