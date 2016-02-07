@@ -37,8 +37,11 @@ class Bounty(object):
                    (if empty, most restrictive assumed)
         key    -- A tuple which contains the RSA n and e values for this Bounty
                    (required only when reward is 0)
-        sig    -- A Bytes object of str(Bounty) signed by the above key
+        sig    -- A Bytes object of the Bounty's print output signed by the above key
                    (required only when reward is 0)
+        cert   -- A copy of the key signed by the certificate authority
+                   (required when reward is 0;
+                    if reward > 0, excluding this will drop it below charity priority)
         TDL    -- More to be defined in later versions
     """
 
