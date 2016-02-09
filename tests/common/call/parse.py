@@ -15,6 +15,10 @@ def accuracy():
     r += [-2]
     l += [("__builtin__", "max", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)]
     r += [9]
+    l += [("sys", "platform", "index=0")]
+    r += [sys.platform[0]]
+    l += [("sys", "platform", "index=2", "end=3")]
+    r += [sys.platform[2:3]]
     l += [("__builtin__", "max", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)]
     r += [10]
     l += [("math", "pow", 5, 8)]
@@ -28,6 +32,4 @@ def accuracy():
         if bool(parse({l[i]: r[i]})) ^ bool(i >= num_invalid):
             return False
     
-    # test keyed arguments
-    return (parse({("sys", "platform", "index=0"): sys.platform[0]}) and
-            parse({("sys", "platform", "index=2", "end=3"): sys.platform[2:3]}))
+    return True
