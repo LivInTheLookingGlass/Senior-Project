@@ -1,12 +1,13 @@
 from common.call import parse
 
+
 def accuracy():
     """Tests the accuracy of call.call"""
     import math, sys
     l, r = [], []
     num_invalid = 4
-    
     # test unkeyed arguments
+
     l += [("sys", "platform")]
     r += ["win33"]
     l += [("math", "pow", 4, 4)]
@@ -27,9 +28,9 @@ def accuracy():
     r += [sys.platform]
     l += [("sys", "maxint")]
     r += [sys.maxint]
-    
+
     for i in range(len(l)):
         if bool(parse({l[i]: r[i]})) ^ bool(i >= num_invalid):
             return False
-    
+
     return True
