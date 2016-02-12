@@ -23,7 +23,7 @@ def accuracy():
     l += [("__builtin__", "max", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)]
     r += [10]
     l += [("math", "pow", 5, 8)]
-    r += [math.pow(5,8)]
+    r += [math.pow(5, 8)]
     l += [("sys", "platform")]
     r += [sys.platform]
     l += [("sys", "maxint")]
