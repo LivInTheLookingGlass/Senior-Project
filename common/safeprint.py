@@ -11,7 +11,7 @@ def safeprint(msg, verbosity=0):
     max_digits.value = max(max_digits.value, len(pid))
     pid = pid.zfill(max_digits.value)
     string = ("[" + pid + "] " + datetime.now().strftime('%H:%M:%S: ') +
-              str(msg) + '\n')
+              str(msg).replace('\n', '\n' + ' ' * len(pid)) + '\n')
     with print_lock:
         with open("output.txt", "a") as log:
             log.write(string)
