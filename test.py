@@ -6,6 +6,23 @@ from multiprocessing import Queue, Process, Value #pragma: no cover
 from time import sleep, time #pragma: no cover
 import pickle, sys #pragma: no cover
 
+def unitTests():
+    from multiprocessing import Pool
+    import tests
+    keys, results = [], []
+    results += [tests.common.bounty.Bounty.validation()]
+    keys    += ["Bounty validation:     "]
+    results += [tests.common.call.call.accuracy()]
+    keys    += ["call.call accuracy:    "]
+    results += [tests.common.call.parse.accuracy()]
+    keys    += ["call.parse accuracy    "]
+    results += [tests.common.call.process.accuracy()]
+    keys    += ["call.process accuracy  "]
+    for i in range(len(keys)):
+        safeprint(keys[i] + "= " + str(results[i]))
+    return not (False in results)
+
+
 def testBounty(ip, btc, rwd, desc, data=None):  #pragma: no cover
     safeprint(desc)
     test = bounty.Bounty(ip,btc,rwd,dataDict=data)
@@ -100,5 +117,5 @@ if __name__ == "__main__": #pragma: no cover
     testSig.data['key'] = (1,1)
     testSig.checkSign()
     safeprint(bounty.addBounties([bounty.Bounty(('8.8.8.8',8888),"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290),bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",0)]))
-    safeprint("This should exit now")
-    exit(0)
+    safeprint("Running unit tests")
+    return unitTests()
