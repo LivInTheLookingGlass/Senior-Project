@@ -1,4 +1,5 @@
 from common.bounty import Bounty
+from common.safeprint import safeprint
 
 
 def validation():
@@ -49,5 +50,6 @@ def validation():
     # Begin testing list
     for i in range(len(l)):
         if bool(i >= num_completely_invalid) ^ bool(l[i][0].isValid()):
-            return (False, l[i][1])
-    return (True, "All bounties correctly assessed")
+            safeprint(l[i][1])
+            return False
+    return True
