@@ -10,10 +10,7 @@ def call(mod, cmd, *args, **kargs):
     Use case:
         if you don't know what command you need to run at compile time
     """
-    if mod != "__builtin__":
-        m = __import__(mod)
-    else:
-        m = __builtins__
+    m = __import__(mod)
     func = getattr(m, cmd)
     if not isinstance(func, type(open)) and not isinstance(func, type(call)):
         r = func
@@ -24,8 +21,10 @@ def call(mod, cmd, *args, **kargs):
     if index is not None:
         if end is not None:
             return r[index:end]
-        return r[index]
-    return r
+        else:
+            return r[index]
+    else:
+        return r
 
 
 def process(tup):
