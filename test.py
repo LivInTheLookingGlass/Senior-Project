@@ -8,7 +8,7 @@ import pickle, sys #pragma: no cover
 
 def unitTests():
     from multiprocessing import Pool
-    from tests import *
+    import tests
     keys, results = [], []
     results += [tests.common.bounty.Bounty.validation()]
     keys    += ["Bounty validation:     "]
