@@ -20,7 +20,7 @@ def unitTests():
     keys    += ["call.process accuracy  "]
     for i in range(len(keys)):
         safeprint(keys[i] + "= " + str(results[i]))
-    return not (False in results)
+    return False in results
 
 
 def testBounty(ip, btc, rwd, desc, data=None):  #pragma: no cover
@@ -118,4 +118,4 @@ if __name__ == "__main__": #pragma: no cover
     testSig.checkSign()
     safeprint(bounty.addBounties([bounty.Bounty(('8.8.8.8',8888),"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290),bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",0)]))
     safeprint("Running unit tests")
-    return unitTests()
+    exit(int(unitTests()))
