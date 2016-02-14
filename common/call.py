@@ -16,7 +16,7 @@ def call(mod, cmd, *args, **kargs):
     else:
         m = __import__(mod)
         func = getattr(m, cmd)
-    if isinstance(func, type(open)) or isinstance(func, type(call)):
+    if isinstance(func, type(max)) or isinstance(func, type(call)):
         r = func(*args)
     else:
         r = func
