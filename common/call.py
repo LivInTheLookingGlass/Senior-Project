@@ -10,9 +10,12 @@ def call(mod, cmd, *args, **kargs):
     Use case:
         if you don't know what command you need to run at compile time
     """
-    if mod == "__builtin__" and call("platform",
-                                     "python_implementation") != "PyPy":
-        func = __builtins__[cmd]
+    if mod == "__builtin__":
+        if call("platform", "python_implementation") != "PyPy":
+            func = __builtins__[cmd]
+        else:
+            m = __import__("__builtins__")
+            func = getattr(m, cmd)
     else:
         m = __import__(mod)
         func = getattr(m, cmd)
