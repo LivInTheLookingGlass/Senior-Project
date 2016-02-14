@@ -1,5 +1,5 @@
 import platform
-
+            
 if platform.python_implementation() != "PyPy":
     def call(mod, cmd, *args, **kargs):
         """Calls an arbitrary python method
@@ -20,14 +20,7 @@ if platform.python_implementation() != "PyPy":
         else:
             m = __import__(mod)
             func = getattr(m, cmd)
-        if isinstance(func, type(max)) or isinstance(func, type(call)):
-            r = func(*args)
-        else:
-            r = func
-        index = kargs.get('index')
-        if index is not None:
-            return r[index:(kargs.get('end') or (index + 1))]
-        return r
+        return call_base(func, *args, **kargs)
 else:
     def call(mod, cmd, *args, **kargs):
         """Calls an arbitrary python method
@@ -45,14 +38,18 @@ else:
         """
         m = __import__(mod)
         func = getattr(m, cmd)
-        if isinstance(func, type(max)) or isinstance(func, type(call)):
-            r = func(*args)
-        else:
-            r = func
-        index = kargs.get('index')
-        if index is not None:
-            return r[index:(kargs.get('end') or (index + 1))]
-        return r
+        return call_base(func, *args, **kargs)
+
+
+def call_base(func, *args, **kargs):
+    if isinstance(func, type(max)) or isinstance(func, type(call)):
+        r = func(*args)
+    else:
+        r = func
+    index = kargs.get('index')
+    if index is not None:
+        return r[index:(kargs.get('end') or (index + 1))]
+    return r
 
 
 def process(tup):
