@@ -1,5 +1,5 @@
 def call(mod, cmd, *args, **kargs):
-    """Calls arbitrary python code
+    """Calls an arbitrary python method
 
     Arguments:
         mod     - The module from which you are calling
@@ -10,7 +10,8 @@ def call(mod, cmd, *args, **kargs):
     Use case:
         if you don't know what command you need to run at compile time
     """
-    if mod == "__builtin__":
+    if mod == "__builtin__" and call("platform",
+                                     "python_implementation") != "PyPy":
         func = __builtins__[cmd]
     else:
         m = __import__(mod)
