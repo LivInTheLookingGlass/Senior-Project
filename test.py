@@ -7,19 +7,19 @@ from time import sleep, time #pragma: no cover
 import pickle, sys #pragma: no cover
 
 def unitTests():
-    from multiprocessing import Pool
     import tests
     keys, results = [], []
-    results += [tests.common.bounty.Bounty.validation()]
+    results += [tests.common.bounty.Bounty.validation]
     keys    += ["Bounty validation:     "]
-    results += [tests.common.call.call.accuracy()]
+    results += [tests.common.call.call.accuracy]
     keys    += ["call.call accuracy:    "]
-    results += [tests.common.call.parse.accuracy()]
+    results += [tests.common.call.parse.accuracy]
     keys    += ["call.parse accuracy    "]
-    results += [tests.common.call.process.accuracy()]
+    results += [tests.common.call.process.accuracy]
     keys    += ["call.process accuracy  "]
-    for i in range(len(keys)):
-        safeprint(keys[i] + "= " + str(results[i]))
+    results  = [test() for test in results]
+    for key, result in zip(keys, results):
+        safeprint(key + "= " + str(result))
     return False in results
 
 
