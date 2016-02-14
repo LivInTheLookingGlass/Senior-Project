@@ -13,6 +13,10 @@ bountyLock = Lock()
 bounty_path = "data" + os.sep + "bounties.pickle"
 masterKey = rsa.PublicKey(*pickle.load(open("master_public_key.pickle", "rb")))
 
+if sys.version_info[0] == 3:
+    def xrange(*args):
+        return range(*args)
+
 
 def getUTC():
     from calendar import timegm
