@@ -1,5 +1,5 @@
 import platform, sys
-            
+
 if platform.python_implementation() != "PyPy":
     def call(mod, cmd, *args, **kargs):
         """Calls an arbitrary python method
