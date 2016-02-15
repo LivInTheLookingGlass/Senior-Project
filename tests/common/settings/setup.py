@@ -55,15 +55,9 @@ def verify(i, test):
     return ret and testIntegers(test)
 
 
-def testIntegers(test): #TODO: reduce complexity
-    ret = True
-    for flag in test:
-        if flag[0:3] == "-f ":
-            ret = int(flag[3:]) == settings.config['propagate_factor']
-            break
-    for flag in test:
-        if flag[0:3] == "-p ":
-            ret = int(flag[3:]) == settings.config['port'] and ret
+def testIntegers(test):  # TODO: reduce complexity
+    ret = checkInt(test, "-f ", 'propagate_factor')
+    ret = checkInt(test, "-p ", 'port') and ret
     return ret
 
 
@@ -78,3 +72,10 @@ def testToggles(test):
 
 def checkFlag(test, flag, longform):
     return bool(test.count(flag)) == settings.config[longform]
+
+
+def checkInt(test, flag, longform):
+    for entry in test:
+        if entry[0:3] == flag:
+            return int(entry[3:]) == settings.config[longform]
+    return True
