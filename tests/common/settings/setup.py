@@ -27,7 +27,7 @@ def accurateParsing():
             ret = verify(tests[j])
             if not ret:
                 safeprint.silent_flag.value = False
-                print(tests[j])
+                safeprint.safeprint(tests[j])
                 return ret
     safeprint.silent_flag.value = False
     return True
