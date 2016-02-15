@@ -138,7 +138,7 @@ matrix:
 # command to install dependencies
 before_install:
   - echo $TRAVIS_OS_NAME;
-  - if [ $TRAVIS_OS_NAME == "osx" ]; then git clone https://github.com/MacPython/terryfy; source terryfy/travis_tools.sh; get_python_environment  macpython $TOXENV; system_install_pip; fi
+  - if [ $TRAVIS_OS_NAME == "osx" ]; then git clone https://github.com/MacPython/terryfy; source terryfy/travis_tools.sh; get_python_environment  macpython $TOXENV; install_pip; alias pip=$PIP_CMD; alias python=$PYTHON_EXE; fi
   - if [ $Cov == 'true'  ]; then pyver=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))'); echo $pyver; if ! [[ $pyver =~ 3\.6\.* ]]; then $pipinstall coverage==3.7.1 ; fi; $pipinstall codecov; fi
 install: 
   - if [ $UPnP == 'true'  ]; then $pipinstall miniupnpc; fi
