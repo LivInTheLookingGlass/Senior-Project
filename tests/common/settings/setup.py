@@ -24,9 +24,10 @@ def accurateParsing():
             settings.config.update(default)
             settings.saveSettings()
             sys.argv = tests[j]
-            ret = verify(math.factorial(i) + j, tests[j])
+            ret = verify(tests[j])
             if not ret:
                 safeprint.silent_flag.value = False
+                print(tests[j])
                 return ret
     safeprint.silent_flag.value = False
     return True
@@ -46,7 +47,7 @@ def genTests(i):    # TODO: reduce complexity
     return [sys.argv + test for test in tests]
 
 
-def verify(i, test):
+def verify(test):
     settings.setup()
     ret = testToggles(test)
     # test verbosity
