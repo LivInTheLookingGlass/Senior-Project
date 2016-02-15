@@ -16,7 +16,9 @@ def saveSettings():
     """Save settings to a file"""
     if not os.path.exists(settings_file.split(os.sep)[0]):
         os.mkdir(settings_file.split(os.sep)[0])
-    pickle.dump(dict(config), open(settings_file, "wb"), 0)
+    f = open(settings_file, "wb")
+    pickle.dump(dict(config), f, 0)
+    f.close()
 
 
 def loadSettings():
@@ -24,7 +26,9 @@ def loadSettings():
     from common.safeprint import safeprint
     if os.path.exists(settings_file):
         try:
-            config.update(pickle.load(open(settings_file, "rb")))
+            f = open(settings_file, "rb")
+            config.update(pickle.load(f))
+            f.close()
         except:
             safeprint("Could not load from file")
 

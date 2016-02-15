@@ -269,7 +269,9 @@ def saveToFile():
     """Save the current bounty list to a file"""
     if not os.path.exists(bounty_path.split(os.sep)[0]):
         os.mkdir(bounty_path.split(os.sep)[0])
-    pickle.dump(getBountyList(), open(bounty_path, "wb"), 0)
+    f = open(bounty_path, "wb")
+    pickle.dump(getBountyList(), f, 0)
+    f.close()
     return True
 
 
@@ -279,7 +281,8 @@ def loadFromFile():
         with bountyLock:
             try:
                 safeprint("Loading bounty list from file", verbosity=2)
-                templist = pickle.load(open(bounty_path, "rb"))
+                f = open(bounty_path, "rb")
+                templist = pickle.load(f)
                 safeprint(addBounties(templist), verbosity=3)
                 safeprint("Bounty list loaded and added", verbosity=2)
             except:

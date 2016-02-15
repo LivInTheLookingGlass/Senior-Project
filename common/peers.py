@@ -134,7 +134,9 @@ def getFromFile():
     """Load peerlist from a file"""
     if os.path.exists(peers_file):
         try:
-            peerlist.extend(pickle.load(open(peers_file, "rb")))
+            f = open(peers_file, "rb")
+            peerlist.extend(pickle.load(f))
+            f.close()
             trimPeers()
         except:
             safeprint("Could not load peerlist from file")
@@ -144,7 +146,8 @@ def saveToFile():
     """Save peerlist to a file"""
     if not os.path.exists(peers_file.split(os.sep)[0]):
         os.mkdir(peers_file.split(os.sep)[0])
-    pickle.dump(peerlist[:], open(peers_file, "wb"), 0)
+    f = open(peers_file, "wb")
+    pickle.dump(peerlist[:], f 0)
 
 
 def getFromSeeds():
