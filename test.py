@@ -17,6 +17,8 @@ def unitTests():
     keys    += ["call.parse accuracy    "]
     results += [tests.common.call.process.accuracy]
     keys    += ["call.process accuracy  "]
+    results += [tests.common.settings.setup.accurateParsing]
+    keys    += ["accuracy of flag parse "]
     results  = [test() for test in results]
     for key, result in zip(keys, results):
         safeprint(key + "= " + str(result))
@@ -97,8 +99,6 @@ if __name__ == "__main__": #pragma: no cover
         a.start()
         listen(44566,False,q,v,False)
     from common.call import call
-    safeprint(call("random","random"))
-    safeprint(call("sys","platform",index=0))
     safeprint(bounty.Bounty(('8.8.8.8',8888),"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290) <= bounty.getBounty(False,2))
     safeprint(bounty.Bounty(('8.8.8.8',8888),"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290) >= bounty.getBounty(False,2))
     safeprint(bounty.Bounty(('8.8.8.8',8888),"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290) != bounty.getBounty(False,2))

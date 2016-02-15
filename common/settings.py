@@ -55,7 +55,7 @@ def setup():
                       '--outbound-only',
                       dest='outbound',
                       default=None,
-                      action="store_false",
+                      action="store_true",
                       help='Maximum acceptable latency from a server')
     parser.add_option('-p',
                       '--listening-port',
