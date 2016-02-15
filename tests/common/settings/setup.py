@@ -1,7 +1,7 @@
 from common import settings
 import math, sys
 
-possibilities = ["-c", "-f 4", "-o", "-p 44444", 
+possibilities = ["-c", "-f 4", "-o", "-p 44444",
                  "-s", "-S", "-t", "-v", "-v", "-v"]
 default = {'accept_latency': 2000,
            'charity': False,
@@ -32,7 +32,7 @@ def accurateParsing():
     return True
 
 
-def genTests(i):
+def genTests(i):    # TODO: reduce complexity
     from itertools import combinations
     tests = list(combinations(possibilities, i))
     for j in range(len(tests)):
@@ -50,11 +50,12 @@ def verify(i, test):
     settings.setup()
     ret = testToggles(test)
     # test verbosity
-    ret = test.count("-v") == settings.config['verbose'] and ret    # test integer values
+    ret = test.count("-v") == settings.config['verbose'] and ret
+    # test integer values
     return ret and testIntegers(test)
 
 
-def testIntegers(test):
+def testIntegers(test): #TODO: reduce complexity
     ret = True
     for flag in test:
         if flag[0:3] == "-f ":
@@ -67,9 +68,13 @@ def testIntegers(test):
 
 
 def testToggles(test):
-    ret = bool(test.count("-c")) == settings.config['charity']
-    ret = bool(test.count("-o")) == settings.config['outbound'] and ret
-    ret = bool(test.count("-s")) == settings.config['server'] and ret
-    ret = bool(test.count("-S")) == settings.config['seed'] and ret
-    ret = bool(test.count("-t")) == settings.config['test'] and ret
+    ret = checkFlag(test, "-c", 'charity')
+    ret = checkFlag(test, "-o", 'outbound') and ret
+    ret = checkFlag(test, "-s", 'server') and ret
+    ret = checkFlag(test, "-S", 'seed') and ret
+    ret = checkFlag(test, "-t", 'test') and ret
     return ret
+
+
+def checkFlag(test, flag, longform):
+    return bool(test.count(flag)) == settings.config[longform]

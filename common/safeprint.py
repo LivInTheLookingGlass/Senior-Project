@@ -3,12 +3,12 @@ from datetime import datetime
 from common import settings
 
 print_lock = multiprocessing.RLock()
-silent_flag = multiprocessing.Value('b',False)
+silent_flag = multiprocessing.Value('b', False)
 
 
 def safeprint(msg, verbosity=0):
     """Prints in a thread-lock, taking a single object as an argument"""
-    if not silent_flag:
+    if not silent_flag.value:
         string = ("[" + str(multiprocessing.current_process().pid) + "] " +
                   datetime.now().strftime('%H:%M:%S: ') + str(msg) + '\r\n')
         with print_lock:
