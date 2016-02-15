@@ -23,8 +23,9 @@ def accurateParsing():
         for j in range(len(tests)):
             settings.config.update(default)
             settings.saveSettings()
-            print(settings.config)
             sys.argv = tests[j]
+            print(settings.config)
+            print(sys.argv)
             ret = verify(tests[j])
             if not ret:
                 safeprint.silent_flag.value = False
