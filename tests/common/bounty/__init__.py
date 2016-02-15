@@ -1,1 +1,3 @@
-import Bounty
+from . import Bounty
+
+__all__ = ["Bounty"]

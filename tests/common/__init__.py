@@ -1,6 +1,8 @@
-import bounty
-import call
-import coins
-import peers
-import safeprint
-import settings
+from . import bounty
+from . import call
+from . import coins
+from . import peers
+from . import safeprint
+from . import settings
+
+__all__ = ["bounty", "call", "coins", "peers", "safeprint", "settings"]
