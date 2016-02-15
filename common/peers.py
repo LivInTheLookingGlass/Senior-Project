@@ -147,7 +147,7 @@ def saveToFile():
     if not os.path.exists(peers_file.split(os.sep)[0]):
         os.mkdir(peers_file.split(os.sep)[0])
     f = open(peers_file, "wb")
-    pickle.dump(peerlist[:], f 0)
+    pickle.dump(peerlist[:], f, 0)
 
 
 def getFromSeeds():
