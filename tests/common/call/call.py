@@ -22,13 +22,17 @@ def accuracy():
     r += [sys.platform]
 
     for i in range(len(l)):
-        print(l[i])
         if bool(call(*l[i]) == r[i]) ^ bool(i >= num_invalid):
+            print(l[i], r[i])
             return False
 
     # test keyed arguments
-    if ((call("sys", "platform", index=0) != sys.platform[0]) or
-       (call("sys", "platform", index=2, end=3) != sys.platform[2:3])):
+    if call("sys", "platform", index=0) != sys.platform[0]:
+        print(call("sys", "platform", index=0))
+        return False
+
+    if call("sys", "platform", index=2, end=3) != sys.platform[2:3]:
+        print(call("sys", "platform", index=2, end=3))
         return False
 
     return True

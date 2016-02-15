@@ -1,4 +1,4 @@
-import platform
+import platform, sys
             
 if platform.python_implementation() != "PyPy":
     def call(mod, cmd, *args, **kargs):
@@ -20,15 +20,8 @@ if platform.python_implementation() != "PyPy":
         else:
             m = __import__(mod)
             func = getattr(m, cmd)
-        if isinstance(func, type(max)) or isinstance(func, type(call)):
-            r = func(*args)
-        else:
-            r = func
-        index = kargs.get('index')
-        if index is not None:
-            return r[index:(kargs.get('end') or (index + 1))]
-        return r
-else:
+        return call_base(func, *args, **kargs)
+elif sys.version_info[0] == 2:
     def call(mod, cmd, *args, **kargs):
         """Calls an arbitrary python method
 
@@ -45,14 +38,39 @@ else:
         """
         m = __import__(mod)
         func = getattr(m, cmd)
-        if isinstance(func, type(max)) or isinstance(func, type(call)):
-            r = func(*args)
+        return call_base(func, *args, **kargs)
+else:
+    def call(mod, cmd, *args, **kargs):
+        """Calls an arbitrary python method
+
+        Arguments:
+            mod     - The module from which you are calling
+            cmd     - The command in said module
+            *args   - Any arguments you need to give to it
+            index=0 - A specific index at which to return
+            end=0   - An end range from which to return
+        Use case:
+            if you don't know what command you need to run at compile time
+        Caveat:
+            This is the PyPy3 version
+        """
+        if mod == "__builtin__":
+            m = __builtins__
         else:
-            r = func
-        index = kargs.get('index')
-        if index is not None:
-            return r[index:(kargs.get('end') or (index + 1))]
-        return r
+            m = __import__(mod)
+        func = getattr(m, cmd)
+        return call_base(func, *args, **kargs)
+
+
+def call_base(func, *args, **kargs):
+    if isinstance(func, type(max)) or isinstance(func, type(call)):
+        r = func(*args)
+    else:
+        r = func
+    index = kargs.get('index')
+    if index is not None:
+        return r[index:(kargs.get('end') or (index + 1))]
+    return r
 
 
 def process(tup):
