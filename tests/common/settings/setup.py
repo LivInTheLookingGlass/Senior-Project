@@ -55,7 +55,7 @@ def verify(i, test):
     return ret and testIntegers(test)
 
 
-def testIntegers(test):  # TODO: reduce complexity
+def testIntegers(test):
     ret = checkInt(test, "-f ", 'propagate_factor')
     ret = checkInt(test, "-p ", 'port') and ret
     return ret
