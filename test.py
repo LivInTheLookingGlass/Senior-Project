@@ -118,5 +118,4 @@ if __name__ == "__main__": #pragma: no cover
     testSig.checkSign()
     safeprint(bounty.addBounties([bounty.Bounty(('8.8.8.8',8888),"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",10290),bounty.Bounty('8.8.8.8:8888',"1EgGfDetymjMzcQ1AEhHjHEyXHjnEavwgg",0)]))
     safeprint("Running unit tests")
-    safeprint(sys.argv)
     exit(int(unitTests()))

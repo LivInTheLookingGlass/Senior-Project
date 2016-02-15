@@ -24,8 +24,6 @@ def accurateParsing():
             settings.config.update(default)
             settings.saveSettings()
             sys.argv = tests[j]
-            print(settings.config)
-            print(sys.argv)
             ret = verify(tests[j])
             if not ret:
                 safeprint.silent_flag.value = False
@@ -46,7 +44,7 @@ def genTests(i):    # TODO: reduce complexity
             removals.append(test)
     for test in removals:
         tests.remove(test)
-    return [sys.argv + test for test in tests]
+    return [[sys.argv[0]] + test for test in tests]
 
 
 def verify(test):
