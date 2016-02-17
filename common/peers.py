@@ -93,41 +93,11 @@ def recv(conn):
         safeprint("Decryption error---Content: " + str(a))
         return "".encode('utf-8')
 
-# The following is taken from https://stackoverflow.com/a/1947766/4748474
-if os.name != "nt":
-    import fcntl
-    import struct
-
-    def get_interface_ip(ifname):
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        return socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack(
-                                '256s', ifname[:15]))[20:24])
-
-
-def no_exteral_get_ip():
-    ip = socket.gethostbyname(socket.gethostname())
-    if ip.startswith("127.") and os.name != "nt":
-        interfaces = ["eth0", "eth1", "eth2", "wlan0", "wlan1", "wifi0", "ath0", "ath1", "ppp0"]
-        for ifname in interfaces:
-            try:
-                ip = get_interface_ip(ifname)
-                break
-            except IOError:
-                pass
-    return ip
-# End Stack Overflow code
-
 
 def get_lan_ip():
-    """Retrieves the LAN ip. Unfortunately uses an external connection in Python 3."""
-    if sys.version_info[0] < 3:
-        return no_exteral_get_ip()
-    else:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(('8.8.8.8', 0))
-        a = s.getsockname()[0]
-        s.close()
-        return a
+    """Retrieves the LAN ip. Taken from http://stackoverflow.com/a/1267524"""
+    import socket
+    return [l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")][:1], [[(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) if l][0][0]
 
 
 def getFromFile():
