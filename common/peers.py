@@ -95,9 +95,18 @@ def recv(conn):
 
 
 def get_lan_ip():
-    """Retrieves the LAN ip. Taken from http://stackoverflow.com/a/1267524"""
+    """Retrieves the LAN ip. Expanded from http://stackoverflow.com/a/28950776"""
     import socket
-    return [l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")][:1], [[(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) if l][0][0]
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 0))
+        IP = s.getsockname()[0]
+    except:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
 
 
 def getFromFile():
