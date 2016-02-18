@@ -22,7 +22,7 @@
                 + " - " + issue.title;
             if (issue.labels.length > 0)
                 appendstring = appendstring + " -";
-            for (var i = 0; i < issue.labels.length; i++)	{
+            for (var i = 0; i < issue.labels.length; i++) {
                 label = issue.labels[i];
                 appendstring = appendstring + " <span style=\"border-color:#" + label.color
                     + ";background:#" + label.color + "\">" + label.name + "</span>";
@@ -77,31 +77,31 @@
 <p>There are five attacks that I currently anticipate on this platform. Each of them must be addressed in its design, and throughout this proposal I will point out when they are.</p>
 
 <ol>
-	<li><a id="MalliciousUser"></a>Mallicious user
-		<ul>
-			<li>This is a Denial of Service attack on the servers. By spoofing an active user (not solving the problems it is sent), an attacker could waste the money and processing time of the server.</li>
-		</ul>
-	</li>
-	<li><a id="MallicousServer"></a>Mallicious server
-		<ul>
-			<li>This is a Denial of Service attack on the user and charity servers (one which does not pay). By spoofing a charity server, an attacker could send useless programs, which, for instance, add random sums forever. Such an attack would go against the wishes of the user (not contributing towards general research), and force real charity servers to provide payment which they may not be able to afford.</li>
-		</ul>
-	</li>
-	<li><a id="DishonestServer"></a>Dishonest server
-		<ul>
-			<li>This is a Denial of Service attack on the user and platform. By broadcasting a bounty with a substantial reward, an attacker could trick nodes into wasting their computational time. This would drive up the general price of the platform, and possibly force it to a halt.</li>
-		</ul>
-	</li>
-	<li><a id="OutsideActors"></a>Outside actors
-		<ul>
-			<li>It is very possible that an outside bad actor could misuse the platform. One such misuse could be hiring out a botnet.</li>
-		</ul>
-	</li>
-	<li><a id="BountySpammers"></a>Bounty spammers
-		<ul>
-			<li>This is an attempt to overwhelm the user end of the network. If they spend all their time verifying incoming bounties, the network cannot function properly. This does not yet have a proposed solution, but is partly mitigated by actively requesting information and having a dedicated listener thread.</li>
-		</ul>
-	</li>
+  <li><a id="MalliciousUser"></a>Mallicious user
+    <ul>
+      <li>This is a Denial of Service attack on the servers. By spoofing an active user (not solving the problems it is sent), an attacker could waste the money and processing time of the server.</li>
+    </ul>
+  </li>
+  <li><a id="MallicousServer"></a>Mallicious server
+    <ul>
+      <li>This is a Denial of Service attack on the user and charity servers (one which does not pay). By spoofing a charity server, an attacker could send useless programs, which, for instance, add random sums forever. Such an attack would go against the wishes of the user (not contributing towards general research), and force real charity servers to provide payment which they may not be able to afford.</li>
+    </ul>
+  </li>
+  <li><a id="DishonestServer"></a>Dishonest server
+    <ul>
+      <li>This is a Denial of Service attack on the user and platform. By broadcasting a bounty with a substantial reward, an attacker could trick nodes into wasting their computational time. This would drive up the general price of the platform, and possibly force it to a halt.</li>
+    </ul>
+  </li>
+  <li><a id="OutsideActors"></a>Outside actors
+    <ul>
+      <li>It is very possible that an outside bad actor could misuse the platform. One such misuse could be hiring out a botnet.</li>
+    </ul>
+  </li>
+  <li><a id="BountySpammers"></a>Bounty spammers
+    <ul>
+      <li>This is an attempt to overwhelm the user end of the network. If they spend all their time verifying incoming bounties, the network cannot function properly. This does not yet have a proposed solution, but is partly mitigated by actively requesting information and having a dedicated listener thread.</li>
+    </ul>
+  </li>
 </ol>
 
 <h2>
@@ -138,7 +138,7 @@
 
 <p>Tests are a vital part of the network. Like there are ways for clients to exclude invalid requests, there must also be a way for servers to exclude inappropriate clients. They can do this with permissions, requirements, and small bits of test code.</p>
 
-<p>Before the user follows through on a bounty, it checks the <code>data['reqs']</code> and <code>data['perms']</code> fields.<script type="text/javascript">addFootnote("Due to a limitation in my <code>call</code> module, checking the Java version must be done in the test program");</script> If the user does not fit the desired client, or the server is requesting too large a sandbox, the user will not follow through.</p> 
+<p>Before the user follows through on a bounty, it checks the <code>data['reqs']</code> and <code>data['perms']</code> fields.<script type="text/javascript">addFootnote("Due to a limitation in my <code>call</code> module, checking the Java version must be done in the test program");</script> If the user does not fit the desired client, or the server is requesting too large a sandbox, the user will not follow through.</p>
 
 <p>This connection is made by sending a specified header, an instance of the Bounty object, and a dict of the client's system info. This allows the server to determine which test/query combination to use. After parsing this request, the server will send the test code.</p>
 
@@ -163,101 +163,101 @@
 <p>The project would be graded according to the following scale, where 1 point is 1%, and all points above 100 are discounted.</p>
 
 <p><table>
-	<tr>
-		<th class="grade-cat"><strong>Goal</strong></th>
-		<th><strong>Points</strong></th>
-		<th><strong>Current</strong></th>
-	</tr>
-	<tr>
-		<td class="grade-cat">Network Communications</td>
-		<td>20</td>
-		<td>20</td>
-	</tr>
-	<tr>
-		<td class="grade-cat">Port Forwarding (Linux, OSX)</td>
-		<td>5</td>
-		<td>5</td>
-	</tr>
-	<tr>
-		<td class="grade-cat">Port Forwarding (Windows)<script type="text/javascript">addFootnote("The additional points are for solving a dependency issue where MiniUPNPc does not compile properly on Windows. Because I have no experience in making C-code into python modules, this will be especially difficult");</script></td>
-		<td>15</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td class="grade-cat">Peer Discovery</td>
-		<td>10</td>
-		<td>10</td>
-	</tr>
-	<tr>
-		<td class="grade-cat">Execution of Bounties</td>
-		<td>15</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td class="grade-cat">Flagging System for Bounties</td>
-		<td>7</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td class="grade-cat">Working Paid Example Server</td>
-		<td>3</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td class="grade-cat">Working Charity Example Server</td>
-		<td>2</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td class="grade-cat">Coin Control</td>
-		<td>25</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td class="grade-cat">Certificate Authority</td>
-		<td>15</td>
-		<td>15</td>
-	</tr>
-	<tr>
-		<td class="grade-cat">Rough GUI</td>
-		<td>5</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td class="grade-cat">Show Bounty Queue</td>
-		<td>5</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td class="grade-cat">Hide to Tray</td>
-		<td>2</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td class="grade-cat">Notifications</td>
-		<td>1</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td class="grade-cat">Additional Wallet Utilities</td>
-		<td>5</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td class="grade-cat">Unit Testing</td>
-		<td>10</td>
-		<td>3</td>
-	</tr>
-	<tr>
-		<th class="grade-cat"><strong>Max Earnable</strong></th>
-		<th><strong>100</strong></th>
-		<th></th>
-	</tr>
-	<tr>
-		<th class="grade-cat"><strong>Total</strong></th>
-		<th><strong>145</strong></th>
-		<th><strong>53</strong></th>
-	</tr>
+  <tr>
+    <th class="grade-cat"><strong>Goal</strong></th>
+    <th><strong>Points</strong></th>
+    <th><strong>Current</strong></th>
+  </tr>
+  <tr>
+    <td class="grade-cat">Network Communications</td>
+    <td>20</td>
+    <td>20</td>
+  </tr>
+  <tr>
+    <td class="grade-cat">Port Forwarding (Linux, OSX)</td>
+    <td>5</td>
+    <td>5</td>
+  </tr>
+  <tr>
+    <td class="grade-cat">Port Forwarding (Windows)<script type="text/javascript">addFootnote("The additional points are for solving a dependency issue where MiniUPNPc does not compile properly on Windows. Because I have no experience in making C-code into python modules, this will be especially difficult");</script></td>
+    <td>15</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="grade-cat">Peer Discovery</td>
+    <td>10</td>
+    <td>10</td>
+  </tr>
+  <tr>
+    <td class="grade-cat">Execution of Bounties</td>
+    <td>15</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="grade-cat">Flagging System for Bounties</td>
+    <td>7</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="grade-cat">Working Paid Example Server</td>
+    <td>3</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="grade-cat">Working Charity Example Server</td>
+    <td>2</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="grade-cat">Coin Control</td>
+    <td>25</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="grade-cat">Certificate Authority</td>
+    <td>15</td>
+    <td>15</td>
+  </tr>
+  <tr>
+    <td class="grade-cat">Rough GUI</td>
+    <td>5</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="grade-cat">Show Bounty Queue</td>
+    <td>5</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="grade-cat">Hide to Tray</td>
+    <td>2</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="grade-cat">Notifications</td>
+    <td>1</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="grade-cat">Additional Wallet Utilities</td>
+    <td>5</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="grade-cat">Unit Testing</td>
+    <td>10</td>
+    <td>3</td>
+  </tr>
+  <tr>
+    <th class="grade-cat"><strong>Max Earnable</strong></th>
+    <th><strong>100</strong></th>
+    <th></th>
+  </tr>
+  <tr>
+    <th class="grade-cat"><strong>Total</strong></th>
+    <th><strong>145</strong></th>
+    <th><strong>53</strong></th>
+  </tr>
 </table></p>
 
 <h1>
@@ -268,125 +268,125 @@
 
 <h2>Required</h2>
 <ul>
-	<li>Java</li>
-	<li>pycoin</li>
-	<li>rsa</li>
-	<ul>
-		<li>pyasn1</li>
-	</ul>
+  <li>Java</li>
+  <li>pycoin</li>
+  <li>rsa</li>
+  <ul>
+    <li>pyasn1</li>
+  </ul>
 </ul>
 
 <h2>Recommended</h2>
 <ul>
-	<li>MiniUPNPc</li>
+  <li>MiniUPNPc</li>
 </ul>
 
 <div id="progresssection">
 
-	<h1>
-	<a id="progress" class="anchor" href="#progress" aria-hidden="true"><span class="octicon octicon-link"></span></a>Progress</h1>
-	
-	<h2>
-	Current Compatability</h2>
-	<p><a href="https://travis-ci.org/gappleto97/Senior-Project" target="_blank"><img src="https://img.shields.io/travis/gappleto97/Senior-Project/master.svg?style=plastic&label=Linux/OSX%20Build" alt=""></img></a> <a href="https://ci.appveyor.com/project/gappleto97/senior-project" target="_blank"><img src="https://img.shields.io/appveyor/ci/gappleto97/Senior-Project/master.svg?style=plastic&label=Windows%20Build" alt=""></img></a> <a href="https://codecov.io/github/gappleto97/Senior-Project" target="_blank"><img src="https://img.shields.io/codecov/c/github/gappleto97/Senior-Project/master.svg?style=plastic&label=Coverage" alt=""></img></a> <a href="https://codeclimate.com/github/gappleto97/Senior-Project/" target="_blank"><img src="https://img.shields.io/codeclimate/github/gappleto97/Senior-Project.svg?style=plastic&label=Style%20Grade"></img></a> <a href="https://waffle.io/gappleto97/Senior-Project" target="_blank"><img src="https://badge.waffle.io/gappleto97/Senior-Project.png?label=in%20progress&title=In%20Progress" alt="Waffle.io issue tracking"></img></a></p>
-	
-	<p><table>
-		<tr>
-			<td></td>
-			<th>Python 2.6</th>
-			<th>Python 2.7</th>
-			<th>Python 3.3</th>
-			<th>Python 3.4</th>
-			<th>Python 3.5</th>
-			<th>Pypy 2</th>
-			<th>Pypy 3</th>
-		</tr>
-		<tr>
-			<th>Linux</th>
-			<td style="background:#008000"></td>
-			<td style="background:#008000"></td>
-			<td style="background:#107000"></td>
-			<td style="background:#107000"></td>
-			<td style="background:#107000"></td>
-			<td style="background:#107000"></td>
-			<td style="background:#206000"></td>
-		</tr>
-		<tr>
-			<th>Windows</th>
-			<td style="background:#107000"></td>
-			<td style="background:#107000"></td>
-			<td style="background:#206000"></td>
-			<td style="background:#206000"></td>
-			<td style="background:#206000"></td>
-			<td style="background:#206000"></td>
-			<td style="background:#305000"></td>
-		</tr>
-		<tr>
-			<th>OSX</th>
-			<td style="background:#008000"></td>
-			<td style="background:#008000"></td>
-			<td style="background:#107000"></td>
-			<td style="background:#107000"></td>
-			<td style="background:#107000"></td>
-			<td style="background:#107000"></td>
-			<td style="background:#206000"></td>
-		</tr>
-	</table></p>
-	<h2>
-	<a id="so-far" class="anchor" href="#so-far" aria-hidden="true"><span class="octicon octicon-link"></span></a>So Far</h2>
-	
-	<ul>
-	<li>Basic networking capabilities
-		<ul>
-			<li>Send messages</li>
-			<li>Listen and respond (concurrently)</li>
-			<li>On a custom port, if desired</li>
-		</ul>
-	</li>
-	<li>Encrypted communications (RSA)</li>
-	<li>Transparent settings storage</li>
-	<li>UPnP forwarding (Linux, OSX)</li>
-	</ul>
-	
-	<h2>
-	<a id="working-on-it" class="anchor" href="#working-on-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>Working on it</h2>
-	
-	<ul>
-	<li>Dedicated server mode</li>
-	<li>More complete bounty definition</li>
-	<li>More complete settings controls</li>
-	<li>Windows dependency fixes
-		<ul>
-			<li>MiniUPNPc (compile-time error)</li>
-		</ul>
-	</li>
-	</ul>
-	
-	<h2>
-	<a id="future" class="anchor" href="#future" aria-hidden="true"><span class="octicon octicon-link"></span></a>Future</h2>
-	
-	<ul>
-	<li>Coin control
-	
-	<ul>
-	<li>Payment channel</li>
-	<li>Secure wallet generation</li>
-	<li>Secure wallet storage</li>
-	</ul>
-	</li>
-	<li>Sandboxed Execution</li>
-	<li>Seedless(?) network discovery</li>
-	</ul>
+  <h1>
+  <a id="progress" class="anchor" href="#progress" aria-hidden="true"><span class="octicon octicon-link"></span></a>Progress</h1>
+
+  <h2>
+  Current Compatability</h2>
+  <p><a href="https://travis-ci.org/gappleto97/Senior-Project" target="_blank"><img src="https://img.shields.io/travis/gappleto97/Senior-Project/master.svg?style=plastic&label=Linux/OSX%20Build" alt=""></img></a> <a href="https://ci.appveyor.com/project/gappleto97/senior-project" target="_blank"><img src="https://img.shields.io/appveyor/ci/gappleto97/Senior-Project/master.svg?style=plastic&label=Windows%20Build" alt=""></img></a> <a href="https://codecov.io/github/gappleto97/Senior-Project" target="_blank"><img src="https://img.shields.io/codecov/c/github/gappleto97/Senior-Project/master.svg?style=plastic&label=Coverage" alt=""></img></a> <a href="https://codeclimate.com/github/gappleto97/Senior-Project/" target="_blank"><img src="https://img.shields.io/codeclimate/github/gappleto97/Senior-Project.svg?style=plastic&label=Style%20Grade"></img></a> <a href="https://waffle.io/gappleto97/Senior-Project" target="_blank"><img src="https://badge.waffle.io/gappleto97/Senior-Project.png?label=in%20progress&title=In%20Progress" alt="Waffle.io issue tracking"></img></a></p>
+
+  <p><table>
+    <tr>
+      <td></td>
+      <th>Python 2.6</th>
+      <th>Python 2.7</th>
+      <th>Python 3.3</th>
+      <th>Python 3.4</th>
+      <th>Python 3.5</th>
+      <th>Pypy 2</th>
+      <th>Pypy 3</th>
+    </tr>
+    <tr>
+      <th>Linux</th>
+      <td style="background:#008000"></td>
+      <td style="background:#008000"></td>
+      <td style="background:#107000"></td>
+      <td style="background:#107000"></td>
+      <td style="background:#107000"></td>
+      <td style="background:#107000"></td>
+      <td style="background:#206000"></td>
+    </tr>
+    <tr>
+      <th>Windows</th>
+      <td style="background:#107000"></td>
+      <td style="background:#107000"></td>
+      <td style="background:#206000"></td>
+      <td style="background:#206000"></td>
+      <td style="background:#206000"></td>
+      <td style="background:#206000"></td>
+      <td style="background:#305000"></td>
+    </tr>
+    <tr>
+      <th>OSX</th>
+      <td style="background:#008000"></td>
+      <td style="background:#008000"></td>
+      <td style="background:#107000"></td>
+      <td style="background:#107000"></td>
+      <td style="background:#107000"></td>
+      <td style="background:#107000"></td>
+      <td style="background:#206000"></td>
+    </tr>
+  </table></p>
+  <h2>
+  <a id="so-far" class="anchor" href="#so-far" aria-hidden="true"><span class="octicon octicon-link"></span></a>So Far</h2>
+
+  <ul>
+  <li>Basic networking capabilities
+    <ul>
+      <li>Send messages</li>
+      <li>Listen and respond (concurrently)</li>
+      <li>On a custom port, if desired</li>
+    </ul>
+  </li>
+  <li>Encrypted communications (RSA)</li>
+  <li>Transparent settings storage</li>
+  <li>UPnP forwarding (Linux, OSX)</li>
+  </ul>
+
+  <h2>
+  <a id="working-on-it" class="anchor" href="#working-on-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>Working on it</h2>
+
+  <ul>
+  <li>Dedicated server mode</li>
+  <li>More complete bounty definition</li>
+  <li>More complete settings controls</li>
+  <li>Windows dependency fixes
+    <ul>
+      <li>MiniUPNPc (compile-time error)</li>
+    </ul>
+  </li>
+  </ul>
+
+  <h2>
+  <a id="future" class="anchor" href="#future" aria-hidden="true"><span class="octicon octicon-link"></span></a>Future</h2>
+
+  <ul>
+  <li>Coin control
+
+  <ul>
+  <li>Payment channel</li>
+  <li>Secure wallet generation</li>
+  <li>Secure wallet storage</li>
+  </ul>
+  </li>
+  <li>Sandboxed Execution</li>
+  <li>Seedless(?) network discovery</li>
+  </ul>
 
 </div>
 
 <div id="issuesection">
-	
-	<h1>Open Issues</h1>
-	
-	<p>Submit an issue <a href="https://gitreports.com/issue/gappleto97/Senior-Project">here</a> if you do not have a GitHub account, or <a href="https://github.com/gappleto97/Senior-Project/issues/new">here</a> if you do.</p>
-	
-	<hr>
+
+  <h1>Open Issues</h1>
+
+  <p>Submit an issue <a href="https://gitreports.com/issue/gappleto97/Senior-Project">here</a> if you do not have a GitHub account, or <a href="https://github.com/gappleto97/Senior-Project/issues/new">here</a> if you do.</p>
+
+  <hr>
 
 </div>
 
